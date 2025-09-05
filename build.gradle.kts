@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
+    alias(libs.plugins.kotest)
 }
 
 group = "com.example"
@@ -19,4 +20,6 @@ dependencies {
     implementation(libs.ktor.server.status.pages)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.kotest.framework.engine)
+    testImplementation(libs.kotest.assertions.core)
 }
