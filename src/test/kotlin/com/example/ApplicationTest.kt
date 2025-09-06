@@ -22,6 +22,17 @@ class ApplicationTest {
     }
 
     @Test
+    fun testHealth() = testApplication {
+        application {
+            module()
+        }
+        val response = client.get("/health")
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals("Hello World!", response.bodyAsText())
+    }
+
+    @Test
     fun testNewEndpoint() = testApplication {
         application {
             module()

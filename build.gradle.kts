@@ -22,4 +22,5 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.kotest.framework.engine)
     testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.rest.assured)
 }

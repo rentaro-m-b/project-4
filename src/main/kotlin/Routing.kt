@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.health.controller
 import io.ktor.http.ContentType
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -18,6 +19,10 @@ fun Application.configureRouting() {
     routing {
         get("/") {
             call.respondText("Hello World!")
+        }
+
+        get("/health") {
+            call.respondText(controller())
         }
 
         get("/test1") {
