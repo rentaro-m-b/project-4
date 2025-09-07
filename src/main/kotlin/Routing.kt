@@ -1,10 +1,10 @@
 package com.example
 
-import com.example.health.controller
-import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
@@ -17,22 +17,15 @@ fun Application.configureRouting() {
     }
 
     routing {
-        get("/") {
-            call.respondText("Hello World!")
-        }
-
         get("/health") {
-            call.respondText(controller())
+            call.respond(HttpStatusCode.OK)
         }
 
-        get("/test1") {
-            val text = "<h1>Hello From Ktor</h1>"
-            val type = ContentType.parse("text/html")
-            call.respondText(text, type)
-        }
-
-        get("/error-test") {
-            throw IllegalStateException("Too Busy")
-        }
+//        get("/tasks") {
+//            call.respond(
+//                status = HttpStatusCode.OK,
+//                message = getTasks(),
+//            )
+//        }
     }
 }
