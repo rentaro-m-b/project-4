@@ -1,7 +1,7 @@
 package com.example.task.usecase
 
-fun interface CreateTaskTicketDefinitionUseCase {
-    fun createTaskTicketDefinition(command: CreateTaskTicketDefinitionCommand): String
+class CreateTaskTicketDefinitionUseCase {
+    fun execute(): String = ""
 }
 
 data class CreateTaskTicketDefinitionCommand(

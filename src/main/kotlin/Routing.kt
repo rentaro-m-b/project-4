@@ -12,7 +12,6 @@ import io.ktor.server.resources.get
 import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
 
-
 fun Application.configureRouting() {
     install(ContentNegotiation) { json() }
     install(Resources)
@@ -27,4 +26,4 @@ fun Application.configureRouting() {
 }
 
 @Resource("/health")
-class HealthCheckResource()
+class HealthCheckResource

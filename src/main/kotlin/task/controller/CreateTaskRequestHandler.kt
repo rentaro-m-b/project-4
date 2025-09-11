@@ -5,13 +5,14 @@ import com.example.task.usecase.CreateTaskTicketDefinitionUseCase
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
-fun handleCreateTaskRequest(
-    request: CreateTaskRequest,
+class CreateTaskRequestHandler(
     useCase: CreateTaskTicketDefinitionUseCase,
-): UUID {
-    val taskTicketDefinitionId = useCase.createTaskTicketDefinition(request.toCommand())
+) {
+    fun handle(request: CreateTaskRequest): UUID {
+        val taskTicketDefinitionId = useCase.execute(request.toCommand())
 
-    return UUID.randomUUID()
+        return UUID.randomUUID()
+    }
 }
 
 @Serializable

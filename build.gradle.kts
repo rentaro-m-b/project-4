@@ -23,6 +23,8 @@ dependencies {
     implementation(libs.ktor.server.resources)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.host.common)
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.logger.slf4j)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.kotest.framework.engine)
