@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotest)
     alias(libs.plugins.kotlin.plugin.serialization)
+    alias(libs.plugins.flyway)
 }
 
 group = "com.example"

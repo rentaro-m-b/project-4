@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import java.util.UUID
 
 class CreateTaskRequestHandler(
-    useCase: CreateTaskTicketDefinitionUseCase,
+    val useCase: CreateTaskTicketDefinitionUseCase,
 ) {
     fun handle(request: CreateTaskRequest): UUID {
         val taskTicketDefinitionId = useCase.execute(request.toCommand())
