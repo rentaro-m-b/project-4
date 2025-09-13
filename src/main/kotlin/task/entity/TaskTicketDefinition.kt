@@ -2,7 +2,7 @@ package com.example.task.entity
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 data class TaskTicketDefinition(
     val id: UUID,
@@ -13,15 +13,15 @@ data class TaskTicketDefinition(
     fun createTaskTicket(
         start: LocalDateTime,
         end: LocalDateTime,
-    ): TaskTicket {
-        return TaskTicket(
+    ): TaskTicket =
+        TaskTicket(
             id = UUID.randomUUID(),
             taskTicketDefinitionId = id,
             actual = BigDecimal("0"),
-            timeBox = TimeBox(
-                start,
-                end,
-            ),
+            timeBox =
+                TimeBox(
+                    start,
+                    end,
+                ),
         )
-    }
 }

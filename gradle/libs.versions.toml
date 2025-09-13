@@ -6,6 +6,7 @@ kotest = "6.0.2"
 rest-assured = "5.5.6"
 koin = "4.1.0"
 flyway = "11.12.0"
+postgresql = "42.7.7"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
@@ -24,6 +25,8 @@ ktor-server-host-common = { module = "io.ktor:ktor-server-host-common", version.
 ktor-server-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql"}
+flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway"}
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

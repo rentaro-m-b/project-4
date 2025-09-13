@@ -13,6 +13,14 @@ application {
     mainClass = "io.ktor.server.netty.EngineMain"
 }
 
+buildscript {
+    repositories { mavenCentral() }
+    dependencies {
+        classpath(libs.postgresql)
+        classpath(libs.flyway.database.postgresql)
+    }
+}
+
 dependencies {
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
@@ -26,9 +34,18 @@ dependencies {
     implementation(libs.ktor.server.host.common)
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
+    implementation(libs.postgresql)
+    implementation(libs.flyway.database.postgresql)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.kotest.framework.engine)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.rest.assured)
+}
+
+flyway {
+    url = "jdbc:postgresql://localhost:54332/main"
+    user = "root"
+    password = "password"
+    locations = arrayOf("filesystem:src/main/resources/db/migration")
 }
