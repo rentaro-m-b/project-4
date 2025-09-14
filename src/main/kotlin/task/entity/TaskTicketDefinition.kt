@@ -9,6 +9,8 @@ data class TaskTicketDefinition(
     val description: String,
     val unit: String,
     val expected: BigDecimal,
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
 ) {
     fun createTaskTicket(
         start: LocalDateTime,

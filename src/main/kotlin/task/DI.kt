@@ -1,6 +1,8 @@
 package com.example.task
 
+import com.example.task.controller.CreateTaskRequestHandler
 import com.example.task.dataaccess.TaskTicketDefinitionRepositoryImpl
+import com.example.task.entity.TaskTicketDefinitionFactory
 import com.example.task.entity.TaskTicketDefinitionRepository
 import com.example.task.usecase.CreateTaskTicketDefinitionUseCase
 import io.ktor.server.application.Application
@@ -12,5 +14,7 @@ fun Application.taskModule() {
     koinModule {
         singleOf(::TaskTicketDefinitionRepositoryImpl) bind TaskTicketDefinitionRepository::class
         singleOf(::CreateTaskTicketDefinitionUseCase)
+        singleOf(::TaskTicketDefinitionFactory)
+        singleOf(::CreateTaskRequestHandler)
     }
 }

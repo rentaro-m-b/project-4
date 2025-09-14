@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.koin.logger.slf4j)
     implementation(libs.postgresql)
     implementation(libs.jooq)
+    implementation(libs.hikaricp)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.kotest.framework.engine)

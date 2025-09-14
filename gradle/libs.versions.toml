@@ -8,6 +8,7 @@ koin = "4.1.0"
 flyway = "11.12.0"
 postgresql = "42.7.7"
 jooq = "3.20.7"
+hikaricp = "7.0.2"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
@@ -31,6 +32,7 @@ flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql
 jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
 jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
 jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

@@ -1,4 +1,4 @@
-CREATE TABLE task_ticket_definition (
+CREATE TABLE task_ticket_definitions (
     id UUID PRIMARY KEY,
     description TEXT NOT NULL,
     unit TEXT NOT NULL,
