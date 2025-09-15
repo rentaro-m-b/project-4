@@ -37,11 +37,14 @@ dependencies {
     implementation(libs.postgresql)
     implementation(libs.jooq)
     implementation(libs.hikaricp)
+    testImplementation(libs.ktor.server.config.yaml)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.kotest.framework.engine)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.rest.assured)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.kotest.extensions.koin)
     jooqCodegen(libs.postgresql)
     jooqCodegen(libs.jooq.meta)
     jooqCodegen(libs.jooq.codegen)
@@ -86,4 +89,9 @@ sourceSets.main {
 
 tasks.named("compileKotlin") {
     dependsOn("jooqCodegen")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging { showStandardStreams = true }
 }

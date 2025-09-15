@@ -33,6 +33,8 @@ jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
 jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
 jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
 hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
+kotest-extensions-koin = { module = "io.kotest:kotest-extensions-koin", version.ref = "kotest" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
