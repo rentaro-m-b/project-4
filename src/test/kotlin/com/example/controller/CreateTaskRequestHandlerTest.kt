@@ -1,43 +1,34 @@
 package com.example.controller
 
-import com.example.TestConfig.provideDataSource
-import com.example.TestConfig.provideDslContext
+import com.example.DBSettings
+import com.example.common.CommonDIContainer
+import com.example.task.TaskDIContainer
 import com.example.task.controller.CreateTaskRequest
 import com.example.task.controller.CreateTaskRequestHandler
-import com.example.task.dataaccess.TaskTicketDefinitionRepositoryImpl
-import com.example.task.entity.TaskTicketDefinitionFactory
-import com.example.task.entity.TaskTicketDefinitionRepository
-import com.example.task.usecase.CreateTaskTicketDefinitionUseCase
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.koin.KoinExtension
 import io.kotest.matchers.shouldBe
-import org.jooq.DSLContext
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
-import org.koin.dsl.module
+import io.ktor.server.config.yaml.YamlConfigLoader
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import java.time.Clock
-import javax.sql.DataSource
 
 class CreateTaskRequestHandlerTest :
     FunSpec(),
     KoinTest {
     init {
-        fun provideUtcClock(): Clock = Clock.systemUTC()
+        val config =
+            YamlConfigLoader()
+                .load("application.yaml")
+                ?.config("db")
+                ?: error("application.yaml not found")
 
         val testModule =
-            module {
-                singleOf(::TaskTicketDefinitionRepositoryImpl) bind TaskTicketDefinitionRepository::class
-                singleOf(::CreateTaskTicketDefinitionUseCase)
-                singleOf(::TaskTicketDefinitionFactory)
-                singleOf(::CreateTaskRequestHandler)
-                singleOf(::provideDataSource) bind DataSource::class
-                singleOf(::provideDslContext) bind DSLContext::class
-                singleOf(::provideUtcClock) bind Clock::class
-            }
+            listOf(
+                TaskDIContainer.defineModule(),
+                CommonDIContainer.defineModule(DBSettings.of(config)),
+            )
 
-        extensions(KoinExtension(modules = listOf(testModule)))
+        extensions(KoinExtension(modules = testModule))
 
         val target by inject<CreateTaskRequestHandler>()
 
@@ -51,7 +42,7 @@ class CreateTaskRequestHandlerTest :
                             unit = "page",
                         ),
                 )
-            id.toString().isNotBlank() shouldBe false
+            id.toString().isNotBlank() shouldBe true
         }
     }
 }

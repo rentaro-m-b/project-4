@@ -5,16 +5,17 @@ import com.example.task.dataaccess.TaskTicketDefinitionRepositoryImpl
 import com.example.task.entity.TaskTicketDefinitionFactory
 import com.example.task.entity.TaskTicketDefinitionRepository
 import com.example.task.usecase.CreateTaskTicketDefinitionUseCase
-import io.ktor.server.application.Application
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
-import org.koin.ktor.plugin.koinModule
+import org.koin.dsl.module
 
-fun Application.taskModule() {
-    koinModule {
-        singleOf(::TaskTicketDefinitionRepositoryImpl) bind TaskTicketDefinitionRepository::class
-        singleOf(::CreateTaskTicketDefinitionUseCase)
-        singleOf(::TaskTicketDefinitionFactory)
-        singleOf(::CreateTaskRequestHandler)
-    }
+object TaskDIContainer {
+    fun defineModule(): Module =
+        module {
+            singleOf(::TaskTicketDefinitionRepositoryImpl) bind TaskTicketDefinitionRepository::class
+            singleOf(::CreateTaskTicketDefinitionUseCase)
+            singleOf(::TaskTicketDefinitionFactory)
+            singleOf(::CreateTaskRequestHandler)
+        }
 }

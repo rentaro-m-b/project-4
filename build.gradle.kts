@@ -37,6 +37,8 @@ dependencies {
     implementation(libs.postgresql)
     implementation(libs.jooq)
     implementation(libs.hikaricp)
+    testImplementation(libs.postgresql)
+    testImplementation(libs.jooq)
     testImplementation(libs.ktor.server.config.yaml)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)

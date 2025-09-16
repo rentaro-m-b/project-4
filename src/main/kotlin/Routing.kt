@@ -1,8 +1,8 @@
 package com.example
 
-import com.example.common.commonModule
+import com.example.common.CommonDIContainer
+import com.example.task.TaskDIContainer
 import com.example.task.controller.taskRoute
-import com.example.task.taskModule
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.resources.Resource
 import io.ktor.serialization.kotlinx.json.json
@@ -18,7 +18,14 @@ import org.koin.ktor.plugin.Koin
 fun Application.configureRouting() {
     install(ContentNegotiation) { json() }
     install(Resources)
-    install(Koin)
+    install(Koin) {
+        modules(
+            listOf(
+                TaskDIContainer.defineModule(),
+                CommonDIContainer.defineModule(readDbSettings()),
+            ),
+        )
+    }
 
     routing {
         get<HealthCheckResource> {
@@ -27,10 +34,6 @@ fun Application.configureRouting() {
 
         taskRoute()
     }
-
-    mainModule()
-    taskModule()
-    commonModule()
 }
 
 @Resource("/health")
