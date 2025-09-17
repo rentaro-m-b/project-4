@@ -47,6 +47,7 @@ dependencies {
     testImplementation(libs.rest.assured)
     testImplementation(libs.koin.test)
     testImplementation(libs.kotest.extensions.koin)
+    testImplementation(libs.mockk)
     jooqCodegen(libs.postgresql)
     jooqCodegen(libs.jooq.meta)
     jooqCodegen(libs.jooq.codegen)

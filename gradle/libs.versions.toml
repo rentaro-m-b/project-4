@@ -9,6 +9,7 @@ flyway = "11.12.0"
 postgresql = "42.7.7"
 jooq = "3.20.7"
 hikaricp = "7.0.2"
+mockk = "1.14.5"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
@@ -35,6 +36,7 @@ jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
 hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
 kotest-extensions-koin = { module = "io.kotest:kotest-extensions-koin", version.ref = "kotest" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
