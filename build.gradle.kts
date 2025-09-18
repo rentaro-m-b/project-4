@@ -48,6 +48,8 @@ dependencies {
     testImplementation(libs.koin.test)
     testImplementation(libs.kotest.extensions.koin)
     testImplementation(libs.mockk)
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.commons.compress)
     jooqCodegen(libs.postgresql)
     jooqCodegen(libs.jooq.meta)
     jooqCodegen(libs.jooq.codegen)

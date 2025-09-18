@@ -10,6 +10,8 @@ postgresql = "42.7.7"
 jooq = "3.20.7"
 hikaricp = "7.0.2"
 mockk = "1.14.5"
+testcontainers-postgresql = "1.21.3"
+commons-compress = "1.28.0"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
@@ -37,6 +39,8 @@ hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
 kotest-extensions-koin = { module = "io.kotest:kotest-extensions-koin", version.ref = "kotest" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers-postgresql" }
+commons-compress = { group = "org.apache.commons", name = "commons-compress", version.ref = "commons-compress" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
