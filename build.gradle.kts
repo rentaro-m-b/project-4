@@ -50,6 +50,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.commons.compress)
+    testImplementation(libs.flyway.database.postgresql)
     jooqCodegen(libs.postgresql)
     jooqCodegen(libs.jooq.meta)
     jooqCodegen(libs.jooq.codegen)
