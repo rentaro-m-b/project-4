@@ -12,6 +12,8 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import org.koin.test.KoinTest
@@ -25,18 +27,25 @@ class CreateTaskTicketUseCaseTest :
     FunSpec(),
     KoinTest {
     init {
+        val target by inject<CreateTaskTicketDefinitionUseCase>()
         val repository = mockk<TaskTicketDefinitionRepository>()
         val factory = mockk<TaskTicketDefinitionFactory>()
 
-        val testModule =
-            module {
-                single { repository }
-                single { factory }
-                singleOf(::CreateTaskTicketDefinitionUseCase)
+        beforeSpec {
+            startKoin {
+                modules(
+                    module {
+                        single { repository }
+                        single { factory }
+                        singleOf(::CreateTaskTicketDefinitionUseCase)
+                    },
+                )
             }
-        extensions(KoinExtension(testModule))
+        }
 
-        val target by inject<CreateTaskTicketDefinitionUseCase>()
+        afterSpec {
+            stopKoin()
+        }
 
         test("normal: create task ticket definition") {
             // arrange

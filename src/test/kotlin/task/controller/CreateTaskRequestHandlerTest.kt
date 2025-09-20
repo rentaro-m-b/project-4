@@ -9,6 +9,8 @@ import io.kotest.koin.KoinExtension
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import org.koin.test.KoinTest
@@ -20,16 +22,23 @@ class CreateTaskRequestHandlerTest :
     FunSpec(),
     KoinTest {
     init {
+        val target by inject<CreateTaskRequestHandler>()
         val useCase = mockk<CreateTaskTicketDefinitionUseCase>()
 
-        val testModule =
-            module {
-                single { useCase }
-                singleOf(::CreateTaskRequestHandler)
+        beforeSpec {
+            startKoin {
+                modules(
+                    module {
+                        single { useCase }
+                        singleOf(::CreateTaskRequestHandler)
+                    },
+                )
             }
-        extensions(KoinExtension(testModule))
+        }
 
-        val target by inject<CreateTaskRequestHandler>()
+        afterSpec {
+            stopKoin()
+        }
 
         test("normal: create task ticket definition") {
             // arrange

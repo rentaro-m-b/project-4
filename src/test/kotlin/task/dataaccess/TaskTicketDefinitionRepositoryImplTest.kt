@@ -7,11 +7,13 @@ import com.example.db.tables.TaskTicketDefinitions.Companion.TASK_TICKET_DEFINIT
 import com.example.db.tables.records.TaskTicketDefinitionsRecord
 import com.example.task.dataaccess.TaskTicketDefinitionRepositoryImpl
 import com.example.task.entity.TaskTicketDefinition
+import com.example.task.entity.TaskTicketDefinitionRepository
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.koin.KoinExtension
 import io.kotest.matchers.shouldBe
 import org.flywaydb.core.Flyway
 import org.jooq.DSLContext
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -26,29 +28,30 @@ import javax.sql.DataSource
 class TaskTicketDefinitionRepositoryImplTest :
     FunSpec(),
     KoinTest {
-    private val postgres = PostgreSQLContainer("postgres:16-alpine")
-
     init {
+        val target by inject<TaskTicketDefinitionRepositoryImpl>()
+        val postgres = PostgreSQLContainer("postgres:17.6-alpine")
+
         beforeSpec {
             postgres.start()
-
-            val settings =
-                DBSettings(
-                    url = postgres.jdbcUrl,
-                    user = postgres.username,
-                    password = postgres.password,
-                    driver = postgres.driverClassName,
-                    maxPoolSize = 10,
+            startKoin {
+                modules(
+                    module {
+                        single {
+                            DBSettings(
+                                url = postgres.jdbcUrl,
+                                user = postgres.username,
+                                password = postgres.password,
+                                driver = postgres.driverClassName,
+                                maxPoolSize = 10,
+                            )
+                        } bind DBSettings::class
+                        singleOf(::provideDataSource) bind DataSource::class
+                        singleOf(::provideDSLContext) bind DSLContext::class
+                        singleOf(::TaskTicketDefinitionRepositoryImpl) bind TaskTicketDefinitionRepository::class
+                    },
                 )
-            val testModule =
-                module {
-                    single { settings } bind DBSettings::class
-                    singleOf(::provideDataSource) bind DataSource::class
-                    singleOf(::provideDSLContext) bind DSLContext::class
-                    singleOf(::TaskTicketDefinitionRepositoryImpl)
-                }
-            extensions(KoinExtension(testModule))
-
+            }
             Flyway
                 .configure()
                 .dataSource(postgres.jdbcUrl, postgres.username, postgres.password)
@@ -58,10 +61,9 @@ class TaskTicketDefinitionRepositoryImplTest :
         }
 
         afterSpec {
+            stopKoin()
             postgres.stop()
         }
-
-        val target by inject<TaskTicketDefinitionRepositoryImpl>()
 
         test("normal: create task ticket definition") {
             // arrange

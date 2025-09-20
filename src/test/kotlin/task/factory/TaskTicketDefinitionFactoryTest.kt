@@ -7,6 +7,8 @@ import io.kotest.koin.KoinExtension
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.mockk.every
 import io.mockk.mockk
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import org.koin.test.KoinTest
@@ -22,16 +24,22 @@ class TaskTicketDefinitionFactoryTest :
     FunSpec(),
     KoinTest {
     init {
+        val target by inject<TaskTicketDefinitionFactory>()
         val clock = mockk<Clock>()
 
-        val testModule =
-            module {
-                single { clock }
-                singleOf(::TaskTicketDefinitionFactory)
+        beforeSpec {
+            startKoin {
+                modules(
+                    module {
+                        single { clock }
+                        singleOf(::TaskTicketDefinitionFactory)
+                    },
+                )
             }
-        extensions(KoinExtension(testModule))
-
-        val target by inject<TaskTicketDefinitionFactory>()
+        }
+        afterSpec {
+            stopKoin()
+        }
 
         test("normal: create task ticket definition") {
             // arrange
