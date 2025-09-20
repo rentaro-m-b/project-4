@@ -3,7 +3,6 @@ package task.factory
 import com.example.task.entity.TaskTicketDefinition
 import com.example.task.entity.TaskTicketDefinitionFactory
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.koin.KoinExtension
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.mockk.every
 import io.mockk.mockk
@@ -18,7 +17,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.UUID
+import java.util.*
 
 class TaskTicketDefinitionFactoryTest :
     FunSpec(),

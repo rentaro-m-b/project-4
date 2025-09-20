@@ -6,7 +6,6 @@ import com.example.task.entity.TaskTicketDefinitionRepository
 import com.example.task.usecase.CreateTaskTicketDefinitionCommand
 import com.example.task.usecase.CreateTaskTicketDefinitionUseCase
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.koin.KoinExtension
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.every
@@ -20,8 +19,7 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.UUID
-import kotlin.getValue
+import java.util.*
 
 class CreateTaskTicketUseCaseTest :
     FunSpec(),

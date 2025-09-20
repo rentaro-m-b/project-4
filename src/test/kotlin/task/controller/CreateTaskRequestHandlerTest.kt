@@ -5,7 +5,6 @@ import com.example.task.controller.CreateTaskRequestHandler
 import com.example.task.usecase.CreateTaskTicketDefinitionCommand
 import com.example.task.usecase.CreateTaskTicketDefinitionUseCase
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.koin.KoinExtension
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
@@ -16,7 +15,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import java.math.BigDecimal
-import java.util.UUID
+import java.util.*
 
 class CreateTaskRequestHandlerTest :
     FunSpec(),
