@@ -20,7 +20,7 @@ import org.koin.test.inject
 import org.testcontainers.containers.PostgreSQLContainer
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 import javax.sql.DataSource
 
 class TaskTicketDefinitionRepositoryImplTest :
