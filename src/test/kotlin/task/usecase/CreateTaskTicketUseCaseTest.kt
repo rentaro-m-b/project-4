@@ -19,7 +19,7 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 class CreateTaskTicketUseCaseTest :
     FunSpec(),

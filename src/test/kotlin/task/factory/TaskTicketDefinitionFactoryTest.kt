@@ -17,7 +17,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.*
+import java.util.UUID
 
 class TaskTicketDefinitionFactoryTest :
     FunSpec(),

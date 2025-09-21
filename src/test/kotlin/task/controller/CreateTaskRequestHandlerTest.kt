@@ -15,7 +15,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import java.math.BigDecimal
-import java.util.*
+import java.util.UUID
 
 class CreateTaskRequestHandlerTest :
     FunSpec(),
