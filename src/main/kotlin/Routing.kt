@@ -15,6 +15,9 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.routing
 import org.koin.ktor.plugin.Koin
 
+@Resource("/health")
+class HealthCheckResource
+
 fun Application.configureRouting() {
     install(ContentNegotiation) { json() }
     install(Resources)
@@ -35,6 +38,3 @@ fun Application.configureRouting() {
         taskRoute()
     }
 }
-
-@Resource("/health")
-class HealthCheckResource

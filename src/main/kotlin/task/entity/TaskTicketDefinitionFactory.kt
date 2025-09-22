@@ -12,12 +12,14 @@ class TaskTicketDefinitionFactory(
         description: String,
         unit: String,
         expected: BigDecimal,
+        cyclePerDays: Short,
     ): TaskTicketDefinition =
         TaskTicketDefinition(
             id = UUID.randomUUID(),
             description = description,
             unit = unit,
             expected = expected,
+            cyclePerDays = cyclePerDays,
             createdAt = LocalDateTime.now(clock),
             updatedAt = LocalDateTime.now(clock),
         )

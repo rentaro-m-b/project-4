@@ -3,8 +3,8 @@ package task.usecase
 import com.example.task.entity.TaskTicketDefinition
 import com.example.task.entity.TaskTicketDefinitionFactory
 import com.example.task.entity.TaskTicketDefinitionRepository
+import com.example.task.usecase.CreateTaskTicketDefinition
 import com.example.task.usecase.CreateTaskTicketDefinitionCommand
-import com.example.task.usecase.CreateTaskTicketDefinitionUseCase
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
@@ -25,7 +25,7 @@ class CreateTaskTicketUseCaseTest :
     FunSpec(),
     KoinTest {
     init {
-        val target by inject<CreateTaskTicketDefinitionUseCase>()
+        val target by inject<CreateTaskTicketDefinition>()
         val repository = mockk<TaskTicketDefinitionRepository>()
         val factory = mockk<TaskTicketDefinitionFactory>()
 
@@ -35,7 +35,7 @@ class CreateTaskTicketUseCaseTest :
                     module {
                         single { repository }
                         single { factory }
-                        singleOf(::CreateTaskTicketDefinitionUseCase)
+                        singleOf(::CreateTaskTicketDefinition)
                     },
                 )
             }
@@ -52,6 +52,7 @@ class CreateTaskTicketUseCaseTest :
                     description = "「テスト駆動開発」を読む",
                     expected = BigDecimal("5"),
                     unit = "page",
+                    cyclePerDays = 1,
                 )
             } returns
                 TaskTicketDefinition(
@@ -59,6 +60,7 @@ class CreateTaskTicketUseCaseTest :
                     description = "「テスト駆動開発」を読む",
                     expected = BigDecimal("5"),
                     unit = "page",
+                    cyclePerDays = 1,
                     createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                     updatedAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                 )
@@ -70,6 +72,7 @@ class CreateTaskTicketUseCaseTest :
                         description = "「テスト駆動開発」を読む",
                         expected = BigDecimal("5"),
                         unit = "page",
+                        cyclePerDays = 1,
                         createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                         updatedAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                     ),
@@ -83,6 +86,7 @@ class CreateTaskTicketUseCaseTest :
                         description = "「テスト駆動開発」を読む",
                         expected = BigDecimal("5"),
                         unit = "page",
+                        cyclePerDays = 1,
                     ),
                 )
 

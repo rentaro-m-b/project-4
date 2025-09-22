@@ -61,6 +61,8 @@ flyway {
     user = "root"
     password = "password"
     locations = arrayOf("filesystem:src/main/resources/db/migration")
+
+    cleanDisabled = false
 }
 
 val codeGenDir = layout.buildDirectory.dir("generated/jooq")

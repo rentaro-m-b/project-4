@@ -51,6 +51,7 @@ class TaskTicketDefinitionFactoryTest :
                     description = "「テスト駆動開発」を読む",
                     expected = BigDecimal("5"),
                     unit = "page",
+                    cyclePerDays = 1,
                 )
 
             // assert
@@ -60,6 +61,7 @@ class TaskTicketDefinitionFactoryTest :
                     description = "「テスト駆動開発」を読む",
                     expected = BigDecimal("5"),
                     unit = "page",
+                    cyclePerDays = 1,
                     createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                     updatedAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                 )

@@ -2,8 +2,8 @@ package task.controller
 
 import com.example.task.controller.CreateTaskRequest
 import com.example.task.controller.CreateTaskRequestHandler
+import com.example.task.usecase.CreateTaskTicketDefinition
 import com.example.task.usecase.CreateTaskTicketDefinitionCommand
-import com.example.task.usecase.CreateTaskTicketDefinitionUseCase
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -22,7 +22,7 @@ class CreateTaskRequestHandlerTest :
     KoinTest {
     init {
         val target by inject<CreateTaskRequestHandler>()
-        val useCase = mockk<CreateTaskTicketDefinitionUseCase>()
+        val useCase = mockk<CreateTaskTicketDefinition>()
 
         beforeSpec {
             startKoin {
@@ -47,6 +47,7 @@ class CreateTaskRequestHandlerTest :
                         description = "「テスト駆動開発」を読む",
                         expected = BigDecimal("5"),
                         unit = "page",
+                        cyclePerDays = 1,
                     ),
                 )
             } returns UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df")
@@ -59,6 +60,7 @@ class CreateTaskRequestHandlerTest :
                             description = "「テスト駆動開発」を読む",
                             expected = "5",
                             unit = "page",
+                            cyclePerDays = 1,
                         ),
                 )
 

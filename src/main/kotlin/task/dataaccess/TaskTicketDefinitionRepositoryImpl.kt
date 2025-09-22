@@ -15,6 +15,7 @@ class TaskTicketDefinitionRepositoryImpl(
             .set(TASK_TICKET_DEFINITIONS.DESCRIPTION, entity.description)
             .set(TASK_TICKET_DEFINITIONS.EXPECTED, entity.expected)
             .set(TASK_TICKET_DEFINITIONS.UNIT, entity.unit)
+            .set(TASK_TICKET_DEFINITIONS.CYCLE_PER_DAYS, entity.cyclePerDays)
             .set(TASK_TICKET_DEFINITIONS.CREATED_AT, entity.createdAt)
             .set(TASK_TICKET_DEFINITIONS.UPDATED_AT, entity.updatedAt)
             .execute()

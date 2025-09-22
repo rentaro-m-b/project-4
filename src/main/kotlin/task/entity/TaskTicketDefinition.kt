@@ -9,6 +9,7 @@ data class TaskTicketDefinition(
     val description: String,
     val unit: String,
     val expected: BigDecimal,
+    val cyclePerDays: Short,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
 ) {

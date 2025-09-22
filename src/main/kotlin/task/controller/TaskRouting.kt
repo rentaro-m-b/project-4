@@ -1,12 +1,16 @@
 package com.example.task.controller
 
 import io.ktor.http.HttpStatusCode.Companion.Created
+import io.ktor.resources.Resource
 import io.ktor.server.request.receive
 import io.ktor.server.resources.post
 import io.ktor.server.response.header
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import org.koin.ktor.ext.inject
+
+@Resource("/tasks")
+class CreateTaskResource
 
 fun Route.taskRoute() {
     post<CreateTaskResource> {

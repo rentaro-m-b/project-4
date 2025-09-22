@@ -76,6 +76,7 @@ class TaskTicketDefinitionRepositoryImplTest :
                         description = "「テスト駆動開発」を読む",
                         expected = BigDecimal("5"),
                         unit = "page",
+                        cyclePerDays = 1,
                         createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                         updatedAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                     ),
@@ -95,6 +96,7 @@ class TaskTicketDefinitionRepositoryImplTest :
                     description = "「テスト駆動開発」を読む",
                     expected = BigDecimal("5").setScale(TASK_TICKET_DEFINITIONS.EXPECTED.dataType.scale()),
                     unit = "page",
+                    cyclePerDays = 1,
                     createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                     updatedAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                 )
