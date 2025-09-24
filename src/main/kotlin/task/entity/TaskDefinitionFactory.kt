@@ -5,7 +5,7 @@ import java.time.Clock
 import java.time.LocalDateTime
 import java.util.UUID
 
-class TaskTicketDefinitionFactory(
+class TaskDefinitionFactory(
     val clock: Clock,
 ) {
     fun create(
@@ -13,8 +13,8 @@ class TaskTicketDefinitionFactory(
         unit: String,
         expected: BigDecimal,
         cyclePerDays: Short,
-    ): TaskTicketDefinition =
-        TaskTicketDefinition(
+    ): TaskDefinition =
+        TaskDefinition(
             id = UUID.randomUUID(),
             description = description,
             unit = unit,

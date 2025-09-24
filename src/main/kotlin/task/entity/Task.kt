@@ -3,9 +3,9 @@ package com.example.task.entity
 import java.math.BigDecimal
 import java.util.UUID
 
-data class TaskTicket(
+data class Task(
     val id: UUID,
-    val taskTicketDefinitionId: UUID,
+    val taskDefinitionId: UUID,
     val actual: BigDecimal,
-    val timeBox: TimeBox,
+    val dueDate: DueDate,
 )

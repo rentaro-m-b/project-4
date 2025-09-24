@@ -1,14 +1,14 @@
 package com.example.task.dataaccess
 
 import com.example.db.tables.TaskTicketDefinitions.Companion.TASK_TICKET_DEFINITIONS
-import com.example.task.entity.TaskTicketDefinition
-import com.example.task.entity.TaskTicketDefinitionRepository
+import com.example.task.entity.TaskDefinition
+import com.example.task.entity.TaskDefinitionRepository
 import org.jooq.DSLContext
 
-class TaskTicketDefinitionRepositoryImpl(
+class TaskDefinitionRepositoryImpl(
     val dslContext: DSLContext,
-) : TaskTicketDefinitionRepository {
-    override fun create(entity: TaskTicketDefinition) {
+) : TaskDefinitionRepository {
+    override fun create(entity: TaskDefinition) {
         dslContext
             .insertInto(TASK_TICKET_DEFINITIONS)
             .set(TASK_TICKET_DEFINITIONS.ID, entity.id)

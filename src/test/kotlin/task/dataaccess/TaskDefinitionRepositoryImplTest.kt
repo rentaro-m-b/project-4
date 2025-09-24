@@ -5,9 +5,9 @@ import com.example.common.DSLContextProvider.provideDSLContext
 import com.example.common.DataSourceProvider.provideDataSource
 import com.example.db.tables.TaskTicketDefinitions.Companion.TASK_TICKET_DEFINITIONS
 import com.example.db.tables.records.TaskTicketDefinitionsRecord
-import com.example.task.dataaccess.TaskTicketDefinitionRepositoryImpl
-import com.example.task.entity.TaskTicketDefinition
-import com.example.task.entity.TaskTicketDefinitionRepository
+import com.example.task.dataaccess.TaskDefinitionRepositoryImpl
+import com.example.task.entity.TaskDefinition
+import com.example.task.entity.TaskDefinitionRepository
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import org.flywaydb.core.Flyway
@@ -25,11 +25,11 @@ import java.time.LocalDateTime
 import java.util.UUID
 import javax.sql.DataSource
 
-class TaskTicketDefinitionRepositoryImplTest :
+class TaskDefinitionRepositoryImplTest :
     FunSpec(),
     KoinTest {
     init {
-        val target by inject<TaskTicketDefinitionRepositoryImpl>()
+        val target by inject<TaskDefinitionRepositoryImpl>()
         val postgres = PostgreSQLContainer("postgres:17.6-alpine")
 
         beforeSpec {
@@ -48,7 +48,7 @@ class TaskTicketDefinitionRepositoryImplTest :
                         } bind DBSettings::class
                         singleOf(::provideDataSource) bind DataSource::class
                         singleOf(::provideDSLContext) bind DSLContext::class
-                        singleOf(::TaskTicketDefinitionRepositoryImpl) bind TaskTicketDefinitionRepository::class
+                        singleOf(::TaskDefinitionRepositoryImpl) bind TaskDefinitionRepository::class
                     },
                 )
             }
@@ -71,7 +71,7 @@ class TaskTicketDefinitionRepositoryImplTest :
             // act
             target.create(
                 entity =
-                    TaskTicketDefinition(
+                    TaskDefinition(
                         id = UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df"),
                         description = "「テスト駆動開発」を読む",
                         expected = BigDecimal("5"),

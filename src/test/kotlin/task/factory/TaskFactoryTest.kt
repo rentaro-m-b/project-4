@@ -1,7 +1,9 @@
 package task.factory
 
-import com.example.task.entity.TaskTicketDefinition
-import com.example.task.entity.TaskTicketDefinitionFactory
+import com.example.task.entity.DueDate
+import com.example.task.entity.Task
+import com.example.task.entity.TaskDefinition
+import com.example.task.entity.TaskFactory
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.mockk.every
@@ -19,11 +21,11 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.UUID
 
-class TaskTicketDefinitionFactoryTest :
+class TaskFactoryTest :
     FunSpec(),
     KoinTest {
     init {
-        val target by inject<TaskTicketDefinitionFactory>()
+        val target by inject<TaskFactory>()
         val clock = mockk<Clock>()
 
         beforeSpec {
@@ -31,7 +33,7 @@ class TaskTicketDefinitionFactoryTest :
                 modules(
                     module {
                         single { clock }
-                        singleOf(::TaskTicketDefinitionFactory)
+                        singleOf(::TaskFactory)
                     },
                 )
             }
@@ -48,24 +50,28 @@ class TaskTicketDefinitionFactoryTest :
             // act
             val actual =
                 target.create(
-                    description = "「テスト駆動開発」を読む",
-                    expected = BigDecimal("5"),
-                    unit = "page",
-                    cyclePerDays = 1,
+                    taskDefinition =
+                        TaskDefinition(
+                            id = UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df"),
+                            description = "「テスト駆動開発」を読む",
+                            expected = BigDecimal("5"),
+                            unit = "page",
+                            cyclePerDays = 1,
+                            createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),
+                            updatedAt = LocalDateTime.parse("2025-09-17T09:00:00"),
+                        ),
+                    dueDate = DueDate(LocalDateTime.parse("2025-09-17T09:00:00")),
                 )
 
             // assert
             val expected =
-                TaskTicketDefinition(
+                Task(
                     id = UUID.randomUUID(),
-                    description = "「テスト駆動開発」を読む",
-                    expected = BigDecimal("5"),
-                    unit = "page",
-                    cyclePerDays = 1,
-                    createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),
-                    updatedAt = LocalDateTime.parse("2025-09-17T09:00:00"),
+                    taskDefinitionId = UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df"),
+                    actual = BigDecimal(0),
+                    dueDate = DueDate(LocalDateTime.parse("2025-09-17T09:00:00")),
                 )
-            actual.shouldBeEqualToIgnoringFields(expected, TaskTicketDefinition::id)
+            actual.shouldBeEqualToIgnoringFields(expected, TaskDefinition::id)
         }
     }
 }
