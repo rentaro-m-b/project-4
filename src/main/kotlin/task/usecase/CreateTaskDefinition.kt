@@ -1,18 +1,18 @@
 package com.example.task.usecase
 
 import com.example.task.entity.DueDate
-import com.example.task.entity.Task
-import com.example.task.entity.TaskDefinition
 import com.example.task.entity.TaskDefinitionFactory
 import com.example.task.entity.TaskDefinitionRepository
 import com.example.task.entity.TaskFactory
+import com.example.task.entity.TaskRepository
 import java.math.BigDecimal
 import java.time.Clock
 import java.time.LocalDateTime
 import java.util.UUID
 
 class CreateTaskDefinition(
-    val repository: TaskDefinitionRepository,
+    val taskDefinitionRepository: TaskDefinitionRepository,
+    val taskRepository: TaskRepository,
     val taskDefinitionFactory: TaskDefinitionFactory,
     val taskFactory: TaskFactory,
     val clock: Clock,
@@ -25,8 +25,9 @@ class CreateTaskDefinition(
                 expected = command.expected,
                 cyclePerDays = command.cyclePerDays,
             )
-        repository.create(taskDefinition)
+        taskDefinitionRepository.create(taskDefinition)
         val task = taskFactory.create(taskDefinition, DueDate(LocalDateTime.now(clock)))
+        taskRepository.create(task)
         return taskDefinition.id
     }
 }

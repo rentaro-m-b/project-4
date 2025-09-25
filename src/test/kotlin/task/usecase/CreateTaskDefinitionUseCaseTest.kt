@@ -6,6 +6,7 @@ import com.example.task.entity.TaskDefinition
 import com.example.task.entity.TaskDefinitionFactory
 import com.example.task.entity.TaskDefinitionRepository
 import com.example.task.entity.TaskFactory
+import com.example.task.entity.TaskRepository
 import com.example.task.usecase.CreateTaskDefinition
 import com.example.task.usecase.CreateTaskDefinitionCommand
 import io.kotest.core.spec.style.FunSpec
@@ -32,7 +33,8 @@ class CreateTaskDefinitionUseCaseTest :
     KoinTest {
     init {
         val target by inject<CreateTaskDefinition>()
-        val repository = mockk<TaskDefinitionRepository>()
+        val taskDefinitionRepository = mockk<TaskDefinitionRepository>()
+        val taskRepository = mockk<TaskRepository>()
         val taskDefinitionFactory = mockk<TaskDefinitionFactory>()
         val taskFactory = mockk<TaskFactory>()
         val clock = mockk<Clock>()
@@ -41,7 +43,8 @@ class CreateTaskDefinitionUseCaseTest :
             startKoin {
                 modules(
                     module {
-                        single { repository }
+                        single { taskDefinitionRepository }
+                        single { taskRepository }
                         single { taskDefinitionFactory }
                         single { taskFactory }
                         single { clock }
@@ -79,7 +82,7 @@ class CreateTaskDefinitionUseCaseTest :
                 )
 
             every {
-                repository.create(
+                taskDefinitionRepository.create(
                     TaskDefinition(
                         id = UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df"),
                         description = "「テスト駆動開発」を読む",
@@ -114,6 +117,19 @@ class CreateTaskDefinitionUseCaseTest :
                     createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                     updatedAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                 )
+
+            every {
+                taskRepository.create(
+                    Task(
+                        id = UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df"),
+                        taskDefinitionId = UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df"),
+                        actual = BigDecimal(0),
+                        dueDate = DueDate(LocalDateTime.parse("2025-09-17T09:00:00")),
+                        createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),
+                        updatedAt = LocalDateTime.parse("2025-09-17T09:00:00"),
+                    ),
+                )
+            } just Runs
 
             // act
             val actual =
