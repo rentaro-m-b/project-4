@@ -2,6 +2,7 @@ package com.example.task.entity
 
 import java.math.BigDecimal
 import java.time.Clock
+import java.time.LocalDateTime
 import java.util.UUID
 
 class TaskFactory(
@@ -16,5 +17,7 @@ class TaskFactory(
             taskDefinitionId = taskDefinition.id,
             actual = BigDecimal(0),
             dueDate = dueDate,
+            createdAt = LocalDateTime.now(clock),
+            updatedAt = LocalDateTime.now(clock),
         )
 }

@@ -29,14 +29,6 @@ class CreateTaskDefinition(
         val task = taskFactory.create(taskDefinition, DueDate(LocalDateTime.now(clock)))
         return taskDefinition.id
     }
-
-    private fun TaskDefinition.createTaskTicket(dueDate: DueDate): Task =
-        Task(
-            id = UUID.randomUUID(),
-            taskDefinitionId = id,
-            actual = BigDecimal(0),
-            dueDate = dueDate,
-        )
 }
 
 data class CreateTaskDefinitionCommand(
