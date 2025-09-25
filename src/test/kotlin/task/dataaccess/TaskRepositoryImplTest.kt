@@ -3,7 +3,6 @@ package task.dataaccess
 import com.example.DBSettings
 import com.example.common.DSLContextProvider.provideDSLContext
 import com.example.common.DataSourceProvider.provideDataSource
-import com.example.db.tables.TaskDefinitions.Companion.TASK_DEFINITIONS
 import com.example.db.tables.records.TasksRecord
 import com.example.db.tables.references.TASKS
 import com.example.task.dataaccess.TaskRepositoryImpl

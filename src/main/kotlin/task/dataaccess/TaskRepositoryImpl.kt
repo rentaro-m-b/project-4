@@ -2,7 +2,6 @@ package com.example.task.dataaccess
 
 import com.example.db.tables.references.TASKS
 import com.example.task.entity.Task
-import com.example.task.entity.TaskDefinitionRepository
 import com.example.task.entity.TaskRepository
 import org.jooq.DSLContext
 
