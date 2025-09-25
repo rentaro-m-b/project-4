@@ -3,8 +3,8 @@ package task.dataaccess
 import com.example.DBSettings
 import com.example.common.DSLContextProvider.provideDSLContext
 import com.example.common.DataSourceProvider.provideDataSource
-import com.example.db.tables.TaskTicketDefinitions.Companion.TASK_TICKET_DEFINITIONS
-import com.example.db.tables.records.TaskTicketDefinitionsRecord
+import com.example.db.tables.TaskDefinitions.Companion.TASK_DEFINITIONS
+import com.example.db.tables.records.TaskDefinitionsRecord
 import com.example.task.dataaccess.TaskDefinitionRepositoryImpl
 import com.example.task.entity.TaskDefinition
 import com.example.task.entity.TaskDefinitionRepository
@@ -86,15 +86,15 @@ class TaskDefinitionRepositoryImplTest :
             val actual =
                 getKoin()
                     .get<DSLContext>()
-                    .selectFrom(TASK_TICKET_DEFINITIONS)
-                    .where(TASK_TICKET_DEFINITIONS.ID.eq(UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df")))
+                    .selectFrom(TASK_DEFINITIONS)
+                    .where(TASK_DEFINITIONS.ID.eq(UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df")))
                     .fetchOne() ?: error("row not found")
 
             val expected =
-                TaskTicketDefinitionsRecord(
+                TaskDefinitionsRecord(
                     id = UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df"),
                     description = "「テスト駆動開発」を読む",
-                    expected = BigDecimal("5").setScale(TASK_TICKET_DEFINITIONS.EXPECTED.dataType.scale()),
+                    expected = BigDecimal("5").setScale(TASK_DEFINITIONS.EXPECTED.dataType.scale()),
                     unit = "page",
                     cyclePerDays = 1,
                     createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),

@@ -70,6 +70,8 @@ class TaskFactoryTest :
                     taskDefinitionId = UUID.fromString("3ee1f358-690f-4ac7-8eec-8e3be49419df"),
                     actual = BigDecimal(0),
                     dueDate = DueDate(LocalDateTime.parse("2025-09-17T09:00:00")),
+                    createdAt = LocalDateTime.parse("2025-09-17T09:00:00"),
+                    updatedAt = LocalDateTime.parse("2025-09-17T09:00:00"),
                 )
             actual.shouldBeEqualToIgnoringFields(expected, TaskDefinition::id)
         }
