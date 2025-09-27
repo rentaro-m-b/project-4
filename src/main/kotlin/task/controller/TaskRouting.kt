@@ -7,6 +7,7 @@ import io.ktor.server.resources.post
 import io.ktor.server.response.header
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import io.netty.handler.codec.http.HttpHeaderNames.LOCATION
 import org.koin.ktor.ext.inject
 
 @Resource("/tasks")
@@ -16,7 +17,7 @@ fun Route.taskRoute() {
     post<CreateTaskResource> {
         val handler by inject<CreateTaskRequestHandler>()
         val request = call.receive<CreateTaskRequest>()
-        call.response.header("Location", handler.handle(request).toString())
+        call.response.header(LOCATION.toString(), handler.handle(request).toString())
         call.respond(Created)
     }
 }

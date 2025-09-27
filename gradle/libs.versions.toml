@@ -15,6 +15,7 @@ commons-compress = "1.28.0"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor" }
@@ -26,6 +27,7 @@ kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.
 rest-assured = { module = "io.rest-assured:rest-assured", version.ref = "rest-assured"}
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-server-host-common = { module = "io.ktor:ktor-server-host-common", version.ref = "ktor" }
 ktor-server-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
