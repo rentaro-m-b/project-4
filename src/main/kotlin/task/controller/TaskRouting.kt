@@ -16,8 +16,10 @@ class CreateTaskResource
 fun Route.taskRoute() {
     post<CreateTaskResource> {
         val handler by inject<CreateTaskRequestHandler>()
+        println("handler inject OK")
         val request = call.receive<CreateTaskRequest>()
         call.response.header(LOCATION.toString(), handler.handle(request).toString())
+        println("handler.handle OK")
         call.respond(Created)
     }
 }

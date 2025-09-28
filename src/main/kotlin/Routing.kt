@@ -29,6 +29,7 @@ fun Application.configureRouting() {
             ),
         )
     }
+    println("install koin OK")
 
     routing {
         get<HealthCheckResource> {
