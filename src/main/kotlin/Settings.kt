@@ -3,8 +3,6 @@ package com.example
 import io.ktor.server.application.Application
 import io.ktor.server.config.ApplicationConfig
 
-fun Application.readDbSettings(): DBSettings = DBSettings.of(environment.config.config("db"))
-
 data class DBSettings(
     val url: String,
     val user: String,

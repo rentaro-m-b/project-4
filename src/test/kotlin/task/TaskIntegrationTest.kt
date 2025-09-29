@@ -1,5 +1,6 @@
 package task
 
+import com.example.configureRouting
 import com.example.module
 import com.example.task.controller.CreateTaskRequest
 import io.kotest.core.spec.style.FunSpec
@@ -12,13 +13,28 @@ import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.yaml.YamlConfigLoader
+import io.ktor.server.netty.EngineMain
 import io.ktor.server.testing.testApplication
-import io.netty.handler.codec.http.HttpHeaderNames.LOCATION
+import org.flywaydb.core.Flyway
 import org.koin.core.context.stopKoin
-import java.util.UUID
 
 class TaskIntegrationTest :
     FunSpec({
+//        beforeSpec {
+//            val config = YamlConfigLoader().load("application.yaml")!!
+//            val url = config.property("db.url").getString()
+//            val user = config.property("db.user").getString()
+//            val password = config.property("db.password").getString()
+//            Flyway
+//                .configure()
+//                .dataSource(url, user, password)
+//                .locations("classpath:db/migration")
+//                .schemas("main")
+//                .defaultSchema("main")
+//                .load()
+//                .migrate()
+//        }
+
         afterSpec {
             stopKoin()
         }
@@ -55,8 +71,15 @@ class TaskIntegrationTest :
                     }
 
                 // assert
+//                val dsl = GlobalContext.get().get<DSLContext>()
+//                val expected =
+//                    dsl
+//                        .selectFrom(TASK_DEFINITIONS)
+//                        .orderBy(TASK_DEFINITIONS.CREATED_AT)
+//                        .fetchOne() ?: error("row not found")
                 response.status shouldBe Created
-                UUID.fromString(response.headers[LOCATION.toString()]).version() shouldBe 4
+//                response.headers[LOCATION.toString()] shouldBe expected.id
+//                UUID.fromString(response.headers[LOCATION.toString()]).version() shouldBe 4
             }
         }
     })

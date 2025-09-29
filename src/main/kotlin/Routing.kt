@@ -25,11 +25,10 @@ fun Application.configureRouting() {
         modules(
             listOf(
                 TaskDIContainer.defineModule(),
-                CommonDIContainer.defineModule(readDbSettings()),
+                CommonDIContainer.defineModule(DBSettings.of(environment.config.config("db"))),
             ),
         )
     }
-    println("install koin OK")
 
     routing {
         get<HealthCheckResource> {

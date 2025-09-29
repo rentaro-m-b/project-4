@@ -1,7 +1,7 @@
 db:
-  url: "jdbc:postgresql://localhost:54332/main"
+  url: "jdbc:tc:postgresql:17-alpine:///main"
   user: "root"
   password: "password"
-  driver: "org.postgresql.Driver"
+  driver: "org.testcontainers.jdbc.ContainerDatabaseDriver"
   pool:
     maxSize: 10
