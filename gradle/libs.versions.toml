@@ -1,53 +1,25 @@
 [versions]
-kotlin = "2.1.10"
-ktor = "3.2.3"
-logback = "1.5.18"
-kotest = "6.0.2"
-rest-assured = "5.5.6"
-koin = "4.1.0"
-flyway = "11.12.0"
-postgresql = "42.7.7"
-jooq = "3.20.7"
-hikaricp = "7.0.2"
-mockk = "1.14.5"
-testcontainers-postgresql = "1.21.3"
-commons-compress = "1.28.0"
+kotlin = "2.2.20"
+ktor = "3.3.2"
+logback = "1.5.21"
+kotlinx = "1.9.0"
 
 [libraries]
+# main
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
-ktor-client-core = { module = "io.ktor:ktor-client-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor" }
-ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
-kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages-jvm", version.ref = "ktor"}
-kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest"}
-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest"}
-rest-assured = { module = "io.rest-assured:rest-assured", version.ref = "rest-assured"}
-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+# test
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
-ktor-server-host-common = { module = "io.ktor:ktor-server-host-common", version.ref = "ktor" }
-ktor-server-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
-koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
-koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
-postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
-flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
-jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
-jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
-jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
-hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
-kotest-extensions-koin = { module = "io.kotest:kotest-extensions-koin", version.ref = "kotest" }
-koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
-testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers-postgresql" }
-commons-compress = { group = "org.apache.commons", name = "commons-compress", version.ref = "commons-compress" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
-kotest = { id = "io.kotest", version.ref = "kotest" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
-jooq-codegen = { id = "org.jooq.jooq-codegen-gradle", version.ref = "jooq" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
