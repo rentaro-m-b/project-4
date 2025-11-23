@@ -6,7 +6,7 @@ import io.ktor.server.testing.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class HealthRouterTest {
+class HealthRoutesTest {
     @Test
     fun getHealth() = testApplication {
         application {
