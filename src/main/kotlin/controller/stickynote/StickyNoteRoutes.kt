@@ -1,6 +1,5 @@
 package com.example.controller.stickynote
 
-import com.example.usecase.stickynote.CreateStickyNoteCommand
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
 import io.ktor.http.HttpStatusCode.Companion.Created
@@ -8,7 +7,6 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.Serializable
 
 fun Route.stickyNoteRoutes(
     listStickyNotesUseCase: ListStickyNotesUseCase,
@@ -24,7 +22,7 @@ fun Route.listStickyNotes(useCase: ListStickyNotesUseCase) {
     get {
         val stickyNotes = useCase.handle()
         call.response.status(OK)
-        call.respond(stickyNotes)
+        call.respond(stickyNotes.map { ListStickyNotesResponse.of(it) })
     }
 }
 
@@ -34,11 +32,4 @@ fun Route.createStickyNote(useCase: CreateStickyNoteUseCase) {
         useCase.handle(request.toCommand())
         call.respond(Created)
     }
-}
-
-@Serializable
-data class CreateStickyNoteRequest(
-    val concern: String,
-) {
-    fun toCommand(): CreateStickyNoteCommand = CreateStickyNoteCommand(concern)
 }
