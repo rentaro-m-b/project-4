@@ -2,7 +2,7 @@ package com.example.infra.stickynote
 
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
-import kotlinx.datetime.LocalDateTime
+import java.time.LocalDateTime
 
 object StickyNoteRepositoryImpl: StickyNoteRepository {
     private val stickyNotes =

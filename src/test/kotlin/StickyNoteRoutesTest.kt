@@ -25,10 +25,10 @@ class StickyNoteRoutesTest {
             formatAsExpected(
                 """
                     [
-                        {"concern":"wanting to submit to illustration contests","createdAt":"2025-01-01T00:00"},
-                        {"concern":"wanting to get better at drawing","createdAt":"2025-01-01T00:00"},
-                        {"concern":"worrying about not losing weight","createdAt":"2025-01-01T00:00"},
-                        {"concern":"to read books","createdAt":"2025-01-01T00:00"}
+                        {"concern":"wanting to submit to illustration contests","createdAt":"2025-01-01T00:00:00"},
+                        {"concern":"wanting to get better at drawing","createdAt":"2025-01-01T00:00:00"},
+                        {"concern":"worrying about not losing weight","createdAt":"2025-01-01T00:00:00"},
+                        {"concern":"to read books","createdAt":"2025-01-01T00:00:00"}
                     ]
                 """
             )

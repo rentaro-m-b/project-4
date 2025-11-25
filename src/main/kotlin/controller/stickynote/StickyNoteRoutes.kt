@@ -1,6 +1,6 @@
 package com.example.controller.stickynote
 
-import com.example.domain.stickynote.StickyNote
+import com.example.usecase.stickynote.CreateStickyNoteCommand
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
 import io.ktor.http.HttpStatusCode.Companion.Created
@@ -8,11 +8,7 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock.System.now
 import kotlinx.serialization.Serializable
-import kotlin.time.ExperimentalTime
 
 fun Route.stickyNoteRoutes(
     listStickyNotesUseCase: ListStickyNotesUseCase,
@@ -32,11 +28,10 @@ fun Route.listStickyNotes(useCase: ListStickyNotesUseCase) {
     }
 }
 
-@OptIn(ExperimentalTime::class)
 fun Route.createStickyNote(useCase: CreateStickyNoteUseCase) {
     post {
         val request = call.receive<CreateStickyNoteRequest>()
-        useCase.handle(StickyNote(request.concern, now().toLocalDateTime(timeZone = TimeZone.UTC)))
+        useCase.handle(request.toCommand())
         call.respond(Created)
     }
 }
@@ -44,4 +39,6 @@ fun Route.createStickyNote(useCase: CreateStickyNoteUseCase) {
 @Serializable
 data class CreateStickyNoteRequest(
     val concern: String,
-)
+) {
+    fun toCommand(): CreateStickyNoteCommand = CreateStickyNoteCommand(concern)
+}
