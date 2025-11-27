@@ -21,8 +21,7 @@ dependencies {
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.logback.classic)
-    implementation(libs.flyway.core)
-    implementation(libs.flyway.database.postgresql)
+    implementation(libs.postgresql)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.ktor.client.content.negotiation)
@@ -36,7 +35,6 @@ flyway {
 
 buildscript {
     dependencies {
-        classpath(libs.flyway.core)
         classpath(libs.flyway.database.postgresql)
     }
 }

@@ -4,6 +4,7 @@ ktor = "3.3.2"
 logback = "1.5.21"
 kotlinx-serialization-json = "1.9.0"
 kotlinx-datetime = "0.7.1"
+postgresql = "42.7.8"
 flyway = "11.18.0"
 
 [libraries]
@@ -16,7 +17,7 @@ ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
-flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql"}
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 
 # test
