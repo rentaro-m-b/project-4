@@ -6,8 +6,8 @@ ktor:
         port: 8080
 db:
     url: "jdbc:postgresql://localhost:54332/main"
-    user: "root"
-    password: "password"
+    user: "montre"
+    password: "P@ssw0rd"
     driver: "org.postgresql.Driver"
     pool:
         maxSize: 10

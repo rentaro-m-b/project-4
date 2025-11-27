@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.ktor)
+    alias(libs.plugins.flyway)
 }
 
 group = "com.example"
@@ -20,7 +21,22 @@ dependencies {
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.logback.classic)
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.database.postgresql)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.ktor.client.content.negotiation)
+}
+
+flyway {
+    url = "jdbc:postgresql://localhost:54332/main"
+    user = "montre"
+    password = "P@ssw0rd"
+}
+
+buildscript {
+    dependencies {
+        classpath(libs.flyway.core)
+        classpath(libs.flyway.database.postgresql)
+    }
 }
