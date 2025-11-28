@@ -26,7 +26,6 @@ dependencies {
     implementation(libs.jooq)
     implementation(libs.jooq.meta)
     implementation(libs.jooq.codegen)
-    runtimeOnly(libs.postgresql)
     jooqCodegen(libs.postgresql)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.ktor.server.test.host)
@@ -46,12 +45,26 @@ flyway {
 }
 
 jooq {
-    configurations {
+    configuration {
         jdbc {
             driver = "org.postgresql.Driver"
             url = "jdbc:postgresql://localhost:54332/main"
             user = "montre"
             password = "P@ssw0rd"
+        }
+
+        generator {
+            database {
+                name = "org.jooq.meta.postgres.PostgresDatabase"
+                includes = ".*"
+                excludes = "flyway_schema_history"
+                inputSchema = "public"
+            }
+
+            target {
+                packageName = group.toString()
+                directory = "./build/generated/jooq"
+            }
         }
     }
 }
