@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.ktor)
     alias(libs.plugins.flyway)
+    alias(libs.plugins.jooq.codegen)
 }
 
 group = "com.example"
@@ -22,9 +23,20 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.logback.classic)
     implementation(libs.postgresql)
+    implementation(libs.jooq)
+    implementation(libs.jooq.meta)
+    implementation(libs.jooq.codegen)
+    runtimeOnly(libs.postgresql)
+    jooqCodegen(libs.postgresql)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.ktor.client.content.negotiation)
+}
+
+buildscript {
+    dependencies {
+        classpath(libs.flyway.database.postgresql)
+    }
 }
 
 flyway {
@@ -33,8 +45,13 @@ flyway {
     password = "P@ssw0rd"
 }
 
-buildscript {
-    dependencies {
-        classpath(libs.flyway.database.postgresql)
+jooq {
+    configurations {
+        jdbc {
+            driver = "org.postgresql.Driver"
+            url = "jdbc:postgresql://localhost:54332/main"
+            user = "montre"
+            password = "P@ssw0rd"
+        }
     }
 }
