@@ -2,7 +2,12 @@ package com.example.infra.stickynote
 
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
+import org.jooq.*
+import org.jooq.impl.DSL
+import org.jooq.tools.jdbc.JDBCUtils.dialect
 import java.time.LocalDateTime
+import java.util.*
+
 
 object StickyNoteRepositoryImpl: StickyNoteRepository {
     private val stickyNotes =
@@ -13,7 +18,11 @@ object StickyNoteRepositoryImpl: StickyNoteRepository {
             StickyNote(concern = "to read books", LocalDateTime.parse("2025-01-01T00:00:00")),
         )
 
+    val dsl = DSL.using(connection, dialect)
+
     override fun listStickyNotes(): List<StickyNote> {
+
+
         return stickyNotes
     }
 
