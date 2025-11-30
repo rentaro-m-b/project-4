@@ -5,6 +5,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,6 +14,9 @@ class StickyNoteRoutesTest {
     @Test
     fun listStickyNotes() = testApplication {
         // setup
+        environment {
+            config = ApplicationConfig("application.yaml")
+        }
         application {
             module()
         }
@@ -39,6 +43,9 @@ class StickyNoteRoutesTest {
     @Test
     fun createStickyNote() = testApplication {
         // setup
+        environment {
+            config = ApplicationConfig("application.yaml")
+        }
         application {
             module()
         }

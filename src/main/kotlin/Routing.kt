@@ -10,8 +10,19 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
-    val listStickyNoteUseCase = ListStickyNotesUseCase(StickyNoteRepositoryImpl)
-    val createStickyNoteUseCase = CreateStickyNoteUseCase(StickyNoteRepositoryImpl)
+    val config = environment.config
+    val url = config.property("db.url")
+    val user = config.property("db.user")
+    val password = config.property("db.password")
+    val dataSource =
+        DataSource(
+            url = url,
+            user = user,
+            password = password,
+        )
+
+    val listStickyNoteUseCase = ListStickyNotesUseCase(StickyNoteRepositoryImpl(dataSource))
+    val createStickyNoteUseCase = CreateStickyNoteUseCase(StickyNoteRepositoryImpl(dataSource))
 
     routing {
         get("/health") {

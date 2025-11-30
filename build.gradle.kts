@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.logback.classic)
     implementation(libs.postgresql)
+    implementation(libs.hikari)
     implementation(libs.jooq)
     implementation(libs.jooq.meta)
     implementation(libs.jooq.codegen)
@@ -30,6 +31,10 @@ dependencies {
     testImplementation(libs.kotlin.test)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.rider.core)
+    testImplementation(libs.snakeyaml)
+    testImplementation(libs.jackson.core)
+    testImplementation(libs.rider.junit5)
 }
 
 buildscript {
@@ -42,6 +47,12 @@ flyway {
     url = "jdbc:postgresql://localhost:54332/main"
     user = "montre"
     password = "P@ssw0rd"
+}
+
+sourceSets {
+    main {
+        java.srcDir("build/generated/jooq/com/example")
+    }
 }
 
 jooq {

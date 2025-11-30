@@ -5,8 +5,13 @@ logback = "1.5.21"
 kotlinx-serialization-json = "1.9.0"
 kotlinx-datetime = "0.7.1"
 postgresql = "42.7.8"
+hikari = "7.0.2"
 flyway = "11.18.0"
 jooq = "3.20.9"
+database-rider = "1.44.0"
+snakeyaml = "2.5"
+jackson = "2.20.1"
+
 
 [libraries]
 # main
@@ -18,7 +23,8 @@ ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
-postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql"}
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
 jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
@@ -28,6 +34,12 @@ jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+rider-core = { module = "com.github.database-rider:rider-core", version.ref = "database-rider" }
+rider-junit5 = { module = "com.github.database-rider:rider-junit5", version.ref = "database-rider" }
+# caused by a vulnerable transitive library from rider-core
+snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
+# caused by a vulnerable transitive library from rider-core
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

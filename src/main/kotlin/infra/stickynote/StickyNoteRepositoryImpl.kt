@@ -1,15 +1,15 @@
 package com.example.infra.stickynote
 
+import com.example.DataSource
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
-import org.jooq.*
+import com.example.tables.StickyNotes.STICKY_NOTES
+import com.example.tables.records.StickyNotesRecord
+import org.jooq.SQLDialect
 import org.jooq.impl.DSL
-import org.jooq.tools.jdbc.JDBCUtils.dialect
 import java.time.LocalDateTime
-import java.util.*
 
-
-object StickyNoteRepositoryImpl: StickyNoteRepository {
+class StickyNoteRepositoryImpl(val dataSource: DataSource): StickyNoteRepository {
     private val stickyNotes =
         mutableListOf(
             StickyNote(concern = "wanting to submit to illustration contests", LocalDateTime.parse("2025-01-01T00:00:00")),
@@ -18,15 +18,20 @@ object StickyNoteRepositoryImpl: StickyNoteRepository {
             StickyNote(concern = "to read books", LocalDateTime.parse("2025-01-01T00:00:00")),
         )
 
-    val dsl = DSL.using(connection, dialect)
-
     override fun listStickyNotes(): List<StickyNote> {
-
-
-        return stickyNotes
+        val dsl = DSL.using(dataSource.getConnection(), SQLDialect.POSTGRES)
+        val result = dsl.selectFrom(STICKY_NOTES).fetch().toList()
+        return result.map { it.toEntity() }
     }
 
     override fun createStickyNote(stickyNote: StickyNote) {
         stickyNotes.add(stickyNote)
     }
+}
+
+fun StickyNotesRecord.toEntity(): StickyNote {
+    return StickyNote(
+        concern = concern,
+        createdAt = createdAt,
+    )
 }
