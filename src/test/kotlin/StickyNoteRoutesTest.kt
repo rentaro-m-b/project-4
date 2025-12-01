@@ -1,5 +1,7 @@
 import com.example.controller.stickynote.CreateStickyNoteRequest
 import com.example.module
+import com.github.database.rider.core.api.dataset.DataSet
+import com.github.database.rider.junit5.api.DBRider
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.*
@@ -10,8 +12,10 @@ import io.ktor.server.testing.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@DBRider
 class StickyNoteRoutesTest {
     @Test
+    @DataSet(value = ["datasets/stickyNotes.yaml"], cleanBefore = true)
     fun listStickyNotes() = testApplication {
         // setup
         environment {

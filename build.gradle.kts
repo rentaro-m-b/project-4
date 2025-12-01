@@ -26,7 +26,6 @@ dependencies {
     implementation(libs.hikari)
     implementation(libs.jooq)
     implementation(libs.jooq.meta)
-    implementation(libs.jooq.codegen)
     jooqCodegen(libs.postgresql)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.ktor.server.test.host)
@@ -51,7 +50,7 @@ flyway {
 
 sourceSets {
     main {
-        java.srcDir("build/generated/jooq/com/example")
+        java.srcDir("./build/generated/jooq")
     }
 }
 
