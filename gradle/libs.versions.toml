@@ -11,6 +11,7 @@ jooq = "3.20.9"
 database-rider = "1.44.0"
 snakeyaml = "2.5"
 jackson = "2.20.1"
+junit-jupiter-api = "6.0.1"
 
 
 [libraries]
@@ -30,6 +31,7 @@ jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
 jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
 
 # test
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter-api"}
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }

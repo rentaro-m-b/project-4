@@ -9,7 +9,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.*
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 @DBRider
