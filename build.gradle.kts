@@ -28,7 +28,7 @@ dependencies {
     implementation(libs.jooq.meta)
     jooqCodegen(libs.postgresql)
     testImplementation(libs.junit.jupiter.api)
-//    testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotlin.test)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.ktor.client.content.negotiation)
     testImplementation(libs.rider.core)
@@ -41,6 +41,10 @@ buildscript {
     dependencies {
         classpath(libs.flyway.database.postgresql)
     }
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 flyway {
