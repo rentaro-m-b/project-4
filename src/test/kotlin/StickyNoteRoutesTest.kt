@@ -1,6 +1,7 @@
 import com.example.controller.stickynote.CreateStickyNoteRequest
 import com.example.module
 import com.github.database.rider.core.api.dataset.DataSet
+import com.github.database.rider.core.api.dataset.ExpectedDataSet
 import com.github.database.rider.junit5.api.DBRider
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -15,7 +16,7 @@ import kotlin.test.assertEquals
 @DBRider
 class StickyNoteRoutesTest {
     @Test
-    @DataSet(value = ["datasets/stickyNotes.yaml"], cleanBefore = true)
+    @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
     fun listStickyNotes() = testApplication {
         // setup
         environment {
@@ -34,9 +35,9 @@ class StickyNoteRoutesTest {
                 """
                     [
                         {"concern":"wanting to submit to illustration contests","createdAt":"2025-01-01T00:00:00"},
-                        {"concern":"wanting to get better at drawing","createdAt":"2025-01-01T00:00:00"},
-                        {"concern":"worrying about not losing weight","createdAt":"2025-01-01T00:00:00"},
-                        {"concern":"to read books","createdAt":"2025-01-01T00:00:00"}
+                        {"concern":"wanting to get better at drawing","createdAt":"2025-01-01T00:00:01"},
+                        {"concern":"worrying about not losing weight","createdAt":"2025-01-01T00:00:02"},
+                        {"concern":"to read books","createdAt":"2025-01-01T00:00:03"}
                     ]
                 """
             )
@@ -45,6 +46,12 @@ class StickyNoteRoutesTest {
     }
 
     @Test
+    @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
+    @ExpectedDataSet(
+        value = ["datasets/expected/createStickyNote.yaml"],
+        orderBy = ["created_at"],
+        ignoreCols = ["created_at"],
+    )
     fun createStickyNote() = testApplication {
         // setup
         environment {
