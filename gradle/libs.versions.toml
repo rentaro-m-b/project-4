@@ -1,5 +1,6 @@
 [versions]
 kotlin = "2.2.20"
+groovy = "3.0.25"
 ktor = "3.3.2"
 logback = "1.5.21"
 kotlinx-serialization-json = "1.9.0"
@@ -37,6 +38,7 @@ ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref 
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 rider-core = { module = "com.github.database-rider:rider-core", version.ref = "database-rider" }
 rider-junit5 = { module = "com.github.database-rider:rider-junit5", version.ref = "database-rider" }
+groovy = { module = "org.codehaus.groovy:groovy-all", version.ref = "groovy" }
 # caused by a vulnerable transitive library from rider-core
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
 # caused by a vulnerable transitive library from rider-core

@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.jooq)
     implementation(libs.jooq.meta)
     jooqCodegen(libs.postgresql)
+    testImplementation(libs.groovy)
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.ktor.server.test.host)

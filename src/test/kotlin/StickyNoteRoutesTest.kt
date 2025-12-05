@@ -50,7 +50,6 @@ class StickyNoteRoutesTest {
     @ExpectedDataSet(
         value = ["datasets/expected/createStickyNote.yaml"],
         orderBy = ["created_at"],
-        ignoreCols = ["created_at"],
     )
     fun createStickyNote() = testApplication {
         // setup

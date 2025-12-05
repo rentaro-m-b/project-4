@@ -13,4 +13,4 @@ sticky_notes:
     created_at: "2025-01-01 00:00:03"
   - id: "groovy:(value != null)"
     concern: "wanting to have happiness"
-    created_at: "2025-01-01 00:00:04"
+    created_at: "groovy:(value != null)"
