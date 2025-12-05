@@ -27,7 +27,8 @@ class StickyNoteRepositoryImpl(val dataSource: DataSource): StickyNoteRepository
 }
 
 fun StickyNotesRecord.toEntity(): StickyNote {
-    return StickyNote(
+    return StickyNote.create(
+        id = id,
         concern = concern,
         createdAt = createdAt,
     )
