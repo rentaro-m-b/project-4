@@ -3,6 +3,7 @@ package com.example
 import com.example.controller.stickynote.stickyNoteRoutes
 import com.example.infra.stickynote.StickyNoteRepositoryImpl
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
+import com.example.usecase.stickynote.DeleteStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
 import com.example.usecase.stickynote.UpdateStickyNoteUseCase
 import io.ktor.http.HttpStatusCode.Companion.OK
@@ -26,6 +27,7 @@ fun Application.configureRouting() {
     val listStickyNoteUseCase = ListStickyNotesUseCase(stickyNoteRepository)
     val createStickyNoteUseCase = CreateStickyNoteUseCase(stickyNoteRepository)
     val updateStickyNoteUseCase = UpdateStickyNoteUseCase(stickyNoteRepository)
+    val deleteStickyNoteUseCase = DeleteStickyNoteUseCase(stickyNoteRepository)
 
     routing {
         get("/health") {
@@ -36,6 +38,7 @@ fun Application.configureRouting() {
             listStickyNoteUseCase,
             createStickyNoteUseCase,
             updateStickyNoteUseCase,
+            deleteStickyNoteUseCase,
         )
     }
 }

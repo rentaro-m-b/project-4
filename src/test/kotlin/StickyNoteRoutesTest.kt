@@ -1,5 +1,6 @@
 import com.example.controller.stickynote.CreateStickyNoteRequest
-import com.example.controller.stickynote.controller.stickynote.UpdateStickyNoteRequest
+import com.example.controller.stickynote.DeleteStickyNoteRequest
+import com.example.controller.stickynote.UpdateStickyNoteRequest
 import com.example.module
 import com.github.database.rider.core.api.dataset.DataSet
 import com.github.database.rider.core.api.dataset.ExpectedDataSet
@@ -107,6 +108,39 @@ class StickyNoteRoutesTest {
                 ContentType.Application.Json
             )
             setBody(UpdateStickyNoteRequest("wanting to have happiness"))
+        }
+
+        // assert
+        assertEquals(NoContent, actual.status)
+    }
+
+    @Test
+    @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
+    @ExpectedDataSet(
+        value = ["datasets/expected/deleteStickyNote.yaml"],
+        orderBy = ["created_at"],
+    )
+    fun deleteStickyNote() = testApplication {
+        // setup
+        environment {
+            config = ApplicationConfig("application.yaml")
+        }
+        application {
+            module()
+        }
+
+        // execute
+        val client = createClient {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+        val actual = client.delete("/stickyNotes/ae95e722-253d-4fde-94f7-598da746cf0c") {
+            header(
+                HttpHeaders.ContentType,
+                ContentType.Application.Json
+            )
+            setBody(DeleteStickyNoteRequest("wanting to have happiness"))
         }
 
         // assert

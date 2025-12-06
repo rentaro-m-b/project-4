@@ -1,7 +1,8 @@
 package com.example.controller.stickynote
 
-import com.example.controller.stickynote.controller.stickynote.UpdateStickyNoteRequest
+import com.example.controller.stickynote.UpdateStickyNoteRequest
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
+import com.example.usecase.stickynote.DeleteStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
 import com.example.usecase.stickynote.UpdateStickyNoteUseCase
 import io.ktor.http.HttpStatusCode.Companion.Created
@@ -18,11 +19,13 @@ fun Route.stickyNoteRoutes(
     listStickyNotesUseCase: ListStickyNotesUseCase,
     createStickyNoteUseCase: CreateStickyNoteUseCase,
     updateStickyNoteUseCase: UpdateStickyNoteUseCase,
+    deleteStickyNoteUseCase: DeleteStickyNoteUseCase,
 ) {
     route("/stickyNotes") {
         listStickyNotes(listStickyNotesUseCase)
         createStickyNote(createStickyNoteUseCase)
         updateStickyNote(updateStickyNoteUseCase)
+        deleteStickyNote(deleteStickyNoteUseCase)
     }
 }
 
@@ -46,6 +49,15 @@ fun Route.updateStickyNote(useCase: UpdateStickyNoteUseCase) {
     put("/{id}") {
         val id: UUID by call.parameters
         val request = call.receive<UpdateStickyNoteRequest>()
+        useCase.handle(request.toCommand(id))
+        call.respond(NoContent)
+    }
+}
+
+fun Route.deleteStickyNote(useCase: DeleteStickyNoteUseCase) {
+    delete("/{id}") {
+        val id: UUID by call.parameters
+        val request = call.receive<DeleteStickyNoteRequest>()
         useCase.handle(request.toCommand(id))
         call.respond(NoContent)
     }

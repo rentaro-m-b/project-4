@@ -41,7 +41,8 @@ class StickyNoteRepositoryImpl(val dataSource: DataSource): StickyNoteRepository
     }
 
     override fun deleteStickyNote(id: UUID) {
-        TODO()
+        val record = dsl.selectFrom(STICKY_NOTES).where(STICKY_NOTES.ID.eq(id)).fetchOne()
+        record?.delete()
     }
 }
 
