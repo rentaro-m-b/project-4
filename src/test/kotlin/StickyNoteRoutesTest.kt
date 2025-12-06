@@ -1,4 +1,5 @@
 import com.example.controller.stickynote.CreateStickyNoteRequest
+import com.example.controller.stickynote.controller.stickynote.UpdateStickyNoteRequest
 import com.example.module
 import com.github.database.rider.core.api.dataset.DataSet
 import com.github.database.rider.core.api.dataset.ExpectedDataSet
@@ -7,6 +8,7 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.http.HttpStatusCode.Companion.NoContent
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.*
@@ -66,7 +68,7 @@ class StickyNoteRoutesTest {
                 json()
             }
         }
-        val responseCreated = client.post("/stickyNotes") {
+        val actual = client.post("/stickyNotes") {
             header(
                 HttpHeaders.ContentType,
                 ContentType.Application.Json
@@ -75,7 +77,40 @@ class StickyNoteRoutesTest {
         }
 
         // assert
-        assertEquals(HttpStatusCode.Created, responseCreated.status)
+        assertEquals(HttpStatusCode.Created, actual.status)
+    }
+
+    @Test
+    @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
+    @ExpectedDataSet(
+        value = ["datasets/expected/updateStickyNote.yaml"],
+        orderBy = ["created_at"],
+    )
+    fun updateStickyNote() = testApplication {
+        // setup
+        environment {
+            config = ApplicationConfig("application.yaml")
+        }
+        application {
+            module()
+        }
+
+        // execute
+        val client = createClient {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+        val actual = client.put("/stickyNotes/ae95e722-253d-4fde-94f7-598da746cf0c") {
+            header(
+                HttpHeaders.ContentType,
+                ContentType.Application.Json
+            )
+            setBody(UpdateStickyNoteRequest("wanting to have happiness"))
+        }
+
+        // assert
+        assertEquals(NoContent, actual.status)
     }
 
     private fun formatAsExpected(preExpected: String): String =

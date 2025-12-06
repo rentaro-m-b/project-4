@@ -2,19 +2,20 @@ package com.example.usecase.stickynote
 
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
-import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
-class UpdateStickyNote(
+class UpdateStickyNoteUseCase(
     val stickyNoteRepository: StickyNoteRepository,
 ) {
     fun handle(command: UpdateStickyNoteCommand) {
-        // TODO: find系を用意して既存のスティッキーノートを取得する
+        val currentStickyNote = stickyNoteRepository.fetchStickyNote(command.id)
+        if (currentStickyNote == null) return
+
         val stickyNote =
             StickyNote.create(
-                id = UUID.randomUUID(),
+                id = command.id,
                 concern = command.concern,
-                createdAt = LocalDateTime.now(),
+                createdAt = currentStickyNote.createdAt,
             )
         stickyNoteRepository.updateStickyNote(stickyNote)
     }

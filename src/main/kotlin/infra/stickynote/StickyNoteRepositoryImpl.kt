@@ -11,9 +11,15 @@ import java.util.*
 
 class StickyNoteRepositoryImpl(val dataSource: DataSource): StickyNoteRepository {
     private val dsl = DSL.using(dataSource.getConnection(), SQLDialect.POSTGRES)
+
     override fun listStickyNotes(): List<StickyNote> {
         val records = dsl.selectFrom(STICKY_NOTES).fetch().toList()
         return records.map { it.toEntity() }
+    }
+
+    override fun fetchStickyNote(id: UUID): StickyNote? {
+        val record = dsl.selectFrom(STICKY_NOTES).where(STICKY_NOTES.ID.eq(id)).fetchOne()
+        return record?.toEntity()
     }
 
     override fun createStickyNote(stickyNote: StickyNote) {
@@ -26,17 +32,10 @@ class StickyNoteRepositoryImpl(val dataSource: DataSource): StickyNoteRepository
     }
 
     override fun updateStickyNote(stickyNote: StickyNote) {
-        val exists = dsl.fetchExists(
-            dsl.selectFrom(STICKY_NOTES)
-                .where(STICKY_NOTES.ID.eq(stickyNote.id))
-        )
-        if (exists) {
-            val record =
-                dsl.newRecord(STICKY_NOTES).apply {
-                    id = stickyNote.id
-                    concern = stickyNote.concern
-                    createdAt = stickyNote.createdAt
-                }
+        val record = dsl.selectFrom(STICKY_NOTES).where(STICKY_NOTES.ID.eq(stickyNote.id)).fetchOne()
+        // TODO: early return
+        if (record != null) {
+            record.concern = stickyNote.concern
             record.store()
         }
     }

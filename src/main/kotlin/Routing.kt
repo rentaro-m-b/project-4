@@ -4,6 +4,7 @@ import com.example.controller.stickynote.stickyNoteRoutes
 import com.example.infra.stickynote.StickyNoteRepositoryImpl
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
+import com.example.usecase.stickynote.UpdateStickyNoteUseCase
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -21,8 +22,10 @@ fun Application.configureRouting() {
             password = password,
         )
 
-    val listStickyNoteUseCase = ListStickyNotesUseCase(StickyNoteRepositoryImpl(dataSource))
-    val createStickyNoteUseCase = CreateStickyNoteUseCase(StickyNoteRepositoryImpl(dataSource))
+    val stickyNoteRepository = StickyNoteRepositoryImpl(dataSource)
+    val listStickyNoteUseCase = ListStickyNotesUseCase(stickyNoteRepository)
+    val createStickyNoteUseCase = CreateStickyNoteUseCase(stickyNoteRepository)
+    val updateStickyNoteUseCase = UpdateStickyNoteUseCase(stickyNoteRepository)
 
     routing {
         get("/health") {
@@ -32,6 +35,7 @@ fun Application.configureRouting() {
         stickyNoteRoutes(
             listStickyNoteUseCase,
             createStickyNoteUseCase,
+            updateStickyNoteUseCase,
         )
     }
 }
