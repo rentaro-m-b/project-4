@@ -9,7 +9,7 @@ import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import java.util.*
 
-class StickyNoteRepositoryImpl(val dataSource: DataSource): StickyNoteRepository {
+class StickyNoteRepositoryImpl(dataSource: DataSource): StickyNoteRepository {
     private val dsl = DSL.using(dataSource.getConnection(), SQLDialect.POSTGRES)
 
     override fun listStickyNotes(): List<StickyNote> {

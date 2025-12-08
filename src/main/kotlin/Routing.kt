@@ -1,6 +1,7 @@
 package com.example
 
 import com.example.controller.stickynote.stickyNoteRoutes
+import com.example.domain.stickynote.StickyNoteRepository
 import com.example.infra.stickynote.StickyNoteRepositoryImpl
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.DeleteStickyNoteUseCase
@@ -10,35 +11,30 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
+import org.koin.ktor.plugin.Koin
 
 fun Application.configureRouting() {
-    val config = environment.config
-    val url = config.property("db.url")
-    val user = config.property("db.user")
-    val password = config.property("db.password")
-    val dataSource =
-        DataSource(
-            url = url,
-            user = user,
-            password = password,
+    install(Koin) {
+        modules(
+            module {
+                single { configureDataSource() }
+                singleOf(::StickyNoteRepositoryImpl) { bind<StickyNoteRepository>() }
+                singleOf(::ListStickyNotesUseCase)
+                singleOf(::CreateStickyNoteUseCase)
+                singleOf(::UpdateStickyNoteUseCase)
+                singleOf(::DeleteStickyNoteUseCase)
+            }
         )
-
-    val stickyNoteRepository = StickyNoteRepositoryImpl(dataSource)
-    val listStickyNoteUseCase = ListStickyNotesUseCase(stickyNoteRepository)
-    val createStickyNoteUseCase = CreateStickyNoteUseCase(stickyNoteRepository)
-    val updateStickyNoteUseCase = UpdateStickyNoteUseCase(stickyNoteRepository)
-    val deleteStickyNoteUseCase = DeleteStickyNoteUseCase(stickyNoteRepository)
+    }
 
     routing {
         get("/health") {
             call.response.status(OK)
             call.respond("Hello, World!")
         }
-        stickyNoteRoutes(
-            listStickyNoteUseCase,
-            createStickyNoteUseCase,
-            updateStickyNoteUseCase,
-            deleteStickyNoteUseCase,
-        )
+        stickyNoteRoutes()
     }
 }
