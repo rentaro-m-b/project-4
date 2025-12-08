@@ -1,8 +1,8 @@
 package com.example.infra.stickynote
 
-import com.example.DataSource
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
+import com.example.infra.DataSource
 import com.example.tables.StickyNotes.STICKY_NOTES
 import com.example.tables.records.StickyNotesRecord
 import org.jooq.SQLDialect

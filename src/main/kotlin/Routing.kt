@@ -2,6 +2,7 @@ package com.example
 
 import com.example.controller.stickynote.stickyNoteRoutes
 import com.example.domain.stickynote.StickyNoteRepository
+import com.example.infra.DataSource
 import com.example.infra.stickynote.StickyNoteRepositoryImpl
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.DeleteStickyNoteUseCase
@@ -20,7 +21,8 @@ fun Application.configureRouting() {
     install(Koin) {
         modules(
             module {
-                single { configureDataSource() }
+                single { environment.config }
+                singleOf(::DataSource)
                 singleOf(::StickyNoteRepositoryImpl) { bind<StickyNoteRepository>() }
                 singleOf(::ListStickyNotesUseCase)
                 singleOf(::CreateStickyNoteUseCase)
