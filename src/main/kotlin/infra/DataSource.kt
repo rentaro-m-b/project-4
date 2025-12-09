@@ -2,8 +2,7 @@ package com.example.infra
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.server.application.Application
-import io.ktor.server.config.ApplicationConfig
+import io.ktor.server.config.*
 import java.sql.Connection
 
 class DataSource(applicationConfig: ApplicationConfig) {

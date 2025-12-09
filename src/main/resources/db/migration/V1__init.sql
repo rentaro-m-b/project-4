@@ -3,3 +3,9 @@ CREATE TABLE sticky_notes (
     concern TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL
 );
+
+CREATE TABLE next_actions (
+    id UUID PRIMARY KEY,
+    description TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
