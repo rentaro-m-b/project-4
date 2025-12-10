@@ -21,7 +21,7 @@ fun Route.stickyNoteRoutes() {
     val updateStickyNoteUseCase by inject<UpdateStickyNoteUseCase>()
     val deleteStickyNoteUseCase by inject<DeleteStickyNoteUseCase>()
 
-    route("/stickyNotes") {
+    route("/sticky-notes") {
         get {
             val stickyNotes = listStickyNotesUseCase.handle()
             call.response.status(OK)

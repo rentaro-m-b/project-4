@@ -30,7 +30,7 @@ class StickyNoteRoutesTest {
         }
 
         // execute
-        val response = client.get("/stickyNotes")
+        val response = client.get("/sticky-notes")
 
         // assert
         val expected =
@@ -51,7 +51,7 @@ class StickyNoteRoutesTest {
     @Test
     @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
     @ExpectedDataSet(
-        value = ["datasets/expected/createStickyNote.yaml"],
+        value = ["datasets/expected/stickynote/createStickyNote.yaml"],
         orderBy = ["created_at"],
     )
     fun createStickyNote() = testApplication {
@@ -69,7 +69,7 @@ class StickyNoteRoutesTest {
                 json()
             }
         }
-        val actual = client.post("/stickyNotes") {
+        val actual = client.post("/sticky-notes") {
             header(
                 HttpHeaders.ContentType,
                 ContentType.Application.Json
@@ -84,7 +84,7 @@ class StickyNoteRoutesTest {
     @Test
     @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
     @ExpectedDataSet(
-        value = ["datasets/expected/updateStickyNote.yaml"],
+        value = ["datasets/expected/stickynote/updateStickyNote.yaml"],
         orderBy = ["created_at"],
     )
     fun updateStickyNote() = testApplication {
@@ -102,7 +102,7 @@ class StickyNoteRoutesTest {
                 json()
             }
         }
-        val actual = client.put("/stickyNotes/ae95e722-253d-4fde-94f7-598da746cf0c") {
+        val actual = client.put("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c") {
             header(
                 HttpHeaders.ContentType,
                 ContentType.Application.Json
@@ -117,7 +117,7 @@ class StickyNoteRoutesTest {
     @Test
     @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
     @ExpectedDataSet(
-        value = ["datasets/expected/deleteStickyNote.yaml"],
+        value = ["datasets/expected/stickynote/deleteStickyNote.yaml"],
         orderBy = ["created_at"],
     )
     fun deleteStickyNote() = testApplication {
@@ -135,7 +135,7 @@ class StickyNoteRoutesTest {
                 json()
             }
         }
-        val actual = client.delete("/stickyNotes/ae95e722-253d-4fde-94f7-598da746cf0c") {
+        val actual = client.delete("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c") {
             header(
                 HttpHeaders.ContentType,
                 ContentType.Application.Json

@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.controller.nextaction.nextActionRoutes
 import com.example.controller.stickynote.stickyNoteRoutes
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.application.*
@@ -13,5 +14,6 @@ fun Application.configureRouting() {
             call.respond("Hello, World!")
         }
         stickyNoteRoutes()
+        nextActionRoutes()
     }
 }

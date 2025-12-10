@@ -2,28 +2,24 @@ package com.example.infra.stickynote
 
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
-import com.example.infra.DataSource
 import com.example.tables.StickyNotes.STICKY_NOTES
 import com.example.tables.records.StickyNotesRecord
-import org.jooq.SQLDialect
-import org.jooq.impl.DSL
+import org.jooq.DSLContext
 import java.util.*
 
-class StickyNoteRepositoryImpl(dataSource: DataSource): StickyNoteRepository {
-    private val dsl = DSL.using(dataSource.getConnection(), SQLDialect.POSTGRES)
-
+class StickyNoteRepositoryImpl(val dslContext: DSLContext): StickyNoteRepository {
     override fun listStickyNotes(): List<StickyNote> {
-        val records = dsl.selectFrom(STICKY_NOTES).fetch().toList()
+        val records = dslContext.selectFrom(STICKY_NOTES).fetch().toList()
         return records.map { it.toEntity() }
     }
 
     override fun fetchStickyNote(id: UUID): StickyNote? {
-        val record = dsl.selectFrom(STICKY_NOTES).where(STICKY_NOTES.ID.eq(id)).fetchOne()
+        val record = dslContext.selectFrom(STICKY_NOTES).where(STICKY_NOTES.ID.eq(id)).fetchOne()
         return record?.toEntity()
     }
 
     override fun createStickyNote(stickyNote: StickyNote) {
-        val record = dsl.newRecord(STICKY_NOTES).apply {
+        val record = dslContext.newRecord(STICKY_NOTES).apply {
             id = UUID.randomUUID()
             concern = stickyNote.concern
             createdAt = stickyNote.createdAt
@@ -32,7 +28,7 @@ class StickyNoteRepositoryImpl(dataSource: DataSource): StickyNoteRepository {
     }
 
     override fun updateStickyNote(stickyNote: StickyNote) {
-        val record = dsl.selectFrom(STICKY_NOTES).where(STICKY_NOTES.ID.eq(stickyNote.id)).fetchOne()
+        val record = dslContext.selectFrom(STICKY_NOTES).where(STICKY_NOTES.ID.eq(stickyNote.id)).fetchOne()
         // TODO: early return
         if (record != null) {
             record.concern = stickyNote.concern
@@ -41,7 +37,7 @@ class StickyNoteRepositoryImpl(dataSource: DataSource): StickyNoteRepository {
     }
 
     override fun deleteStickyNote(id: UUID) {
-        val record = dsl.selectFrom(STICKY_NOTES).where(STICKY_NOTES.ID.eq(id)).fetchOne()
+        val record = dslContext.selectFrom(STICKY_NOTES).where(STICKY_NOTES.ID.eq(id)).fetchOne()
         record?.delete()
     }
 }
