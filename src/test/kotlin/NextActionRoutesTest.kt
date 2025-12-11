@@ -1,6 +1,6 @@
 import com.example.controller.nextaction.CreateNextActionRequest
+import com.example.controller.nextaction.UpdateNextActionRequest
 import com.example.controller.stickynote.CreateStickyNoteRequest
-import com.example.controller.stickynote.DeleteStickyNoteRequest
 import com.example.controller.stickynote.UpdateStickyNoteRequest
 import com.example.module
 import com.github.database.rider.core.api.dataset.DataSet
@@ -19,35 +19,35 @@ import kotlin.test.assertEquals
 
 @DBRider
 class NextActionRoutesTest {
-//    @Test
-//    @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
-//    fun listStickyNotes() = testApplication {
-//        // setup
-//        environment {
-//            config = ApplicationConfig("application.yaml")
-//        }
-//        application {
-//            module()
-//        }
-//
-//        // execute
-//        val response = client.get("/sticky-notes")
-//
-//        // assert
-//        val expected =
-//            formatAsExpected(
-//                """
-//                    [
-//                        {"concern":"wanting to submit to illustration contests","createdAt":"2025-01-01T00:00:00"},
-//                        {"concern":"wanting to get better at drawing","createdAt":"2025-01-01T00:00:01"},
-//                        {"concern":"worrying about not losing weight","createdAt":"2025-01-01T00:00:02"},
-//                        {"concern":"to read books","createdAt":"2025-01-01T00:00:03"}
-//                    ]
-//                """
-//            )
-//        assertEquals(HttpStatusCode.OK, response.status)
-//        assertEquals(expected, response.body())
-//    }
+    @Test
+    @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
+    fun listNextActions() = testApplication {
+        // setup
+        environment {
+            config = ApplicationConfig("application.yaml")
+        }
+        application {
+            module()
+        }
+
+        // execute
+        val response = client.get("/next-actions")
+
+        // assert
+        val expected =
+            formatAsExpected(
+                """
+                    [
+                        {"description":"practice drawing for 10 minutes","createdAt":"2025-01-01T00:00:00"},
+                        {"description":"collect five reference materials","createdAt":"2025-01-01T00:00:01"},
+                        {"description":"decide on a theme for the painting","createdAt":"2025-01-01T00:00:02"},
+                        {"description":"decide which contest to submit to","createdAt":"2025-01-01T00:00:03"}
+                    ]
+                """
+            )
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals(expected, response.body())
+    }
 
     @Test
     @DataSet(
@@ -88,71 +88,65 @@ class NextActionRoutesTest {
         assertEquals(HttpStatusCode.Created, actual.status)
     }
 
-//    @Test
-//    @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
-//    @ExpectedDataSet(
-//        value = ["datasets/expected/updateStickyNote.yaml"],
-//        orderBy = ["created_at"],
-//    )
-//    fun updateStickyNote() = testApplication {
-//        // setup
-//        environment {
-//            config = ApplicationConfig("application.yaml")
-//        }
-//        application {
-//            module()
-//        }
-//
-//        // execute
-//        val client = createClient {
-//            install(ContentNegotiation) {
-//                json()
-//            }
-//        }
-//        val actual = client.put("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c") {
-//            header(
-//                HttpHeaders.ContentType,
-//                ContentType.Application.Json
-//            )
-//            setBody(UpdateStickyNoteRequest("wanting to have happiness"))
-//        }
-//
-//        // assert
-//        assertEquals(NoContent, actual.status)
-//    }
-//
-//    @Test
-//    @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
-//    @ExpectedDataSet(
-//        value = ["datasets/expected/deleteStickyNote.yaml"],
-//        orderBy = ["created_at"],
-//    )
-//    fun deleteStickyNote() = testApplication {
-//        // setup
-//        environment {
-//            config = ApplicationConfig("application.yaml")
-//        }
-//        application {
-//            module()
-//        }
-//
-//        // execute
-//        val client = createClient {
-//            install(ContentNegotiation) {
-//                json()
-//            }
-//        }
-//        val actual = client.delete("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c") {
-//            header(
-//                HttpHeaders.ContentType,
-//                ContentType.Application.Json
-//            )
-//            setBody(DeleteStickyNoteRequest("wanting to have happiness"))
-//        }
-//
-//        // assert
-//        assertEquals(NoContent, actual.status)
-//    }
+    @Test
+    @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
+    @ExpectedDataSet(
+        value = ["datasets/expected/nextaction/updateNextAction.yaml"],
+        orderBy = ["created_at"],
+    )
+    fun updateNextAction() = testApplication {
+        // setup
+        environment {
+            config = ApplicationConfig("application.yaml")
+        }
+        application {
+            module()
+        }
+
+        // execute
+        val client = createClient {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+        val actual = client.put("/next-actions/e574a515-5170-4d76-afc9-da17513dc5d3") {
+            header(
+                HttpHeaders.ContentType,
+                ContentType.Application.Json
+            )
+            setBody(UpdateNextActionRequest("practice drawing for 7 minutes"))
+        }
+
+        // assert
+        assertEquals(NoContent, actual.status)
+    }
+
+    @Test
+    @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
+    @ExpectedDataSet(
+        value = ["datasets/expected/nextaction/deleteNextAction.yaml"],
+        orderBy = ["created_at"],
+    )
+    fun deleteStickyNote() = testApplication {
+        // setup
+        environment {
+            config = ApplicationConfig("application.yaml")
+        }
+        application {
+            module()
+        }
+
+        // execute
+        val client = createClient {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+        val actual = client.delete("/next-actions/e574a515-5170-4d76-afc9-da17513dc5d3")
+
+        // assert
+        assertEquals(NoContent, actual.status)
+    }
 
     private fun formatAsExpected(preExpected: String): String =
         preExpected

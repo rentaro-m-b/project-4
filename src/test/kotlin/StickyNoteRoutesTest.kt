@@ -1,5 +1,4 @@
 import com.example.controller.stickynote.CreateStickyNoteRequest
-import com.example.controller.stickynote.DeleteStickyNoteRequest
 import com.example.controller.stickynote.UpdateStickyNoteRequest
 import com.example.module
 import com.github.database.rider.core.api.dataset.DataSet
@@ -130,18 +129,7 @@ class StickyNoteRoutesTest {
         }
 
         // execute
-        val client = createClient {
-            install(ContentNegotiation) {
-                json()
-            }
-        }
-        val actual = client.delete("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c") {
-            header(
-                HttpHeaders.ContentType,
-                ContentType.Application.Json
-            )
-            setBody(DeleteStickyNoteRequest("wanting to have happiness"))
-        }
+        val actual = client.delete("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c")
 
         // assert
         assertEquals(NoContent, actual.status)

@@ -41,10 +41,9 @@ class NextActionRepositoryImpl(val dslContext: DSLContext): NextActionRepository
     }
 }
 
-fun NextActionsRecord.toEntity(): NextAction {
-    return NextAction.create(
+fun NextActionsRecord.toEntity(): NextAction =
+    NextAction.create(
         id = id,
         description = description,
         createdAt = createdAt,
     )
-}

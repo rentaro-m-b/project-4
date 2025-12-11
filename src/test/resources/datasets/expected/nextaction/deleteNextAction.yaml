@@ -1,0 +1,10 @@
+next_actions:
+  - id: "0909127e-69dc-4f7a-82b2-9da21e2cd090"
+    description: "collect five reference materials"
+    created_at: "2025-01-01 00:00:01"
+  - id: "117f0003-9f42-4750-9ed2-9356bb8a9887"
+    description: "decide on a theme for the painting"
+    created_at: "2025-01-01 00:00:02"
+  - id: "bc562522-7dc8-42bd-a0ee-6cc5ef238e9f"
+    description: "decide which contest to submit to"
+    created_at: "2025-01-01 00:00:03"

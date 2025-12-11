@@ -6,6 +6,9 @@ import com.example.infra.DataSource
 import com.example.infra.nextaction.NextActionRepositoryImpl
 import com.example.infra.stickynote.StickyNoteRepositoryImpl
 import com.example.usecase.nextaction.CreateNextActionUseCase
+import com.example.usecase.nextaction.DeleteNextActionUseCase
+import com.example.usecase.nextaction.ListNextActionsUseCase
+import com.example.usecase.nextaction.UpdateNextActionUseCase
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.DeleteStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
@@ -29,7 +32,10 @@ fun Application.configureDependencyInjection() {
                 singleOf(::CreateStickyNoteUseCase)
                 singleOf(::UpdateStickyNoteUseCase)
                 singleOf(::DeleteStickyNoteUseCase)
+                singleOf(::ListNextActionsUseCase)
                 singleOf(::CreateNextActionUseCase)
+                singleOf(::UpdateNextActionUseCase)
+                singleOf(::DeleteNextActionUseCase)
             }
         )
     }
