@@ -8,12 +8,17 @@ import com.example.usecase.stickynote.UpdateStickyNoteUseCase
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
 import io.ktor.http.HttpStatusCode.Companion.OK
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.server.util.*
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.put
+import io.ktor.server.routing.route
+import io.ktor.server.util.getValue
 import org.koin.ktor.ext.inject
-import java.util.*
+import java.util.UUID
 import kotlin.getValue
 
 fun Route.stickyNoteRoutes() {

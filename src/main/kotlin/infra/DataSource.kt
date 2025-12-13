@@ -2,10 +2,12 @@ package com.example.infra
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.server.config.*
+import io.ktor.server.config.ApplicationConfig
 import java.sql.Connection
 
-class DataSource(applicationConfig: ApplicationConfig) {
+class DataSource(
+    applicationConfig: ApplicationConfig,
+) {
     private val config = HikariConfig()
     private val dataSource: HikariDataSource
 

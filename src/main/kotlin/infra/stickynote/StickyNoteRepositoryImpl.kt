@@ -5,9 +5,11 @@ import com.example.domain.stickynote.StickyNoteRepository
 import com.example.tables.StickyNotes.STICKY_NOTES
 import com.example.tables.records.StickyNotesRecord
 import org.jooq.DSLContext
-import java.util.*
+import java.util.UUID
 
-class StickyNoteRepositoryImpl(val dslContext: DSLContext): StickyNoteRepository {
+class StickyNoteRepositoryImpl(
+    val dslContext: DSLContext,
+) : StickyNoteRepository {
     override fun listStickyNotes(): List<StickyNote> {
         val records = dslContext.selectFrom(STICKY_NOTES).fetch().toList()
         return records.map { it.toEntity() }
@@ -19,11 +21,12 @@ class StickyNoteRepositoryImpl(val dslContext: DSLContext): StickyNoteRepository
     }
 
     override fun createStickyNote(stickyNote: StickyNote) {
-        val record = dslContext.newRecord(STICKY_NOTES).apply {
-            id = UUID.randomUUID()
-            concern = stickyNote.concern
-            createdAt = stickyNote.createdAt
-        }
+        val record =
+            dslContext.newRecord(STICKY_NOTES).apply {
+                id = UUID.randomUUID()
+                concern = stickyNote.concern
+                createdAt = stickyNote.createdAt
+            }
         record.store()
     }
 
@@ -42,10 +45,9 @@ class StickyNoteRepositoryImpl(val dslContext: DSLContext): StickyNoteRepository
     }
 }
 
-fun StickyNotesRecord.toEntity(): StickyNote {
-    return StickyNote.create(
+fun StickyNotesRecord.toEntity(): StickyNote =
+    StickyNote.create(
         id = id,
         concern = concern,
         createdAt = createdAt,
     )
-}

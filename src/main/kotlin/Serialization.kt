@@ -1,9 +1,9 @@
 package com.example
 
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.application.*
+import io.ktor.server.application.Application
 import io.ktor.server.application.install
-import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -22,7 +22,7 @@ fun Application.configureSerialization() {
                     SerializersModule {
                         contextual(LocalDateTime::class, LocalDateTimeSerializer)
                     }
-            }
+            },
         )
     }
 }
@@ -33,11 +33,12 @@ private object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
 
     private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
-    override fun serialize(encoder: Encoder, value: LocalDateTime) {
+    override fun serialize(
+        encoder: Encoder,
+        value: LocalDateTime,
+    ) {
         encoder.encodeString(value.format(formatter))
     }
 
-    override fun deserialize(decoder: Decoder): LocalDateTime {
-        return LocalDateTime.parse(decoder.decodeString(), formatter)
-    }
+    override fun deserialize(decoder: Decoder): LocalDateTime = LocalDateTime.parse(decoder.decodeString(), formatter)
 }

@@ -2,7 +2,7 @@ package com.example.controller.nextaction
 
 import com.example.usecase.nextaction.UpdateNextActionCommand
 import kotlinx.serialization.Serializable
-import java.util.*
+import java.util.UUID
 
 @Serializable
 data class UpdateNextActionRequest(

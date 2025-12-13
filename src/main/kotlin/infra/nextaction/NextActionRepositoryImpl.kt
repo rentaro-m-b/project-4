@@ -5,9 +5,11 @@ import com.example.domain.nextaction.NextActionRepository
 import com.example.tables.NextActions.NEXT_ACTIONS
 import com.example.tables.records.NextActionsRecord
 import org.jooq.DSLContext
-import java.util.*
+import java.util.UUID
 
-class NextActionRepositoryImpl(val dslContext: DSLContext): NextActionRepository {
+class NextActionRepositoryImpl(
+    val dslContext: DSLContext,
+) : NextActionRepository {
     override fun listNextActions(): List<NextAction> {
         val records = dslContext.selectFrom(NEXT_ACTIONS).fetch().toList()
         return records.map { it.toEntity() }
@@ -19,11 +21,12 @@ class NextActionRepositoryImpl(val dslContext: DSLContext): NextActionRepository
     }
 
     override fun createNextAction(nextAction: NextAction) {
-        val record = dslContext.newRecord(NEXT_ACTIONS).apply {
-            id = UUID.randomUUID()
-            description = nextAction.description
-            createdAt = nextAction.createdAt
-        }
+        val record =
+            dslContext.newRecord(NEXT_ACTIONS).apply {
+                id = UUID.randomUUID()
+                description = nextAction.description
+                createdAt = nextAction.createdAt
+            }
         record.store()
     }
 

@@ -4,7 +4,7 @@ import com.example.domain.nextaction.NextAction
 import com.example.domain.nextaction.NextActionRepository
 import com.example.domain.stickynote.StickyNoteRepository
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 class CreateNextActionUseCase(
     val nextActionRepository: NextActionRepository,

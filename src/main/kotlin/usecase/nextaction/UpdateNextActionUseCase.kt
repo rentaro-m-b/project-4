@@ -2,7 +2,7 @@ package com.example.usecase.nextaction
 
 import com.example.domain.nextaction.NextAction
 import com.example.domain.nextaction.NextActionRepository
-import java.util.*
+import java.util.UUID
 
 class UpdateNextActionUseCase(
     val nextActionRepository: NextActionRepository,

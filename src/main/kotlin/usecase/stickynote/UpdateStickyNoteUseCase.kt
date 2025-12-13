@@ -2,7 +2,7 @@ package com.example.usecase.stickynote
 
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
-import java.util.*
+import java.util.UUID
 
 class UpdateStickyNoteUseCase(
     val stickyNoteRepository: StickyNoteRepository,

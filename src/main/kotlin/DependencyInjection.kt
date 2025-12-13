@@ -13,7 +13,8 @@ import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.DeleteStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
 import com.example.usecase.stickynote.UpdateStickyNoteUseCase
-import io.ktor.server.application.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import org.koin.core.module.dsl.bind
@@ -36,7 +37,7 @@ fun Application.configureDependencyInjection() {
                 singleOf(::CreateNextActionUseCase)
                 singleOf(::UpdateNextActionUseCase)
                 singleOf(::DeleteNextActionUseCase)
-            }
+            },
         )
     }
 }

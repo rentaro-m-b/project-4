@@ -1,6 +1,5 @@
 package com.example.controller.nextaction
 
-import com.example.controller.nextaction.ListNextActionsResponse
 import com.example.usecase.nextaction.CreateNextActionUseCase
 import com.example.usecase.nextaction.DeleteNextActionCommand
 import com.example.usecase.nextaction.DeleteNextActionUseCase
@@ -9,13 +8,17 @@ import com.example.usecase.nextaction.UpdateNextActionUseCase
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
 import io.ktor.http.HttpStatusCode.Companion.OK
-import io.ktor.http.content.OutgoingContent
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.server.util.*
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.put
+import io.ktor.server.routing.route
+import io.ktor.server.util.getValue
 import org.koin.ktor.ext.inject
-import java.util.*
+import java.util.UUID
 
 fun Route.nextActionRoutes() {
     val listNextActionsUseCase by inject<ListNextActionsUseCase>()
