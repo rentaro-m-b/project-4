@@ -9,3 +9,11 @@ CREATE TABLE next_actions (
     description TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL
 );
+
+CREATE TABLE scheduled_actions (
+    id UUID PRIMARY KEY,
+    description TEXT NOT NULL,
+    starts_at TIMESTAMP NOT NULL,
+    ends_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);

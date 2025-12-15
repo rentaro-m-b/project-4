@@ -1,6 +1,7 @@
 package com.example.controller.scheduledaction
 
 import com.example.usecase.nextaction.CreateNextActionCommand
+import com.example.usecase.scheduledaction.CreateScheduledActionCommand
 import kotlinx.serialization.Serializable
 import java.util.UUID
 

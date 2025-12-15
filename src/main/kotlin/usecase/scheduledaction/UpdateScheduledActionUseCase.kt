@@ -7,7 +7,7 @@ import java.util.UUID
 class UpdateScheduledActionUseCase(
     val nextActionRepository: NextActionRepository,
 ) {
-    fun handle(command: UpdateNextActionCommand) {
+    fun handle(command: UpdateScheduledActionCommand) {
         val currentNextAction = nextActionRepository.fetchNextAction(command.id)
         if (currentNextAction == null) return
 
@@ -21,7 +21,7 @@ class UpdateScheduledActionUseCase(
     }
 }
 
-data class UpdateNextActionCommand(
+data class UpdateScheduledActionCommand(
     val id: UUID,
     val description: String,
 )

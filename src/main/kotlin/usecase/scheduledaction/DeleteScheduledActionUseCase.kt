@@ -6,11 +6,11 @@ import java.util.UUID
 class DeleteScheduledActionUseCase(
     val nextActionRepository: NextActionRepository,
 ) {
-    fun handle(command: DeleteNextActionCommand) {
+    fun handle(command: DeleteScheduledActionCommand) {
         nextActionRepository.deleteNextAction(command.id)
     }
 }
 
-data class DeleteNextActionCommand(
+data class DeleteScheduledActionCommand(
     val id: UUID,
 )

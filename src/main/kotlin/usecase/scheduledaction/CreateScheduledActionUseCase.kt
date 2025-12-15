@@ -1,28 +1,32 @@
 package com.example.usecase.scheduledaction
 
-import com.example.domain.nextaction.NextAction
-import com.example.domain.nextaction.NextActionRepository
+import com.example.domain.shceduledaction.ScheduledAction
+import com.example.domain.shceduledaction.ScheduledActionRepository
 import com.example.domain.stickynote.StickyNoteRepository
 import java.time.LocalDateTime
 import java.util.UUID
 
 class CreateScheduledActionUseCase(
-    val nextActionRepository: NextActionRepository,
+    val scheduledActionRepository: ScheduledActionRepository,
     val stickyNoteRepository: StickyNoteRepository,
 ) {
-    fun handle(command: CreateNextActionCommand) {
+    fun handle(command: CreateScheduledActionCommand) {
         if (stickyNoteRepository.fetchStickyNote(command.stickyNoteId) == null) return
-        val nextAction =
-            NextAction.create(
+        val scheduledAction =
+            ScheduledAction.create(
                 id = UUID.randomUUID(),
                 description = command.description,
+                startsAt = command.startsAt,
+                endsAt = command.endsAt,
                 createdAt = LocalDateTime.now(),
             )
-        nextActionRepository.createNextAction(nextAction)
+        scheduledActionRepository.createScheduledAction(scheduledAction)
     }
 }
 
-data class CreateNextActionCommand(
+data class CreateScheduledActionCommand(
     val stickyNoteId: UUID,
+    val startsAt: LocalDateTime,
+    val endsAt: LocalDateTime,
     val description: String,
 )
