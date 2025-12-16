@@ -18,7 +18,7 @@ import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import io.ktor.server.util.getValue
 import org.koin.ktor.ext.inject
-import java.util.*
+import java.util.UUID
 
 fun Route.scheduledActionRoutes() {
     val listScheduledActionsUseCase by inject<ListScheduledActionsUseCase>()
@@ -26,11 +26,11 @@ fun Route.scheduledActionRoutes() {
     val updateScheduledActionUseCase by inject<UpdateScheduledActionUseCase>()
     val deleteScheduledActionUseCase by inject<DeleteScheduledActionUseCase>()
 
-    route("/next-actions") {
+    route("/scheduled-actions") {
         get {
-            val ScheduledActions = listScheduledActionsUseCase.handle()
+            val scheduledActions = listScheduledActionsUseCase.handle()
             call.response.status(OK)
-            call.respond(ScheduledActions.map { ListScheduledActionsResponse.of(it) })
+            call.respond(scheduledActions.map { ListScheduledActionsResponse.of(it) })
         }
         route("/{id}") {
             put {
@@ -47,7 +47,7 @@ fun Route.scheduledActionRoutes() {
             }
         }
     }
-    route("/sticky-notes/{id}/next-actions") {
+    route("/sticky-notes/{id}/scheduled-actions") {
         post {
             val id: UUID by call.parameters
             val request = call.receive<CreateScheduledActionRequest>()

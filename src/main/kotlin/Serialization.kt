@@ -27,7 +27,7 @@ fun Application.configureSerialization() {
     }
 }
 
-private object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
+object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
     override val descriptor =
         PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
 

@@ -1,3 +1,4 @@
+import com.example.LocalDateTimeSerializer
 import com.example.controller.scheduledaction.CreateScheduledActionRequest
 import com.example.controller.scheduledaction.UpdateScheduledActionRequest
 import com.example.module
@@ -20,7 +21,10 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
 @DBRider
@@ -82,7 +86,14 @@ class ScheduledActionRoutesTest {
             val client =
                 createClient {
                     install(ContentNegotiation) {
-                        json()
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
                     }
                 }
             val actual =
@@ -91,7 +102,13 @@ class ScheduledActionRoutesTest {
                         HttpHeaders.ContentType,
                         ContentType.Application.Json,
                     )
-                    setBody(CreateScheduledActionRequest("draw for 10 minutes"))
+                    setBody(
+                        CreateScheduledActionRequest(
+                            description = "draw for 10 minutes",
+                            startsAt = LocalDateTime.parse("2025-03-01T12:00:00"),
+                            endsAt = LocalDateTime.parse("2025-03-01T13:00:00"),
+                        ),
+                    )
                 }
 
             // assert
@@ -127,7 +144,13 @@ class ScheduledActionRoutesTest {
                         HttpHeaders.ContentType,
                         ContentType.Application.Json,
                     )
-                    setBody(UpdateScheduledActionRequest("practice drawing for 7 minutes"))
+                    setBody(
+                        UpdateScheduledActionRequest(
+                            description = "practice drawing for 7 minutes",
+                            startsAt = LocalDateTime.parse("2025-02-01T00:00:00"),
+                            endsAt = LocalDateTime.parse("2025-02-02T00:00:00"),
+                        ),
+                    )
                 }
 
             // assert
