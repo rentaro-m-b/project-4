@@ -49,10 +49,10 @@ class ScheduledActionRoutesTest {
                 formatAsExpected(
                     """
                     [
-                        {"description":"practice drawing for 10 minutes","createdAt":"2025-01-01T00:00:00"},
-                        {"description":"collect five reference materials","createdAt":"2025-01-01T00:00:01"},
-                        {"description":"decide on a theme for the painting","createdAt":"2025-01-01T00:00:02"},
-                        {"description":"decide which contest to submit to","createdAt":"2025-01-01T00:00:03"}
+                        {"description":"practice drawing for 10 minutes","startsAt":"2025-02-01T12:00:00","endsAt":"2025-02-01T13:00:00","createdAt":"2025-01-01T00:00:00"},
+                        {"description":"collect five reference materials","startsAt":"2025-02-01T12:00:01","endsAt":"2025-02-01T13:00:01","createdAt":"2025-01-01T00:00:01"},
+                        {"description":"decide on a theme for the painting","startsAt":"2025-02-01T12:00:02","endsAt":"2025-02-01T13:00:02","createdAt":"2025-01-01T00:00:02"},
+                        {"description":"decide which contest to submit to","startsAt":"2025-02-01T12:00:03","endsAt":"2025-02-01T13:00:03","createdAt":"2025-01-01T00:00:03"}
                     ]
                 """,
                 )
@@ -135,11 +135,18 @@ class ScheduledActionRoutesTest {
             val client =
                 createClient {
                     install(ContentNegotiation) {
-                        json()
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
                     }
                 }
             val actual =
-                client.put("/scheduled-actions/e574a515-5170-4d76-afc9-da17513dc5d3") {
+                client.put("/scheduled-actions/af5307cb-5147-46ad-affa-92be36a67645") {
                     header(
                         HttpHeaders.ContentType,
                         ContentType.Application.Json,
@@ -147,8 +154,8 @@ class ScheduledActionRoutesTest {
                     setBody(
                         UpdateScheduledActionRequest(
                             description = "practice drawing for 7 minutes",
-                            startsAt = LocalDateTime.parse("2025-02-01T00:00:00"),
-                            endsAt = LocalDateTime.parse("2025-02-02T00:00:00"),
+                            startsAt = LocalDateTime.parse("2025-02-01T13:00:00"),
+                            endsAt = LocalDateTime.parse("2025-02-01T13:30:00"),
                         ),
                     )
                 }
@@ -180,7 +187,7 @@ class ScheduledActionRoutesTest {
                         json()
                     }
                 }
-            val actual = client.delete("/scheduled-actions/e574a515-5170-4d76-afc9-da17513dc5d3")
+            val actual = client.delete("/scheduled-actions/af5307cb-5147-46ad-affa-92be36a67645")
 
             // assert
             assertEquals(NoContent, actual.status)

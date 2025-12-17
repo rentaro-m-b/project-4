@@ -1,13 +1,14 @@
 package com.example.usecase.scheduledaction
 
 import com.example.domain.nextaction.NextActionRepository
+import com.example.domain.shceduledaction.ScheduledActionRepository
 import java.util.UUID
 
 class DeleteScheduledActionUseCase(
-    val nextActionRepository: NextActionRepository,
+    val scheduledActionRepository: ScheduledActionRepository,
 ) {
     fun handle(command: DeleteScheduledActionCommand) {
-        nextActionRepository.deleteNextAction(command.id)
+        scheduledActionRepository.deleteScheduledAction(command.id)
     }
 }
 

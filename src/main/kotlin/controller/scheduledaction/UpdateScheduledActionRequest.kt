@@ -14,5 +14,11 @@ data class UpdateScheduledActionRequest(
     @Contextual
     val endsAt: LocalDateTime,
 ) {
-    fun toCommand(id: UUID): UpdateScheduledActionCommand = UpdateScheduledActionCommand(id, description)
+    fun toCommand(id: UUID): UpdateScheduledActionCommand =
+        UpdateScheduledActionCommand(
+            id = id,
+            description = description,
+            startsAt = startsAt,
+            endsAt = endsAt,
+        )
 }

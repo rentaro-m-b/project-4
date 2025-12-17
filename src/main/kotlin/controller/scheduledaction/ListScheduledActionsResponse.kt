@@ -1,6 +1,6 @@
 package com.example.controller.scheduledaction
 
-import com.example.domain.nextaction.NextAction
+import com.example.domain.shceduledaction.ScheduledAction
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
@@ -9,13 +9,19 @@ import java.time.LocalDateTime
 data class ListScheduledActionsResponse(
     val description: String,
     @Contextual
+    val startsAt: LocalDateTime,
+    @Contextual
+    val endsAt: LocalDateTime,
+    @Contextual
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun of(nextAction: NextAction): ListScheduledActionsResponse =
+        fun of(scheduledAction: ScheduledAction): ListScheduledActionsResponse =
             ListScheduledActionsResponse(
-                description = nextAction.description,
-                createdAt = nextAction.createdAt,
+                description = scheduledAction.description,
+                startsAt = scheduledAction.startsAt,
+                endsAt = scheduledAction.endsAt,
+                createdAt = scheduledAction.createdAt,
             )
     }
 }
