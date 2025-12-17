@@ -9,6 +9,7 @@ class UpdateNextActionUseCase(
 ) {
     fun handle(command: UpdateNextActionCommand) {
         val currentNextAction = nextActionRepository.fetchNextAction(command.id)
+        // TODO: 以下の処理にて404を返すためにエラーを返させる。Resultを導入して試してみる
         if (currentNextAction == null) return
 
         val nextAction =
