@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.hikari)
     implementation(libs.jooq)
     implementation(libs.jooq.meta)
+    implementation(libs.problem)
     jooqCodegen(libs.postgresql)
     testImplementation(libs.groovy)
     testImplementation(libs.junit.jupiter.api)

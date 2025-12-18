@@ -2,15 +2,21 @@ package com.example.usecase.nextaction
 
 import com.example.domain.nextaction.NextAction
 import com.example.domain.nextaction.NextActionRepository
+import java.lang.Exception
 import java.util.UUID
+
+class CurrentNextActionNotFoundException(
+    message: String,
+) : Exception()
 
 class UpdateNextActionUseCase(
     val nextActionRepository: NextActionRepository,
 ) {
-    fun handle(command: UpdateNextActionCommand) {
+    fun handle(command: UpdateNextActionCommand): Result<Unit> {
         val currentNextAction = nextActionRepository.fetchNextAction(command.id)
-        // TODO: 以下の処理にて404を返すためにエラーを返させる。Resultを導入して試してみる
-        if (currentNextAction == null) return
+        if (currentNextAction == null) {
+            return Result.failure(CurrentNextActionNotFoundException("next action not found : ${command.id}"))
+        }
 
         val nextAction =
             NextAction.create(
@@ -19,6 +25,8 @@ class UpdateNextActionUseCase(
                 createdAt = currentNextAction.createdAt,
             )
         nextActionRepository.updateNextAction(nextAction)
+
+        return Result.success(Unit)
     }
 }
 

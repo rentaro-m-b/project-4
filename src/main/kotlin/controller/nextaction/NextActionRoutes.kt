@@ -7,6 +7,7 @@ import com.example.usecase.nextaction.ListNextActionsUseCase
 import com.example.usecase.nextaction.UpdateNextActionUseCase
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
@@ -18,7 +19,10 @@ import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import io.ktor.server.util.getValue
 import org.koin.ktor.ext.inject
-import java.util.UUID
+import org.zalando.problem.Problem
+import org.zalando.problem.Status
+import java.net.URI
+import java.util.*
 
 fun Route.nextActionRoutes() {
     val listNextActionsUseCase by inject<ListNextActionsUseCase>()
@@ -36,7 +40,19 @@ fun Route.nextActionRoutes() {
             put {
                 val id: UUID by call.parameters
                 val request = call.receive<UpdateNextActionRequest>()
-                updateNextActionUseCase.handle(request.toCommand(id))
+                val result = updateNextActionUseCase.handle(request.toCommand(id))
+                if (result.isFailure) {
+                    call.response.status(NotFound)
+                    call.respond(
+                        Problem
+                            .builder()
+                            .withType(URI.create("https://example.com/problems/next-action-not-found"))
+                            .withTitle("Next action not found")
+                            .withStatus(Status.NOT_FOUND)
+                            .withDetail("next action not found by this id : $id")
+                            .build(),
+                    )
+                }
                 call.respond(NoContent)
             }
 

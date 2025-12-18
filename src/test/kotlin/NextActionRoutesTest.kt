@@ -16,11 +16,15 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
 import org.junit.jupiter.api.Test
+import org.zalando.problem.Problem
+import org.zalando.problem.Status
+import java.net.URI
 import kotlin.test.assertEquals
 
 @DBRider
@@ -132,6 +136,51 @@ class NextActionRoutesTest {
 
             // assert
             assertEquals(NoContent, actual.status)
+        }
+
+    @Test
+    @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
+    @ExpectedDataSet(
+        value = ["datasets/setup/nextActions.yaml"],
+        orderBy = ["created_at"],
+    )
+    fun updateNextAction_notFound() =
+        testApplication {
+            // setup
+            environment {
+                config = ApplicationConfig("application.yaml")
+            }
+            application {
+                module()
+            }
+
+            // execute
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json()
+                    }
+                }
+            val actual =
+                client.put("/next-actions/1e79998f-79ea-4fcb-95d6-e18eb33e2c8e") {
+                    header(
+                        HttpHeaders.ContentType,
+                        ContentType.Application.Json,
+                    )
+                    setBody(UpdateNextActionRequest("practice drawing for 7 minutes"))
+                }
+
+            // assert
+            val expected =
+                Problem
+                    .builder()
+                    .withType(URI.create("https://example.com/problems/next-action-not-found"))
+                    .withTitle("Next action not found")
+                    .withStatus(Status.NOT_FOUND)
+                    .withDetail("next action not found by this id : 1e79998f-79ea-4fcb-95d6-e18eb33e2c8e")
+                    .build()
+            assertEquals(NotFound, actual.status)
+            assertEquals(expected, actual.body())
         }
 
     @Test
