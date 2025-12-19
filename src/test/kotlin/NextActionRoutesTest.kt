@@ -171,16 +171,7 @@ class NextActionRoutesTest {
                 }
 
             // assert
-            val expected =
-                Problem
-                    .builder()
-                    .withType(URI.create("https://example.com/problems/next-action-not-found"))
-                    .withTitle("Next action not found")
-                    .withStatus(Status.NOT_FOUND)
-                    .withDetail("next action not found by this id : 1e79998f-79ea-4fcb-95d6-e18eb33e2c8e")
-                    .build()
             assertEquals(NotFound, actual.status)
-            assertEquals(expected, actual.body())
         }
 
     @Test

@@ -22,7 +22,7 @@ import org.koin.ktor.ext.inject
 import org.zalando.problem.Problem
 import org.zalando.problem.Status
 import java.net.URI
-import java.util.*
+import java.util.UUID
 
 fun Route.nextActionRoutes() {
     val listNextActionsUseCase by inject<ListNextActionsUseCase>()
@@ -42,16 +42,7 @@ fun Route.nextActionRoutes() {
                 val request = call.receive<UpdateNextActionRequest>()
                 val result = updateNextActionUseCase.handle(request.toCommand(id))
                 if (result.isFailure) {
-                    call.response.status(NotFound)
-                    call.respond(
-                        Problem
-                            .builder()
-                            .withType(URI.create("https://example.com/problems/next-action-not-found"))
-                            .withTitle("Next action not found")
-                            .withStatus(Status.NOT_FOUND)
-                            .withDetail("next action not found by this id : $id")
-                            .build(),
-                    )
+                    call.respond(NotFound)
                 }
                 call.respond(NoContent)
             }
