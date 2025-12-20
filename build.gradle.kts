@@ -15,7 +15,6 @@ application {
 
 dependencies {
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.datetime)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.config.yaml)
@@ -29,7 +28,6 @@ dependencies {
     implementation(libs.hikari)
     implementation(libs.jooq)
     implementation(libs.jooq.meta)
-    implementation(libs.problem)
     jooqCodegen(libs.postgresql)
     testImplementation(libs.groovy)
     testImplementation(libs.junit.jupiter.api)

@@ -1,5 +1,6 @@
 package com.example.controller.nextaction
 
+import com.example.controller.common.ErrorResponse
 import com.example.usecase.nextaction.CreateNextActionUseCase
 import com.example.usecase.nextaction.DeleteNextActionCommand
 import com.example.usecase.nextaction.DeleteNextActionUseCase
@@ -19,9 +20,6 @@ import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import io.ktor.server.util.getValue
 import org.koin.ktor.ext.inject
-import org.zalando.problem.Problem
-import org.zalando.problem.Status
-import java.net.URI
 import java.util.UUID
 
 fun Route.nextActionRoutes() {
@@ -42,7 +40,15 @@ fun Route.nextActionRoutes() {
                 val request = call.receive<UpdateNextActionRequest>()
                 val result = updateNextActionUseCase.handle(request.toCommand(id))
                 if (result.isFailure) {
-                    call.respond(NotFound)
+                    call.response.status(NotFound)
+                    call.respond(
+                        ErrorResponse(
+                            type = "blanck",
+                            title = "Not found sticky note.",
+                            detail = "No sticky note matching the id was found.",
+                            instance = "/next-actions/$id",
+                        ),
+                    )
                 }
                 call.respond(NoContent)
             }

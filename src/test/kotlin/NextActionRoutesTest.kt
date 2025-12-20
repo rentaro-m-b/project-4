@@ -1,3 +1,4 @@
+import com.example.controller.common.ErrorResponse
 import com.example.controller.nextaction.CreateNextActionRequest
 import com.example.controller.nextaction.UpdateNextActionRequest
 import com.example.module
@@ -22,9 +23,6 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
 import org.junit.jupiter.api.Test
-import org.zalando.problem.Problem
-import org.zalando.problem.Status
-import java.net.URI
 import kotlin.test.assertEquals
 
 @DBRider
@@ -171,7 +169,15 @@ class NextActionRoutesTest {
                 }
 
             // assert
+            val expected =
+                ErrorResponse(
+                    type = "blanck",
+                    title = "Not found sticky note.",
+                    detail = "No sticky note matching the id was found.",
+                    instance = "/next-actions/1e79998f-79ea-4fcb-95d6-e18eb33e2c8e",
+                )
             assertEquals(NotFound, actual.status)
+            assertEquals(expected, actual.body())
         }
 
     @Test
