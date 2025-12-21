@@ -2,12 +2,8 @@ package com.example.usecase.nextaction
 
 import com.example.domain.nextaction.NextAction
 import com.example.domain.nextaction.NextActionRepository
-import java.lang.Exception
+import com.example.usecase.common.CurrentNextActionNotFoundException
 import java.util.UUID
-
-class CurrentNextActionNotFoundException(
-    message: String,
-) : Exception()
 
 class UpdateNextActionUseCase(
     val nextActionRepository: NextActionRepository,

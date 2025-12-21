@@ -1,6 +1,11 @@
 package com.example.controller.nextaction
 
 import com.example.controller.common.ErrorResponse
+import com.example.controller.nextaction.dto.CreateNextActionRequest
+import com.example.controller.nextaction.dto.ListNextActionsResponse
+import com.example.controller.nextaction.dto.UpdateNextActionRequest
+import com.example.usecase.common.CurrentNextActionNotFoundException
+import com.example.usecase.common.usecase.common.CurrentStickyNoteNotFoundException
 import com.example.usecase.nextaction.CreateNextActionUseCase
 import com.example.usecase.nextaction.DeleteNextActionCommand
 import com.example.usecase.nextaction.DeleteNextActionUseCase
@@ -39,16 +44,20 @@ fun Route.nextActionRoutes() {
                 val id: UUID by call.parameters
                 val request = call.receive<UpdateNextActionRequest>()
                 val result = updateNextActionUseCase.handle(request.toCommand(id))
-                if (result.isFailure) {
-                    call.response.status(NotFound)
-                    call.respond(
-                        ErrorResponse(
-                            type = "blanck",
-                            title = "Not found sticky note.",
-                            detail = "No sticky note matching the id was found.",
-                            instance = "/next-actions/$id",
-                        ),
-                    )
+                when (result.exceptionOrNull()) {
+                    is CurrentNextActionNotFoundException -> {
+                        call.response.status(NotFound)
+                        call.respond(
+                            ErrorResponse(
+                                type = "blanck",
+                                title = "Not found next action.",
+                                detail = "No next action matching the id was found.",
+                                instance = "/next-actions/$id",
+                            ),
+                        )
+                    }
+
+                    null -> {}
                 }
                 call.respond(NoContent)
             }
@@ -64,7 +73,22 @@ fun Route.nextActionRoutes() {
         post {
             val id: UUID by call.parameters
             val request = call.receive<CreateNextActionRequest>()
-            createNextActionUseCase.handle(request.toCommand(id))
+            val result = createNextActionUseCase.handle(request.toCommand(id))
+            when (result.exceptionOrNull()) {
+                is CurrentStickyNoteNotFoundException -> {
+                    call.response.status(NotFound)
+                    call.respond(
+                        ErrorResponse(
+                            type = "blanck",
+                            title = "Not found sticky note.",
+                            detail = "No sticky note matching the id was found.",
+                            instance = "/sticky-notes/$id/next-actions",
+                        ),
+                    )
+                }
+
+                null -> {}
+            }
             call.respond(Created)
         }
     }

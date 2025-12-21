@@ -1,4 +1,4 @@
-package com.example.controller.nextaction
+package com.example.controller.nextaction.dto
 
 import com.example.usecase.nextaction.UpdateNextActionCommand
 import kotlinx.serialization.Serializable

@@ -1,6 +1,6 @@
 import com.example.controller.common.ErrorResponse
-import com.example.controller.nextaction.CreateNextActionRequest
-import com.example.controller.nextaction.UpdateNextActionRequest
+import com.example.controller.nextaction.dto.CreateNextActionRequest
+import com.example.controller.nextaction.dto.UpdateNextActionRequest
 import com.example.module
 import com.github.database.rider.core.api.dataset.DataSet
 import com.github.database.rider.core.api.dataset.ExpectedDataSet
@@ -101,6 +101,56 @@ class NextActionRoutesTest {
         }
 
     @Test
+    @DataSet(
+        value = [
+            "datasets/setup/nextActions.yaml",
+            "datasets/setup/stickyNotes.yaml",
+        ],
+        cleanBefore = true,
+    )
+    @ExpectedDataSet(
+        value = ["datasets/setup/nextActions.yaml"],
+        orderBy = ["created_at"],
+    )
+    fun createNextAction_StickyNoteNotFound() =
+        testApplication {
+            // setup
+            environment {
+                config = ApplicationConfig("application.yaml")
+            }
+            application {
+                module()
+            }
+
+            // execute
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json()
+                    }
+                }
+            val actual =
+                client.post("/sticky-notes/6e920f0d-15d6-4898-b126-6ad49558520e/next-actions") {
+                    header(
+                        HttpHeaders.ContentType,
+                        ContentType.Application.Json,
+                    )
+                    setBody(CreateNextActionRequest("draw for 10 minutes"))
+                }
+
+            // assert
+            val expected =
+                ErrorResponse(
+                    type = "blanck",
+                    title = "Not found sticky note.",
+                    detail = "No sticky note matching the id was found.",
+                    instance = "/sticky-notes/6e920f0d-15d6-4898-b126-6ad49558520e/next-actions",
+                )
+            assertEquals(NotFound, actual.status)
+            assertEquals(expected, actual.body())
+        }
+
+    @Test
     @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
     @ExpectedDataSet(
         value = ["datasets/expected/nextaction/updateNextAction.yaml"],
@@ -172,8 +222,8 @@ class NextActionRoutesTest {
             val expected =
                 ErrorResponse(
                     type = "blanck",
-                    title = "Not found sticky note.",
-                    detail = "No sticky note matching the id was found.",
+                    title = "Not found next action.",
+                    detail = "No next action matching the id was found.",
                     instance = "/next-actions/1e79998f-79ea-4fcb-95d6-e18eb33e2c8e",
                 )
             assertEquals(NotFound, actual.status)
