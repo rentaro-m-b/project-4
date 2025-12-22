@@ -5,7 +5,7 @@ import com.example.controller.nextaction.dto.CreateNextActionRequest
 import com.example.controller.nextaction.dto.ListNextActionsResponse
 import com.example.controller.nextaction.dto.UpdateNextActionRequest
 import com.example.usecase.common.CurrentNextActionNotFoundException
-import com.example.usecase.common.usecase.common.CurrentStickyNoteNotFoundException
+import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import com.example.usecase.nextaction.CreateNextActionUseCase
 import com.example.usecase.nextaction.DeleteNextActionCommand
 import com.example.usecase.nextaction.DeleteNextActionUseCase

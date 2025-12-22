@@ -1,4 +1,5 @@
 import com.example.LocalDateTimeSerializer
+import com.example.controller.common.ErrorResponse
 import com.example.controller.scheduledaction.CreateScheduledActionRequest
 import com.example.controller.scheduledaction.UpdateScheduledActionRequest
 import com.example.module
@@ -17,6 +18,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
@@ -116,6 +118,69 @@ class ScheduledActionRoutesTest {
         }
 
     @Test
+    @DataSet(
+        value = [
+            "datasets/setup/scheduledActions.yaml",
+            "datasets/setup/stickyNotes.yaml",
+        ],
+        cleanBefore = true,
+    )
+    @ExpectedDataSet(
+        value = ["datasets/setup/scheduledActions.yaml"],
+        orderBy = ["created_at"],
+    )
+    fun createScheduledAction_notFoundStickyNote() =
+        testApplication {
+            // setup
+            environment {
+                config = ApplicationConfig("application.yaml")
+            }
+            application {
+                module()
+            }
+
+            // execute
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
+                    }
+                }
+            val actual =
+                client.post("/sticky-notes/f3196969-a4c5-4483-bd10-5b92e58d5ef8/scheduled-actions") {
+                    header(
+                        HttpHeaders.ContentType,
+                        ContentType.Application.Json,
+                    )
+                    setBody(
+                        CreateScheduledActionRequest(
+                            description = "draw for 10 minutes",
+                            startsAt = LocalDateTime.parse("2025-03-01T12:00:00"),
+                            endsAt = LocalDateTime.parse("2025-03-01T13:00:00"),
+                        ),
+                    )
+                }
+
+            // assert
+            val expected =
+                ErrorResponse(
+                    type = "blanck",
+                    title = "Not found sticky note.",
+                    detail = "No sticky note matching the id was found.",
+                    instance = "/sticky-notes/f3196969-a4c5-4483-bd10-5b92e58d5ef8/scheduled-actions",
+                )
+            assertEquals(NotFound, actual.status)
+            assertEquals(expected, actual.body())
+        }
+
+    @Test
     @DataSet(value = ["datasets/setup/scheduledActions.yaml"], cleanBefore = true)
     @ExpectedDataSet(
         value = ["datasets/expected/scheduledaction/updateScheduledAction.yaml"],
@@ -162,6 +227,63 @@ class ScheduledActionRoutesTest {
 
             // assert
             assertEquals(NoContent, actual.status)
+        }
+
+    @Test
+    @DataSet(value = ["datasets/setup/scheduledActions.yaml"], cleanBefore = true)
+    @ExpectedDataSet(
+        value = ["datasets/setup/scheduledActions.yaml"],
+        orderBy = ["created_at"],
+    )
+    fun updateScheduledAction_notFound() =
+        testApplication {
+            // setup
+            environment {
+                config = ApplicationConfig("application.yaml")
+            }
+            application {
+                module()
+            }
+
+            // execute
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
+                    }
+                }
+            val actual =
+                client.put("/scheduled-actions/8eb01866-816a-4734-b793-d8c455e9af3a") {
+                    header(
+                        HttpHeaders.ContentType,
+                        ContentType.Application.Json,
+                    )
+                    setBody(
+                        UpdateScheduledActionRequest(
+                            description = "practice drawing for 7 minutes",
+                            startsAt = LocalDateTime.parse("2025-02-01T13:00:00"),
+                            endsAt = LocalDateTime.parse("2025-02-01T13:30:00"),
+                        ),
+                    )
+                }
+
+            // assert
+            val expected =
+                ErrorResponse(
+                    type = "blanck",
+                    title = "Not found next action.",
+                    detail = "No next action matching the id was found.",
+                    instance = "/next-actions/8eb01866-816a-4734-b793-d8c455e9af3a",
+                )
+            assertEquals(NotFound, actual.status)
+            assertEquals(expected, actual.body())
         }
 
     @Test

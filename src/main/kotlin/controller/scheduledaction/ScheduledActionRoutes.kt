@@ -1,5 +1,7 @@
 package com.example.controller.scheduledaction
 
+import com.example.controller.common.ErrorResponse
+import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import com.example.usecase.scheduledaction.CreateScheduledActionUseCase
 import com.example.usecase.scheduledaction.DeleteScheduledActionCommand
 import com.example.usecase.scheduledaction.DeleteScheduledActionUseCase
@@ -7,6 +9,7 @@ import com.example.usecase.scheduledaction.ListScheduledActionsUseCase
 import com.example.usecase.scheduledaction.UpdateScheduledActionUseCase
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
@@ -51,7 +54,22 @@ fun Route.scheduledActionRoutes() {
         post {
             val id: UUID by call.parameters
             val request = call.receive<CreateScheduledActionRequest>()
-            createScheduledActionUseCase.handle(request.toCommand(id))
+            val result = createScheduledActionUseCase.handle(request.toCommand(id))
+            when (result.exceptionOrNull()) {
+                is CurrentStickyNoteNotFoundException -> {
+                    call.response.status(NotFound)
+                    call.respond(
+                        ErrorResponse(
+                            type = "blanck",
+                            title = "Not found sticky note.",
+                            detail = "No sticky note matching the id was found.",
+                            instance = "/sticky-notes/$id/scheduled-actions",
+                        ),
+                    )
+                }
+
+                null -> {}
+            }
             call.respond(Created)
         }
     }

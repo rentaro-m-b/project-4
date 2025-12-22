@@ -3,7 +3,7 @@ package com.example.usecase.nextaction
 import com.example.domain.nextaction.NextAction
 import com.example.domain.nextaction.NextActionRepository
 import com.example.domain.stickynote.StickyNoteRepository
-import com.example.usecase.common.usecase.common.CurrentStickyNoteNotFoundException
+import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import java.time.LocalDateTime
 import java.util.UUID
 

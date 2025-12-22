@@ -3,6 +3,7 @@ package com.example.usecase.scheduledaction
 import com.example.domain.shceduledaction.ScheduledAction
 import com.example.domain.shceduledaction.ScheduledActionRepository
 import com.example.domain.stickynote.StickyNoteRepository
+import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -10,8 +11,10 @@ class CreateScheduledActionUseCase(
     val scheduledActionRepository: ScheduledActionRepository,
     val stickyNoteRepository: StickyNoteRepository,
 ) {
-    fun handle(command: CreateScheduledActionCommand) {
-        if (stickyNoteRepository.fetchStickyNote(command.stickyNoteId) == null) return
+    fun handle(command: CreateScheduledActionCommand): Result<Unit> {
+        if (stickyNoteRepository.fetchStickyNote(command.stickyNoteId) == null) {
+            return Result.failure(CurrentStickyNoteNotFoundException("sticky note not found : ${command.stickyNoteId}"))
+        }
         val scheduledAction =
             ScheduledAction.create(
                 id = UUID.randomUUID(),
@@ -21,6 +24,8 @@ class CreateScheduledActionUseCase(
                 createdAt = LocalDateTime.now(),
             )
         scheduledActionRepository.createScheduledAction(scheduledAction)
+
+        return Result.success(Unit)
     }
 }
 
