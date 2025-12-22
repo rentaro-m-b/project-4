@@ -25,9 +25,13 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
+import org.hamcrest.CoreMatchers.startsWith
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNotNull
 import java.time.LocalDateTime
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @DBRider
 class ScheduledActionRoutesTest {
@@ -115,6 +119,7 @@ class ScheduledActionRoutesTest {
 
             // assert
             assertEquals(Created, actual.status)
+            assertTrue(actual.headers["Location"]!!.startsWith("/scheduled-actions/"))
         }
 
     @Test
@@ -278,9 +283,9 @@ class ScheduledActionRoutesTest {
             val expected =
                 ErrorResponse(
                     type = "blanck",
-                    title = "Not found next action.",
-                    detail = "No next action matching the id was found.",
-                    instance = "/next-actions/8eb01866-816a-4734-b793-d8c455e9af3a",
+                    title = "Not found scheduled action.",
+                    detail = "No scheduled action matching the id was found.",
+                    instance = "/scheduled-actions/8eb01866-816a-4734-b793-d8c455e9af3a",
                 )
             assertEquals(NotFound, actual.status)
             assertEquals(expected, actual.body())

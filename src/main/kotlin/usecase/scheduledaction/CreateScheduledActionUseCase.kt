@@ -11,7 +11,7 @@ class CreateScheduledActionUseCase(
     val scheduledActionRepository: ScheduledActionRepository,
     val stickyNoteRepository: StickyNoteRepository,
 ) {
-    fun handle(command: CreateScheduledActionCommand): Result<Unit> {
+    fun handle(command: CreateScheduledActionCommand): Result<UUID> {
         if (stickyNoteRepository.fetchStickyNote(command.stickyNoteId) == null) {
             return Result.failure(CurrentStickyNoteNotFoundException("sticky note not found : ${command.stickyNoteId}"))
         }
@@ -25,7 +25,7 @@ class CreateScheduledActionUseCase(
             )
         scheduledActionRepository.createScheduledAction(scheduledAction)
 
-        return Result.success(Unit)
+        return Result.success(scheduledAction.id)
     }
 }
 

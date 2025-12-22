@@ -2,15 +2,18 @@ package com.example.usecase.scheduledaction
 
 import com.example.domain.shceduledaction.ScheduledAction
 import com.example.domain.shceduledaction.ScheduledActionRepository
+import com.example.usecase.common.usecase.common.CurrentScheduledActionNotFoundException
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 class UpdateScheduledActionUseCase(
     val scheduledActionRepository: ScheduledActionRepository,
 ) {
-    fun handle(command: UpdateScheduledActionCommand) {
+    fun handle(command: UpdateScheduledActionCommand): Result<Unit> {
         val currentScheduledAction = scheduledActionRepository.fetchScheduledAction(command.id)
-        if (currentScheduledAction == null) return
+        if (currentScheduledAction == null) {
+            return Result.failure(CurrentScheduledActionNotFoundException("scheduled action not found : ${command.id}"))
+        }
 
         val scheduledAction =
             ScheduledAction.create(
@@ -21,6 +24,8 @@ class UpdateScheduledActionUseCase(
                 createdAt = currentScheduledAction.createdAt,
             )
         scheduledActionRepository.updateScheduledAction(scheduledAction)
+
+        return Result.success(Unit)
     }
 }
 

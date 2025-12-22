@@ -2,16 +2,19 @@ package com.example.controller.scheduledaction
 
 import com.example.controller.common.ErrorResponse
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
+import com.example.usecase.common.usecase.common.CurrentScheduledActionNotFoundException
 import com.example.usecase.scheduledaction.CreateScheduledActionUseCase
 import com.example.usecase.scheduledaction.DeleteScheduledActionCommand
 import com.example.usecase.scheduledaction.DeleteScheduledActionUseCase
 import com.example.usecase.scheduledaction.ListScheduledActionsUseCase
 import com.example.usecase.scheduledaction.UpdateScheduledActionUseCase
+import io.ktor.http.HttpHeaders.Location
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
 import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.request.receive
+import io.ktor.server.response.header
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
@@ -39,7 +42,22 @@ fun Route.scheduledActionRoutes() {
             put {
                 val id: UUID by call.parameters
                 val request = call.receive<UpdateScheduledActionRequest>()
-                updateScheduledActionUseCase.handle(request.toCommand(id))
+                val result = updateScheduledActionUseCase.handle(request.toCommand(id))
+                when (result.exceptionOrNull()) {
+                    is CurrentScheduledActionNotFoundException -> {
+                        call.response.status(NotFound)
+                        call.respond(
+                            ErrorResponse(
+                                type = "blanck",
+                                title = "Not found scheduled action.",
+                                detail = "No scheduled action matching the id was found.",
+                                instance = "/scheduled-actions/$id",
+                            ),
+                        )
+                    }
+
+                    null -> {}
+                }
                 call.respond(NoContent)
             }
 
@@ -55,22 +73,27 @@ fun Route.scheduledActionRoutes() {
             val id: UUID by call.parameters
             val request = call.receive<CreateScheduledActionRequest>()
             val result = createScheduledActionUseCase.handle(request.toCommand(id))
-            when (result.exceptionOrNull()) {
-                is CurrentStickyNoteNotFoundException -> {
-                    call.response.status(NotFound)
-                    call.respond(
-                        ErrorResponse(
-                            type = "blanck",
-                            title = "Not found sticky note.",
-                            detail = "No sticky note matching the id was found.",
-                            instance = "/sticky-notes/$id/scheduled-actions",
-                        ),
-                    )
-                }
-
-                null -> {}
-            }
-            call.respond(Created)
+            result.fold(
+                onSuccess = {
+                    call.response.status(Created)
+                    call.response.header(Location, "/scheduled-actions/$it")
+                },
+                onFailure = {
+                    when (it) {
+                        is CurrentStickyNoteNotFoundException -> {
+                            call.response.status(NotFound)
+                            call.respond(
+                                ErrorResponse(
+                                    type = "blanck",
+                                    title = "Not found sticky note.",
+                                    detail = "No sticky note matching the id was found.",
+                                    instance = "/sticky-notes/$id/scheduled-actions",
+                                ),
+                            )
+                        }
+                    }
+                },
+            )
         }
     }
 }
