@@ -1,4 +1,4 @@
-package com.example.controller.stickynote
+package com.example.controller.stickynote.dto
 
 import com.example.domain.stickynote.StickyNote
 import kotlinx.serialization.Contextual

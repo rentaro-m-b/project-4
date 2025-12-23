@@ -1,22 +1,22 @@
-package com.example.controller.scheduledaction
+package com.example.controller.scheduledaction.dto
 
-import com.example.usecase.scheduledaction.CreateScheduledActionCommand
+import com.example.usecase.scheduledaction.UpdateScheduledActionCommand
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.util.UUID
 
 @Serializable
-data class CreateScheduledActionRequest(
+data class UpdateScheduledActionRequest(
     val description: String,
     @Contextual
     val startsAt: LocalDateTime,
     @Contextual
     val endsAt: LocalDateTime,
 ) {
-    fun toCommand(id: UUID): CreateScheduledActionCommand =
-        CreateScheduledActionCommand(
-            stickyNoteId = id,
+    fun toCommand(id: UUID): UpdateScheduledActionCommand =
+        UpdateScheduledActionCommand(
+            id = id,
             description = description,
             startsAt = startsAt,
             endsAt = endsAt,

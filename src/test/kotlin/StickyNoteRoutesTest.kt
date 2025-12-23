@@ -1,5 +1,5 @@
-import com.example.controller.stickynote.CreateStickyNoteRequest
-import com.example.controller.stickynote.UpdateStickyNoteRequest
+import com.example.controller.stickynote.dto.CreateStickyNoteRequest
+import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
 import com.example.module
 import com.github.database.rider.core.api.dataset.DataSet
 import com.github.database.rider.core.api.dataset.ExpectedDataSet

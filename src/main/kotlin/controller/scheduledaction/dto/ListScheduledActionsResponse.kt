@@ -1,4 +1,4 @@
-package com.example.controller.scheduledaction
+package com.example.controller.scheduledaction.dto
 
 import com.example.domain.shceduledaction.ScheduledAction
 import kotlinx.serialization.Contextual

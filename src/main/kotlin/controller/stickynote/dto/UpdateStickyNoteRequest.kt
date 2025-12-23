@@ -1,4 +1,4 @@
-package com.example.controller.stickynote
+package com.example.controller.stickynote.dto
 
 import com.example.usecase.stickynote.UpdateStickyNoteCommand
 import kotlinx.serialization.Serializable

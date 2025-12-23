@@ -2,14 +2,17 @@ package com.example.usecase.stickynote
 
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
+import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import java.util.UUID
 
 class UpdateStickyNoteUseCase(
     val stickyNoteRepository: StickyNoteRepository,
 ) {
-    fun handle(command: UpdateStickyNoteCommand) {
+    fun handle(command: UpdateStickyNoteCommand): Result<Unit> {
         val currentStickyNote = stickyNoteRepository.fetchStickyNote(command.id)
-        if (currentStickyNote == null) return
+        if (currentStickyNote == null) {
+            return Result.failure(CurrentStickyNoteNotFoundException("sticky note not found : ${command.id}"))
+        }
 
         val stickyNote =
             StickyNote.create(
@@ -18,6 +21,8 @@ class UpdateStickyNoteUseCase(
                 createdAt = currentStickyNote.createdAt,
             )
         stickyNoteRepository.updateStickyNote(stickyNote)
+
+        return Result.success(Unit)
     }
 }
 

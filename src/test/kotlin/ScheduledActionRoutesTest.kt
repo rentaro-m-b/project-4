@@ -1,7 +1,7 @@
 import com.example.LocalDateTimeSerializer
 import com.example.controller.common.ErrorResponse
-import com.example.controller.scheduledaction.CreateScheduledActionRequest
-import com.example.controller.scheduledaction.UpdateScheduledActionRequest
+import com.example.controller.scheduledaction.dto.CreateScheduledActionRequest
+import com.example.controller.scheduledaction.dto.UpdateScheduledActionRequest
 import com.example.module
 import com.github.database.rider.core.api.dataset.DataSet
 import com.github.database.rider.core.api.dataset.ExpectedDataSet
@@ -25,11 +25,8 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import org.hamcrest.CoreMatchers.startsWith
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertNotNull
 import java.time.LocalDateTime
-import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

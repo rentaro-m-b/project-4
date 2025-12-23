@@ -1,6 +1,9 @@
 package com.example.controller.scheduledaction
 
 import com.example.controller.common.ErrorResponse
+import com.example.controller.scheduledaction.dto.CreateScheduledActionRequest
+import com.example.controller.scheduledaction.dto.ListScheduledActionsResponse
+import com.example.controller.scheduledaction.dto.UpdateScheduledActionRequest
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import com.example.usecase.common.usecase.common.CurrentScheduledActionNotFoundException
 import com.example.usecase.scheduledaction.CreateScheduledActionUseCase
@@ -43,22 +46,26 @@ fun Route.scheduledActionRoutes() {
                 val id: UUID by call.parameters
                 val request = call.receive<UpdateScheduledActionRequest>()
                 val result = updateScheduledActionUseCase.handle(request.toCommand(id))
-                when (result.exceptionOrNull()) {
-                    is CurrentScheduledActionNotFoundException -> {
-                        call.response.status(NotFound)
-                        call.respond(
-                            ErrorResponse(
-                                type = "blanck",
-                                title = "Not found scheduled action.",
-                                detail = "No scheduled action matching the id was found.",
-                                instance = "/scheduled-actions/$id",
-                            ),
-                        )
-                    }
-
-                    null -> {}
-                }
-                call.respond(NoContent)
+                result.fold(
+                    onSuccess = {
+                        call.respond(NoContent)
+                    },
+                    onFailure = {
+                        when (it) {
+                            is CurrentScheduledActionNotFoundException -> {
+                                call.response.status(NotFound)
+                                call.respond(
+                                    ErrorResponse(
+                                        type = "blanck",
+                                        title = "Not found scheduled action.",
+                                        detail = "No scheduled action matching the id was found.",
+                                        instance = "/scheduled-actions/$id",
+                                    ),
+                                )
+                            }
+                        }
+                    },
+                )
             }
 
             delete {

@@ -1,5 +1,8 @@
 package com.example.controller.stickynote
 
+import com.example.controller.stickynote.dto.CreateStickyNoteRequest
+import com.example.controller.stickynote.dto.ListStickyNotesResponse
+import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.DeleteStickyNoteCommand
 import com.example.usecase.stickynote.DeleteStickyNoteUseCase
@@ -44,7 +47,7 @@ fun Route.stickyNoteRoutes() {
             put {
                 val id: UUID by call.parameters
                 val request = call.receive<UpdateStickyNoteRequest>()
-                updateStickyNoteUseCase.handle(request.toCommand(id))
+                val result = updateStickyNoteUseCase.handle(request.toCommand(id))
                 call.respond(NoContent)
             }
 
