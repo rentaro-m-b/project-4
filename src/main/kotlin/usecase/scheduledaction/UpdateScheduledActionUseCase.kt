@@ -2,7 +2,7 @@ package com.example.usecase.scheduledaction
 
 import com.example.domain.shceduledaction.ScheduledAction
 import com.example.domain.shceduledaction.ScheduledActionRepository
-import com.example.usecase.common.usecase.common.CurrentScheduledActionNotFoundException
+import com.example.usecase.common.CurrentScheduledActionNotFoundException
 import java.time.LocalDateTime
 import java.util.UUID
 

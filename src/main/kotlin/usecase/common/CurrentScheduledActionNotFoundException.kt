@@ -1,4 +1,4 @@
-package com.example.usecase.common.usecase.common
+package com.example.usecase.common
 
 import java.lang.Exception
 

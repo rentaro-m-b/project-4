@@ -4,8 +4,8 @@ import com.example.controller.common.ErrorResponse
 import com.example.controller.scheduledaction.dto.CreateScheduledActionRequest
 import com.example.controller.scheduledaction.dto.ListScheduledActionsResponse
 import com.example.controller.scheduledaction.dto.UpdateScheduledActionRequest
+import com.example.usecase.common.CurrentScheduledActionNotFoundException
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
-import com.example.usecase.common.usecase.common.CurrentScheduledActionNotFoundException
 import com.example.usecase.scheduledaction.CreateScheduledActionUseCase
 import com.example.usecase.scheduledaction.DeleteScheduledActionCommand
 import com.example.usecase.scheduledaction.DeleteScheduledActionUseCase

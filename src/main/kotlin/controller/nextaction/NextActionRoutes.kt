@@ -5,6 +5,7 @@ import com.example.controller.nextaction.dto.CreateNextActionRequest
 import com.example.controller.nextaction.dto.ListNextActionsResponse
 import com.example.controller.nextaction.dto.UpdateNextActionRequest
 import com.example.usecase.common.CurrentNextActionNotFoundException
+import com.example.usecase.common.CurrentScheduledActionNotFoundException
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import com.example.usecase.nextaction.CreateNextActionUseCase
 import com.example.usecase.nextaction.DeleteNextActionCommand
@@ -44,22 +45,26 @@ fun Route.nextActionRoutes() {
                 val id: UUID by call.parameters
                 val request = call.receive<UpdateNextActionRequest>()
                 val result = updateNextActionUseCase.handle(request.toCommand(id))
-                when (result.exceptionOrNull()) {
-                    is CurrentNextActionNotFoundException -> {
-                        call.response.status(NotFound)
-                        call.respond(
-                            ErrorResponse(
-                                type = "blanck",
-                                title = "Not found next action.",
-                                detail = "No next action matching the id was found.",
-                                instance = "/next-actions/$id",
-                            ),
-                        )
-                    }
-
-                    null -> {}
-                }
-                call.respond(NoContent)
+                result.fold(
+                    onSuccess = {
+                        call.respond(NoContent)
+                    },
+                    onFailure = {
+                        when (it) {
+                            is CurrentNextActionNotFoundException -> {
+                                call.response.status(NotFound)
+                                call.respond(
+                                    ErrorResponse(
+                                        type = "blanck",
+                                        title = "Not found next action.",
+                                        detail = "No next action matching the id was found.",
+                                        instance = "/next-actions/$id",
+                                    ),
+                                )
+                            }
+                        }
+                    },
+                )
             }
 
             delete {
@@ -74,22 +79,26 @@ fun Route.nextActionRoutes() {
             val id: UUID by call.parameters
             val request = call.receive<CreateNextActionRequest>()
             val result = createNextActionUseCase.handle(request.toCommand(id))
-            when (result.exceptionOrNull()) {
-                is CurrentStickyNoteNotFoundException -> {
-                    call.response.status(NotFound)
-                    call.respond(
-                        ErrorResponse(
-                            type = "blanck",
-                            title = "Not found sticky note.",
-                            detail = "No sticky note matching the id was found.",
-                            instance = "/sticky-notes/$id/next-actions",
-                        ),
-                    )
-                }
-
-                null -> {}
-            }
-            call.respond(Created)
+            result.fold(
+                onSuccess = {
+                    call.respond(Created)
+                },
+                onFailure = {
+                    when (it) {
+                        is CurrentNextActionNotFoundException -> {
+                            call.response.status(NotFound)
+                            call.respond(
+                                ErrorResponse(
+                                    type = "blanck",
+                                    title = "Not found sticky note.",
+                                    detail = "No sticky note matching the id was found.",
+                                    instance = "/sticky-notes/$id/next-actions",
+                                ),
+                            )
+                        }
+                    }
+                },
+            )
         }
     }
 }

@@ -1,3 +1,4 @@
+import com.example.controller.common.ErrorResponse
 import com.example.controller.stickynote.dto.CreateStickyNoteRequest
 import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
 import com.example.module
@@ -16,6 +17,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
@@ -126,6 +128,50 @@ class StickyNoteRoutesTest {
 
             // assert
             assertEquals(NoContent, actual.status)
+        }
+
+    @Test
+    @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
+    @ExpectedDataSet(
+        value = ["datasets/setup/stickyNotes.yaml"],
+        orderBy = ["created_at"],
+    )
+    fun updateStickyNote_notFound() =
+        testApplication {
+            // setup
+            environment {
+                config = ApplicationConfig("application.yaml")
+            }
+            application {
+                module()
+            }
+
+            // execute
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json()
+                    }
+                }
+            val actual =
+                client.put("/sticky-notes/cee8b174-fe19-47ac-b15b-d665c268c661") {
+                    header(
+                        HttpHeaders.ContentType,
+                        ContentType.Application.Json,
+                    )
+                    setBody(UpdateStickyNoteRequest("wanting to have happiness"))
+                }
+
+            // assert
+            val expected =
+                ErrorResponse(
+                    type = "blanck",
+                    title = "Not found sticky note.",
+                    detail = "No sticky note matching the id was found.",
+                    instance = "/sticky-notes/cee8b174-fe19-47ac-b15b-d665c268c661",
+                )
+            assertEquals(NotFound, actual.status)
+            assertEquals(expected, actual.body())
         }
 
     @Test

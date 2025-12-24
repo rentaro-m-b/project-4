@@ -236,7 +236,7 @@ class NextActionRoutesTest {
         value = ["datasets/expected/nextaction/deleteNextAction.yaml"],
         orderBy = ["created_at"],
     )
-    fun deleteStickyNote() =
+    fun deleteNextAction() =
         testApplication {
             // setup
             environment {

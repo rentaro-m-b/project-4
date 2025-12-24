@@ -294,7 +294,7 @@ class ScheduledActionRoutesTest {
         value = ["datasets/expected/scheduledaction/deleteScheduledAction.yaml"],
         orderBy = ["created_at"],
     )
-    fun deleteStickyNote() =
+    fun deleteScheduledAction() =
         testApplication {
             // setup
             environment {
