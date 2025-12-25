@@ -4,18 +4,19 @@ import com.example.controller.common.ErrorResponse
 import com.example.controller.stickynote.dto.CreateStickyNoteRequest
 import com.example.controller.stickynote.dto.ListStickyNotesResponse
 import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
-import com.example.usecase.common.CurrentScheduledActionNotFoundException
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.DeleteStickyNoteCommand
 import com.example.usecase.stickynote.DeleteStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
 import com.example.usecase.stickynote.UpdateStickyNoteUseCase
+import io.ktor.http.HttpHeaders.Location
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
 import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.request.receive
+import io.ktor.server.response.header
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
@@ -26,7 +27,6 @@ import io.ktor.server.routing.route
 import io.ktor.server.util.getValue
 import org.koin.ktor.ext.inject
 import java.util.UUID
-import kotlin.getValue
 
 fun Route.stickyNoteRoutes() {
     val listStickyNotesUseCase by inject<ListStickyNotesUseCase>()
@@ -43,8 +43,9 @@ fun Route.stickyNoteRoutes() {
 
         post {
             val request = call.receive<CreateStickyNoteRequest>()
-            createStickyNoteUseCase.handle(request.toCommand())
-            call.respond(Created)
+            val id = createStickyNoteUseCase.handle(request.toCommand())
+            call.response.status(Created)
+            call.response.header(Location, "/sticky-notes/$id")
         }
 
         route("/{id}") {

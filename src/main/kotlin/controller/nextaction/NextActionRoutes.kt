@@ -5,18 +5,19 @@ import com.example.controller.nextaction.dto.CreateNextActionRequest
 import com.example.controller.nextaction.dto.ListNextActionsResponse
 import com.example.controller.nextaction.dto.UpdateNextActionRequest
 import com.example.usecase.common.CurrentNextActionNotFoundException
-import com.example.usecase.common.CurrentScheduledActionNotFoundException
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import com.example.usecase.nextaction.CreateNextActionUseCase
 import com.example.usecase.nextaction.DeleteNextActionCommand
 import com.example.usecase.nextaction.DeleteNextActionUseCase
 import com.example.usecase.nextaction.ListNextActionsUseCase
 import com.example.usecase.nextaction.UpdateNextActionUseCase
+import io.ktor.http.HttpHeaders.Location
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.NoContent
 import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.request.receive
+import io.ktor.server.response.header
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
@@ -81,11 +82,12 @@ fun Route.nextActionRoutes() {
             val result = createNextActionUseCase.handle(request.toCommand(id))
             result.fold(
                 onSuccess = {
-                    call.respond(Created)
+                    call.response.status(Created)
+                    call.response.header(Location, "/next-actions/$it")
                 },
                 onFailure = {
                     when (it) {
-                        is CurrentNextActionNotFoundException -> {
+                        is CurrentStickyNoteNotFoundException -> {
                             call.response.status(NotFound)
                             call.respond(
                                 ErrorResponse(

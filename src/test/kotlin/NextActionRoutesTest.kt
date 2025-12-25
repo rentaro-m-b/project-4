@@ -24,6 +24,7 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @DBRider
 class NextActionRoutesTest {
@@ -98,6 +99,7 @@ class NextActionRoutesTest {
 
             // assert
             assertEquals(Created, actual.status)
+            assertTrue(actual.headers["Location"]!!.startsWith("/next-actions/"))
         }
 
     @Test

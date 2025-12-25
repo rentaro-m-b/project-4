@@ -11,7 +11,7 @@ class CreateNextActionUseCase(
     val nextActionRepository: NextActionRepository,
     val stickyNoteRepository: StickyNoteRepository,
 ) {
-    fun handle(command: CreateNextActionCommand): Result<Unit> {
+    fun handle(command: CreateNextActionCommand): Result<UUID> {
         if (stickyNoteRepository.fetchStickyNote(command.stickyNoteId) == null) {
             return Result.failure(CurrentStickyNoteNotFoundException("sticky note not found : ${command.stickyNoteId}"))
         }
@@ -22,7 +22,7 @@ class CreateNextActionUseCase(
                 createdAt = LocalDateTime.now(),
             )
         nextActionRepository.createNextAction(nextAction)
-        return Result.success(Unit)
+        return Result.success(nextAction.id)
     }
 }
 
