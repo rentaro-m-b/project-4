@@ -3,14 +3,18 @@ package com.example.usecase.stickynote
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
+import org.slf4j.LoggerFactory
 import java.util.UUID
 
 class UpdateStickyNoteUseCase(
-    val stickyNoteRepository: StickyNoteRepository,
+    private val stickyNoteRepository: StickyNoteRepository,
 ) {
+    private val log = LoggerFactory.getLogger(UpdateStickyNoteUseCase::class.java)
+
     fun handle(command: UpdateStickyNoteCommand): Result<Unit> {
         val currentStickyNote = stickyNoteRepository.fetchStickyNote(command.id)
         if (currentStickyNote == null) {
+            log.warn("sticky note not found : ${command.id}")
             return Result.failure(CurrentStickyNoteNotFoundException("sticky note not found : ${command.id}"))
         }
 

@@ -1,7 +1,12 @@
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.read.ListAppender
 import com.example.controller.common.ErrorResponse
 import com.example.controller.stickynote.dto.CreateStickyNoteRequest
 import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
 import com.example.module
+import com.example.usecase.stickynote.UpdateStickyNoteUseCase
 import com.github.database.rider.core.api.dataset.DataSet
 import com.github.database.rider.core.api.dataset.ExpectedDataSet
 import com.github.database.rider.junit5.api.DBRider
@@ -23,6 +28,7 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
 import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -148,6 +154,11 @@ class StickyNoteRoutesTest {
                 module()
             }
 
+            val log = LoggerFactory.getLogger(UpdateStickyNoteUseCase::class.java) as Logger
+            val appender = ListAppender<ILoggingEvent>()
+            appender.start()
+            log.addAppender(appender)
+
             // execute
             val client =
                 createClient {
@@ -174,6 +185,10 @@ class StickyNoteRoutesTest {
                 )
             assertEquals(NotFound, actual.status)
             assertEquals(expected, actual.body())
+            val events = appender.list
+            assert(events.size == 1)
+            assert(events[0].level == Level.WARN)
+            assert(events[0].formattedMessage == "sticky note not found : cee8b174-fe19-47ac-b15b-d665c268c661")
         }
 
     @Test

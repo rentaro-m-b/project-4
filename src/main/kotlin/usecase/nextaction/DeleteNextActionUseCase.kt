@@ -4,7 +4,7 @@ import com.example.domain.nextaction.NextActionRepository
 import java.util.UUID
 
 class DeleteNextActionUseCase(
-    val nextActionRepository: NextActionRepository,
+    private val nextActionRepository: NextActionRepository,
 ) {
     fun handle(command: DeleteNextActionCommand) {
         nextActionRepository.deleteNextAction(command.id)

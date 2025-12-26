@@ -4,7 +4,7 @@ import com.example.domain.stickynote.StickyNoteRepository
 import java.util.UUID
 
 class DeleteStickyNoteUseCase(
-    val stickyNoteRepository: StickyNoteRepository,
+    private val stickyNoteRepository: StickyNoteRepository,
 ) {
     fun handle(command: DeleteStickyNoteCommand) {
         stickyNoteRepository.deleteStickyNote(command.id)

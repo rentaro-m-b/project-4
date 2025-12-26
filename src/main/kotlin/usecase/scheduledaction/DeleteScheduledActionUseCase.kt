@@ -5,7 +5,7 @@ import com.example.domain.shceduledaction.ScheduledActionRepository
 import java.util.UUID
 
 class DeleteScheduledActionUseCase(
-    val scheduledActionRepository: ScheduledActionRepository,
+    private val scheduledActionRepository: ScheduledActionRepository,
 ) {
     fun handle(command: DeleteScheduledActionCommand) {
         scheduledActionRepository.deleteScheduledAction(command.id)

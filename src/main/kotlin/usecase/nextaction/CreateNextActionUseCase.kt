@@ -8,8 +8,8 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 class CreateNextActionUseCase(
-    val nextActionRepository: NextActionRepository,
-    val stickyNoteRepository: StickyNoteRepository,
+    private val nextActionRepository: NextActionRepository,
+    private val stickyNoteRepository: StickyNoteRepository,
 ) {
     fun handle(command: CreateNextActionCommand): Result<UUID> {
         if (stickyNoteRepository.fetchStickyNote(command.stickyNoteId) == null) {

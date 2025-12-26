@@ -6,7 +6,7 @@ import com.example.domain.shceduledaction.ScheduledAction
 import com.example.domain.shceduledaction.ScheduledActionRepository
 
 class ListScheduledActionsUseCase(
-    val scheduledActionRepository: ScheduledActionRepository,
+    private val scheduledActionRepository: ScheduledActionRepository,
 ) {
     fun handle(): List<ScheduledAction> = scheduledActionRepository.listScheduledActions()
 }

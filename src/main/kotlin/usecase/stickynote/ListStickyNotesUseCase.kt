@@ -4,7 +4,7 @@ import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
 
 class ListStickyNotesUseCase(
-    val stickyNoteRepository: StickyNoteRepository,
+    private val stickyNoteRepository: StickyNoteRepository,
 ) {
     fun handle(): List<StickyNote> = stickyNoteRepository.listStickyNotes()
 }

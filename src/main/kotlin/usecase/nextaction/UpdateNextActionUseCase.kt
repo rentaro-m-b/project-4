@@ -6,7 +6,7 @@ import com.example.usecase.common.CurrentNextActionNotFoundException
 import java.util.UUID
 
 class UpdateNextActionUseCase(
-    val nextActionRepository: NextActionRepository,
+    private val nextActionRepository: NextActionRepository,
 ) {
     fun handle(command: UpdateNextActionCommand): Result<Unit> {
         val currentNextAction = nextActionRepository.fetchNextAction(command.id)

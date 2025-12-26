@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 class UpdateScheduledActionUseCase(
-    val scheduledActionRepository: ScheduledActionRepository,
+    private val scheduledActionRepository: ScheduledActionRepository,
 ) {
     fun handle(command: UpdateScheduledActionCommand): Result<Unit> {
         val currentScheduledAction = scheduledActionRepository.fetchScheduledAction(command.id)

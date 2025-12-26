@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 class CreateStickyNoteUseCase(
-    val stickyNoteRepository: StickyNoteRepository,
+    private val stickyNoteRepository: StickyNoteRepository,
 ) {
     fun handle(command: CreateStickyNoteCommand): UUID {
         val stickyNote =

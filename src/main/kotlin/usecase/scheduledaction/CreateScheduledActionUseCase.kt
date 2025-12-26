@@ -8,8 +8,8 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 class CreateScheduledActionUseCase(
-    val scheduledActionRepository: ScheduledActionRepository,
-    val stickyNoteRepository: StickyNoteRepository,
+    private val scheduledActionRepository: ScheduledActionRepository,
+    private val stickyNoteRepository: StickyNoteRepository,
 ) {
     fun handle(command: CreateScheduledActionCommand): Result<UUID> {
         if (stickyNoteRepository.fetchStickyNote(command.stickyNoteId) == null) {
