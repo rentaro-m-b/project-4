@@ -4,6 +4,7 @@ import com.example.domain.shceduledaction.ScheduledAction
 import com.example.domain.shceduledaction.ScheduledActionRepository
 import com.example.domain.stickynote.StickyNoteRepository
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -11,8 +12,11 @@ class CreateScheduledActionUseCase(
     private val scheduledActionRepository: ScheduledActionRepository,
     private val stickyNoteRepository: StickyNoteRepository,
 ) {
+    private val log = LoggerFactory.getLogger(CreateScheduledActionUseCase::class.java)
+
     fun handle(command: CreateScheduledActionCommand): Result<UUID> {
         if (stickyNoteRepository.fetchStickyNote(command.stickyNoteId) == null) {
+            log.warn("sticky note not found : ${command.stickyNoteId}")
             return Result.failure(CurrentStickyNoteNotFoundException("sticky note not found : ${command.stickyNoteId}"))
         }
         val scheduledAction =

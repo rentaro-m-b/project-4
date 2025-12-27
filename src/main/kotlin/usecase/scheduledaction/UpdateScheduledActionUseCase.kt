@@ -3,15 +3,19 @@ package com.example.usecase.scheduledaction
 import com.example.domain.shceduledaction.ScheduledAction
 import com.example.domain.shceduledaction.ScheduledActionRepository
 import com.example.usecase.common.CurrentScheduledActionNotFoundException
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
 
 class UpdateScheduledActionUseCase(
     private val scheduledActionRepository: ScheduledActionRepository,
 ) {
+    private val log = LoggerFactory.getLogger(UpdateScheduledActionUseCase::class.java)
+
     fun handle(command: UpdateScheduledActionCommand): Result<Unit> {
         val currentScheduledAction = scheduledActionRepository.fetchScheduledAction(command.id)
         if (currentScheduledAction == null) {
+            log.warn("scheduled action not found : ${command.id}")
             return Result.failure(CurrentScheduledActionNotFoundException("scheduled action not found : ${command.id}"))
         }
 
