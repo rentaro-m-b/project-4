@@ -1,8 +1,14 @@
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.read.ListAppender
 import com.example.LocalDateTimeSerializer
 import com.example.controller.common.ErrorResponse
 import com.example.controller.scheduledaction.dto.CreateScheduledActionRequest
 import com.example.controller.scheduledaction.dto.UpdateScheduledActionRequest
 import com.example.module
+import com.example.usecase.scheduledaction.CreateScheduledActionUseCase
+import com.example.usecase.scheduledaction.UpdateScheduledActionUseCase
 import com.github.database.rider.core.api.dataset.DataSet
 import com.github.database.rider.core.api.dataset.ExpectedDataSet
 import com.github.database.rider.junit5.api.DBRider
@@ -26,6 +32,7 @@ import io.ktor.server.testing.testApplication
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -141,6 +148,8 @@ class ScheduledActionRoutesTest {
                 module()
             }
 
+            val appender = setUpAppender(CreateScheduledActionUseCase::class.java)
+
             // execute
             val client =
                 createClient {
@@ -180,6 +189,10 @@ class ScheduledActionRoutesTest {
                 )
             assertEquals(NotFound, actual.status)
             assertEquals(expected, actual.body())
+            val events = appender.list
+            assert(events.size == 1)
+            assert(events[0].level == Level.WARN)
+            assert(events[0].formattedMessage == "sticky note not found : f3196969-a4c5-4483-bd10-5b92e58d5ef8")
         }
 
     @Test
@@ -247,6 +260,8 @@ class ScheduledActionRoutesTest {
                 module()
             }
 
+            val appender = setUpAppender(UpdateScheduledActionUseCase::class.java)
+
             // execute
             val client =
                 createClient {
@@ -286,6 +301,10 @@ class ScheduledActionRoutesTest {
                 )
             assertEquals(NotFound, actual.status)
             assertEquals(expected, actual.body())
+            val events = appender.list
+            assert(events.size == 1)
+            assert(events[0].level == Level.WARN)
+            assert(events[0].formattedMessage == "scheduled action not found : 8eb01866-816a-4734-b793-d8c455e9af3a")
         }
 
     @Test
@@ -322,4 +341,12 @@ class ScheduledActionRoutesTest {
             .lineSequence()
             .map { it.trim() }
             .joinToString("")
+
+    private fun <T> setUpAppender(logId: Class<T>): ListAppender<ILoggingEvent> {
+        val log = LoggerFactory.getLogger(logId) as Logger
+        val appender = ListAppender<ILoggingEvent>()
+        appender.start()
+        log.addAppender(appender)
+        return appender
+    }
 }

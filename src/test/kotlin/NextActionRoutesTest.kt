@@ -1,7 +1,13 @@
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.read.ListAppender
 import com.example.controller.common.ErrorResponse
 import com.example.controller.nextaction.dto.CreateNextActionRequest
 import com.example.controller.nextaction.dto.UpdateNextActionRequest
 import com.example.module
+import com.example.usecase.nextaction.CreateNextActionUseCase
+import com.example.usecase.nextaction.UpdateNextActionUseCase
 import com.github.database.rider.core.api.dataset.DataSet
 import com.github.database.rider.core.api.dataset.ExpectedDataSet
 import com.github.database.rider.junit5.api.DBRider
@@ -23,6 +29,7 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
 import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -124,6 +131,8 @@ class NextActionRoutesTest {
                 module()
             }
 
+            val appender = setUpAppender(CreateNextActionUseCase::class.java)
+
             // execute
             val client =
                 createClient {
@@ -150,6 +159,10 @@ class NextActionRoutesTest {
                 )
             assertEquals(NotFound, actual.status)
             assertEquals(expected, actual.body())
+            val events = appender.list
+            assert(events.size == 1)
+            assert(events[0].level == Level.WARN)
+            assert(events[0].formattedMessage == "sticky note not found : 6e920f0d-15d6-4898-b126-6ad49558520e")
         }
 
     @Test
@@ -204,6 +217,8 @@ class NextActionRoutesTest {
                 module()
             }
 
+            val appender = setUpAppender(UpdateNextActionUseCase::class.java)
+
             // execute
             val client =
                 createClient {
@@ -230,6 +245,10 @@ class NextActionRoutesTest {
                 )
             assertEquals(NotFound, actual.status)
             assertEquals(expected, actual.body())
+            val events = appender.list
+            assert(events.size == 1)
+            assert(events[0].level == Level.WARN)
+            assert(events[0].formattedMessage == "next action not found : 1e79998f-79ea-4fcb-95d6-e18eb33e2c8e")
         }
 
     @Test
@@ -266,4 +285,12 @@ class NextActionRoutesTest {
             .lineSequence()
             .map { it.trim() }
             .joinToString("")
+
+    private fun <T> setUpAppender(logId: Class<T>): ListAppender<ILoggingEvent> {
+        val log = LoggerFactory.getLogger(logId) as Logger
+        val appender = ListAppender<ILoggingEvent>()
+        appender.start()
+        log.addAppender(appender)
+        return appender
+    }
 }

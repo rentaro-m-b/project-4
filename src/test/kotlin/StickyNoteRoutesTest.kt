@@ -1,6 +1,7 @@
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.Appender
 import ch.qos.logback.core.read.ListAppender
 import com.example.controller.common.ErrorResponse
 import com.example.controller.stickynote.dto.CreateStickyNoteRequest
@@ -154,10 +155,7 @@ class StickyNoteRoutesTest {
                 module()
             }
 
-            val log = LoggerFactory.getLogger(UpdateStickyNoteUseCase::class.java) as Logger
-            val appender = ListAppender<ILoggingEvent>()
-            appender.start()
-            log.addAppender(appender)
+            val appender = setUpAppender(UpdateStickyNoteUseCase::class.java)
 
             // execute
             val client =
@@ -219,4 +217,12 @@ class StickyNoteRoutesTest {
             .lineSequence()
             .map { it.trim() }
             .joinToString("")
+
+    private fun <T> setUpAppender(logId: Class<T>): ListAppender<ILoggingEvent> {
+        val log = LoggerFactory.getLogger(logId) as Logger
+        val appender = ListAppender<ILoggingEvent>()
+        appender.start()
+        log.addAppender(appender)
+        return appender
+    }
 }
