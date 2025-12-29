@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 
 @Serializable
 data class ListStickyNotesResponse(
+    val id: String,
     val concern: String,
     @Contextual
     val createdAt: LocalDateTime,
@@ -14,6 +15,7 @@ data class ListStickyNotesResponse(
     companion object {
         fun of(stickyNote: StickyNote): ListStickyNotesResponse =
             ListStickyNotesResponse(
+                id = stickyNote.id.toString(),
                 concern = stickyNote.concern,
                 createdAt = stickyNote.createdAt,
             )
