@@ -1,13 +1,16 @@
+package it
+
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.read.ListAppender
+import com.example.LocalDateTimeSerializer
 import com.example.controller.common.ErrorResponse
-import com.example.controller.nextaction.dto.CreateNextActionRequest
-import com.example.controller.nextaction.dto.UpdateNextActionRequest
+import com.example.controller.scheduledaction.dto.CreateScheduledActionRequest
+import com.example.controller.scheduledaction.dto.UpdateScheduledActionRequest
 import com.example.module
-import com.example.usecase.nextaction.CreateNextActionUseCase
-import com.example.usecase.nextaction.UpdateNextActionUseCase
+import com.example.usecase.scheduledaction.CreateScheduledActionUseCase
+import com.example.usecase.scheduledaction.UpdateScheduledActionUseCase
 import com.github.database.rider.core.api.dataset.DataSet
 import com.github.database.rider.core.api.dataset.ExpectedDataSet
 import com.github.database.rider.junit5.api.DBRider
@@ -28,16 +31,19 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
+import java.time.LocalDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @DBRider
-class NextActionRoutesTest {
+class ScheduledActionRoutesTest {
     @Test
-    @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
-    fun listNextActions() =
+    @DataSet(value = ["datasets/setup/scheduledActions.yaml"], cleanBefore = true)
+    fun listScheduledActions() =
         testApplication {
             // setup
             environment {
@@ -48,17 +54,17 @@ class NextActionRoutesTest {
             }
 
             // execute
-            val response = client.get("/next-actions")
+            val response = client.get("/scheduled-actions")
 
             // assert
             val expected =
                 formatAsExpected(
                     """
                     [
-                        {"description":"practice drawing for 10 minutes","createdAt":"2025-01-01T00:00:00"},
-                        {"description":"collect five reference materials","createdAt":"2025-01-01T00:00:01"},
-                        {"description":"decide on a theme for the painting","createdAt":"2025-01-01T00:00:02"},
-                        {"description":"decide which contest to submit to","createdAt":"2025-01-01T00:00:03"}
+                        {"description":"practice drawing for 10 minutes","startsAt":"2025-02-01T12:00:00","endsAt":"2025-02-01T13:00:00","createdAt":"2025-01-01T00:00:00"},
+                        {"description":"collect five reference materials","startsAt":"2025-02-01T12:00:01","endsAt":"2025-02-01T13:00:01","createdAt":"2025-01-01T00:00:01"},
+                        {"description":"decide on a theme for the painting","startsAt":"2025-02-01T12:00:02","endsAt":"2025-02-01T13:00:02","createdAt":"2025-01-01T00:00:02"},
+                        {"description":"decide which contest to submit to","startsAt":"2025-02-01T12:00:03","endsAt":"2025-02-01T13:00:03","createdAt":"2025-01-01T00:00:03"}
                     ]
                 """,
                 )
@@ -69,16 +75,16 @@ class NextActionRoutesTest {
     @Test
     @DataSet(
         value = [
-            "datasets/setup/nextActions.yaml",
+            "datasets/setup/scheduledActions.yaml",
             "datasets/setup/stickyNotes.yaml",
         ],
         cleanBefore = true,
     )
     @ExpectedDataSet(
-        value = ["datasets/expected/nextaction/createNextAction.yaml"],
+        value = ["datasets/expected/scheduledaction/createScheduledAction.yaml"],
         orderBy = ["created_at"],
     )
-    fun createNextAction() =
+    fun createScheduledAction() =
         testApplication {
             // setup
             environment {
@@ -92,36 +98,49 @@ class NextActionRoutesTest {
             val client =
                 createClient {
                     install(ContentNegotiation) {
-                        json()
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
                     }
                 }
             val actual =
-                client.post("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c/next-actions") {
+                client.post("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c/scheduled-actions") {
                     header(
                         HttpHeaders.ContentType,
                         ContentType.Application.Json,
                     )
-                    setBody(CreateNextActionRequest("draw for 10 minutes"))
+                    setBody(
+                        CreateScheduledActionRequest(
+                            description = "draw for 10 minutes",
+                            startsAt = LocalDateTime.parse("2025-03-01T12:00:00"),
+                            endsAt = LocalDateTime.parse("2025-03-01T13:00:00"),
+                        ),
+                    )
                 }
 
             // assert
             assertEquals(Created, actual.status)
-            assertTrue(actual.headers["Location"]!!.startsWith("/next-actions/"))
+            assertTrue(actual.headers["Location"]!!.startsWith("/scheduled-actions/"))
         }
 
     @Test
     @DataSet(
         value = [
-            "datasets/setup/nextActions.yaml",
+            "datasets/setup/scheduledActions.yaml",
             "datasets/setup/stickyNotes.yaml",
         ],
         cleanBefore = true,
     )
     @ExpectedDataSet(
-        value = ["datasets/setup/nextActions.yaml"],
+        value = ["datasets/setup/scheduledActions.yaml"],
         orderBy = ["created_at"],
     )
-    fun createNextAction_StickyNoteNotFound() =
+    fun createScheduledAction_notFoundStickyNote() =
         testApplication {
             // setup
             environment {
@@ -131,22 +150,35 @@ class NextActionRoutesTest {
                 module()
             }
 
-            val appender = setUpAppender(CreateNextActionUseCase::class.java)
+            val appender = setUpAppender(CreateScheduledActionUseCase::class.java)
 
             // execute
             val client =
                 createClient {
                     install(ContentNegotiation) {
-                        json()
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
                     }
                 }
             val actual =
-                client.post("/sticky-notes/6e920f0d-15d6-4898-b126-6ad49558520e/next-actions") {
+                client.post("/sticky-notes/f3196969-a4c5-4483-bd10-5b92e58d5ef8/scheduled-actions") {
                     header(
                         HttpHeaders.ContentType,
                         ContentType.Application.Json,
                     )
-                    setBody(CreateNextActionRequest("draw for 10 minutes"))
+                    setBody(
+                        CreateScheduledActionRequest(
+                            description = "draw for 10 minutes",
+                            startsAt = LocalDateTime.parse("2025-03-01T12:00:00"),
+                            endsAt = LocalDateTime.parse("2025-03-01T13:00:00"),
+                        ),
+                    )
                 }
 
             // assert
@@ -155,23 +187,23 @@ class NextActionRoutesTest {
                     type = "blanck",
                     title = "Not found sticky note.",
                     detail = "No sticky note matching the id was found.",
-                    instance = "/sticky-notes/6e920f0d-15d6-4898-b126-6ad49558520e/next-actions",
+                    instance = "/sticky-notes/f3196969-a4c5-4483-bd10-5b92e58d5ef8/scheduled-actions",
                 )
             assertEquals(NotFound, actual.status)
             assertEquals(expected, actual.body())
             val events = appender.list
             assert(events.size == 1)
             assert(events[0].level == Level.WARN)
-            assert(events[0].formattedMessage == "sticky note not found : 6e920f0d-15d6-4898-b126-6ad49558520e")
+            assert(events[0].formattedMessage == "sticky note not found : f3196969-a4c5-4483-bd10-5b92e58d5ef8")
         }
 
     @Test
-    @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
+    @DataSet(value = ["datasets/setup/scheduledActions.yaml"], cleanBefore = true)
     @ExpectedDataSet(
-        value = ["datasets/expected/nextaction/updateNextAction.yaml"],
+        value = ["datasets/expected/scheduledaction/updateScheduledAction.yaml"],
         orderBy = ["created_at"],
     )
-    fun updateNextAction() =
+    fun updateScheduledAction() =
         testApplication {
             // setup
             environment {
@@ -185,16 +217,29 @@ class NextActionRoutesTest {
             val client =
                 createClient {
                     install(ContentNegotiation) {
-                        json()
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
                     }
                 }
             val actual =
-                client.put("/next-actions/e574a515-5170-4d76-afc9-da17513dc5d3") {
+                client.put("/scheduled-actions/af5307cb-5147-46ad-affa-92be36a67645") {
                     header(
                         HttpHeaders.ContentType,
                         ContentType.Application.Json,
                     )
-                    setBody(UpdateNextActionRequest("practice drawing for 7 minutes"))
+                    setBody(
+                        UpdateScheduledActionRequest(
+                            description = "practice drawing for 7 minutes",
+                            startsAt = LocalDateTime.parse("2025-02-01T13:00:00"),
+                            endsAt = LocalDateTime.parse("2025-02-01T13:30:00"),
+                        ),
+                    )
                 }
 
             // assert
@@ -202,12 +247,12 @@ class NextActionRoutesTest {
         }
 
     @Test
-    @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
+    @DataSet(value = ["datasets/setup/scheduledActions.yaml"], cleanBefore = true)
     @ExpectedDataSet(
-        value = ["datasets/setup/nextActions.yaml"],
+        value = ["datasets/setup/scheduledActions.yaml"],
         orderBy = ["created_at"],
     )
-    fun updateNextAction_notFound() =
+    fun updateScheduledAction_notFound() =
         testApplication {
             // setup
             environment {
@@ -217,47 +262,60 @@ class NextActionRoutesTest {
                 module()
             }
 
-            val appender = setUpAppender(UpdateNextActionUseCase::class.java)
+            val appender = setUpAppender(UpdateScheduledActionUseCase::class.java)
 
             // execute
             val client =
                 createClient {
                     install(ContentNegotiation) {
-                        json()
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
                     }
                 }
             val actual =
-                client.put("/next-actions/1e79998f-79ea-4fcb-95d6-e18eb33e2c8e") {
+                client.put("/scheduled-actions/8eb01866-816a-4734-b793-d8c455e9af3a") {
                     header(
                         HttpHeaders.ContentType,
                         ContentType.Application.Json,
                     )
-                    setBody(UpdateNextActionRequest("practice drawing for 7 minutes"))
+                    setBody(
+                        UpdateScheduledActionRequest(
+                            description = "practice drawing for 7 minutes",
+                            startsAt = LocalDateTime.parse("2025-02-01T13:00:00"),
+                            endsAt = LocalDateTime.parse("2025-02-01T13:30:00"),
+                        ),
+                    )
                 }
 
             // assert
             val expected =
                 ErrorResponse(
                     type = "blanck",
-                    title = "Not found next action.",
-                    detail = "No next action matching the id was found.",
-                    instance = "/next-actions/1e79998f-79ea-4fcb-95d6-e18eb33e2c8e",
+                    title = "Not found scheduled action.",
+                    detail = "No scheduled action matching the id was found.",
+                    instance = "/scheduled-actions/8eb01866-816a-4734-b793-d8c455e9af3a",
                 )
             assertEquals(NotFound, actual.status)
             assertEquals(expected, actual.body())
             val events = appender.list
             assert(events.size == 1)
             assert(events[0].level == Level.WARN)
-            assert(events[0].formattedMessage == "next action not found : 1e79998f-79ea-4fcb-95d6-e18eb33e2c8e")
+            assert(events[0].formattedMessage == "scheduled action not found : 8eb01866-816a-4734-b793-d8c455e9af3a")
         }
 
     @Test
-    @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
+    @DataSet(value = ["datasets/setup/scheduledActions.yaml"], cleanBefore = true)
     @ExpectedDataSet(
-        value = ["datasets/expected/nextaction/deleteNextAction.yaml"],
+        value = ["datasets/expected/scheduledaction/deleteScheduledAction.yaml"],
         orderBy = ["created_at"],
     )
-    fun deleteNextAction() =
+    fun deleteScheduledAction() =
         testApplication {
             // setup
             environment {
@@ -274,7 +332,7 @@ class NextActionRoutesTest {
                         json()
                     }
                 }
-            val actual = client.delete("/next-actions/e574a515-5170-4d76-afc9-da17513dc5d3")
+            val actual = client.delete("/scheduled-actions/af5307cb-5147-46ad-affa-92be36a67645")
 
             // assert
             assertEquals(NoContent, actual.status)
