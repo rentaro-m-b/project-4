@@ -38,6 +38,7 @@ dependencies {
     testImplementation(libs.snakeyaml)
     testImplementation(libs.jackson.core)
     testImplementation(libs.rider.junit5)
+    testImplementation(libs.mokk)
 }
 
 buildscript {
