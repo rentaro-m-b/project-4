@@ -9,7 +9,7 @@ import io.ktor.server.testing.testApplication
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class HealthRoutesTest {
+class HealthsApiTest {
     @Test
     fun getHealth() =
         testApplication {

@@ -40,7 +40,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @DBRider
-class ScheduledActionRoutesTest {
+class ScheduledActionsApiTest {
     @Test
     @DataSet(value = ["datasets/setup/scheduledActions.yaml"], cleanBefore = true)
     fun listScheduledActions() =

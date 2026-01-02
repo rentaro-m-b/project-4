@@ -36,7 +36,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @DBRider
-class NextActionRoutesTest {
+class NextActionsApiTest {
     @Test
     @DataSet(value = ["datasets/setup/nextActions.yaml"], cleanBefore = true)
     fun listNextActions() =

@@ -35,7 +35,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @DBRider
-class StickyNoteRoutesTest {
+class StickyNotesApiTest {
     @Test
     @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
     fun listStickyNotes() =
