@@ -2,8 +2,8 @@ package ut.controller
 
 import com.example.configureRouting
 import com.example.configureSerialization
-import com.example.domain.stickynote.StickyNote
-import com.example.usecase.stickynote.ListStickyNotesUseCase
+import com.example.domain.nextaction.NextAction
+import com.example.usecase.nextaction.ListNextActionsUseCase
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode.Companion.OK
@@ -18,60 +18,60 @@ import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class StickyNoteRoutesTest {
+class NextActionRoutesTest {
     @Test
-    fun listStickyNotes() =
+    fun listNextActions() =
         testApplication {
             // setup
-            val listStickyNotesUseCase = mockk<ListStickyNotesUseCase>()
+            val listNextActionsUseCase = mockk<ListNextActionsUseCase>()
             application {
                 configureSerialization()
                 configureRouting()
                 install(Koin) {
                     modules(
                         module {
-                            single { listStickyNotesUseCase }
+                            single { listNextActionsUseCase }
                         },
                     )
                 }
             }
 
-            every { listStickyNotesUseCase.handle() } returns
+            every { listNextActionsUseCase.handle() } returns
                 listOf(
-                    StickyNote.create(
-                        id = UUID.fromString("ae95e722-253d-4fde-94f7-598da746cf0c"),
-                        concern = "wanting to submit to illustration contests",
+                    NextAction.create(
+                        id = UUID.fromString("e574a515-5170-4d76-afc9-da17513dc5d3"),
+                        description = "practice drawing for 10 minutes",
                         createdAt = LocalDateTime.parse("2025-01-01T00:00:00"),
                     ),
-                    StickyNote.create(
-                        id = UUID.fromString("36baaf2f-e621-4db4-b26a-9dda2db5cb29"),
-                        concern = "wanting to get better at drawing",
+                    NextAction.create(
+                        id = UUID.fromString("0909127e-69dc-4f7a-82b2-9da21e2cd090"),
+                        description = "collect five reference materials",
                         createdAt = LocalDateTime.parse("2025-01-01T00:00:01"),
                     ),
-                    StickyNote.create(
-                        id = UUID.fromString("3a7c31c1-765b-4486-a05f-eefbee300be4"),
-                        concern = "worrying about not losing weight",
+                    NextAction.create(
+                        id = UUID.fromString("117f0003-9f42-4750-9ed2-9356bb8a9887"),
+                        description = "decide on a theme for the painting",
                         createdAt = LocalDateTime.parse("2025-01-01T00:00:02"),
                     ),
-                    StickyNote.create(
-                        id = UUID.fromString("8df1df03-5e9d-4a2a-aec3-96060d27727d"),
-                        concern = "to read books",
+                    NextAction.create(
+                        id = UUID.fromString("bc562522-7dc8-42bd-a0ee-6cc5ef238e9f"),
+                        description = "decide which contest to submit to",
                         createdAt = LocalDateTime.parse("2025-01-01T00:00:03"),
                     ),
                 )
 
             // execute
-            val response = client.get("/sticky-notes")
+            val response = client.get("/next-actions")
 
             // assert
             val expected =
                 formatAsExpected(
                     """
                     [
-                        {"id":"ae95e722-253d-4fde-94f7-598da746cf0c","concern":"wanting to submit to illustration contests","createdAt":"2025-01-01T00:00:00"},
-                        {"id":"36baaf2f-e621-4db4-b26a-9dda2db5cb29","concern":"wanting to get better at drawing","createdAt":"2025-01-01T00:00:01"},
-                        {"id":"3a7c31c1-765b-4486-a05f-eefbee300be4","concern":"worrying about not losing weight","createdAt":"2025-01-01T00:00:02"},
-                        {"id":"8df1df03-5e9d-4a2a-aec3-96060d27727d","concern":"to read books","createdAt":"2025-01-01T00:00:03"}
+                        {"description":"practice drawing for 10 minutes","createdAt":"2025-01-01T00:00:00"},
+                        {"description":"collect five reference materials","createdAt":"2025-01-01T00:00:01"},
+                        {"description":"decide on a theme for the painting","createdAt":"2025-01-01T00:00:02"},
+                        {"description":"decide which contest to submit to","createdAt":"2025-01-01T00:00:03"}
                     ]
                 """,
                 )
