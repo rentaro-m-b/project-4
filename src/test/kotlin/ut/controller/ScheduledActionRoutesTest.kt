@@ -2,9 +2,7 @@ package ut.controller
 
 import com.example.configureRouting
 import com.example.configureSerialization
-import com.example.domain.nextaction.NextAction
 import com.example.domain.shceduledaction.ScheduledAction
-import com.example.usecase.nextaction.ListNextActionsUseCase
 import com.example.usecase.scheduledaction.ListScheduledActionsUseCase
 import io.ktor.client.call.body
 import io.ktor.client.request.get
