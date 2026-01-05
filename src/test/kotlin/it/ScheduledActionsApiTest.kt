@@ -33,9 +33,9 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

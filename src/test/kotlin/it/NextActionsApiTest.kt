@@ -30,8 +30,8 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
-import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

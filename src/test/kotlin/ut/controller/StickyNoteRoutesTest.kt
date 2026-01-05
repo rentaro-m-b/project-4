@@ -79,6 +79,34 @@ class StickyNoteRoutesTest {
             assertEquals(expected, response.body())
         }
 
+    @Test
+    fun listStickyNotesNoContents() =
+        testApplication {
+            // setup
+            val listStickyNotesUseCase = mockk<ListStickyNotesUseCase>()
+            application {
+                configureSerialization()
+                configureRouting()
+                install(Koin) {
+                    modules(
+                        module {
+                            single { listStickyNotesUseCase }
+                        },
+                    )
+                }
+            }
+
+            every { listStickyNotesUseCase.handle() } returns listOf()
+
+            // execute
+            val response = client.get("/sticky-notes")
+
+            // assert
+            val expected = formatAsExpected("[]")
+            assertEquals(OK, response.status)
+            assertEquals(expected, response.body())
+        }
+
     private fun formatAsExpected(preExpected: String): String =
         preExpected
             .lineSequence()

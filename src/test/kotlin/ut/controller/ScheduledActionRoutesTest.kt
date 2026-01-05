@@ -87,6 +87,34 @@ class ScheduledActionRoutesTest {
             assertEquals(expected, response.body())
         }
 
+    @Test
+    fun listScheduledActionsNoContents() =
+        testApplication {
+            // setup
+            val listScheduledActionsUseCase = mockk<ListScheduledActionsUseCase>()
+            application {
+                configureSerialization()
+                configureRouting()
+                install(Koin) {
+                    modules(
+                        module {
+                            single { listScheduledActionsUseCase }
+                        },
+                    )
+                }
+            }
+
+            every { listScheduledActionsUseCase.handle() } returns listOf()
+
+            // execute
+            val response = client.get("/scheduled-actions")
+
+            // assert
+            val expected = formatAsExpected("[]")
+            assertEquals(OK, response.status)
+            assertEquals(expected, response.body())
+        }
+
     private fun formatAsExpected(preExpected: String): String =
         preExpected
             .lineSequence()
