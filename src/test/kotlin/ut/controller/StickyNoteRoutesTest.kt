@@ -1,22 +1,51 @@
 package ut.controller
 
+import ch.qos.logback.classic.Level
 import com.example.configureRouting
 import com.example.configureSerialization
+import com.example.controller.common.ErrorResponse
+import com.example.controller.stickynote.dto.CreateStickyNoteRequest
+import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
 import com.example.domain.stickynote.StickyNote
+import com.example.module
+import com.example.usecase.stickynote.CreateStickyNoteCommand
+import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
+import com.example.usecase.stickynote.UpdateStickyNoteCommand
+import com.example.usecase.stickynote.UpdateStickyNoteUseCase
+import com.github.database.rider.core.api.dataset.DataSet
+import com.github.database.rider.core.api.dataset.ExpectedDataSet
 import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.put
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode.Companion.Created
+import io.ktor.http.HttpStatusCode.Companion.NoContent
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.HttpStatusCode.Companion.OK
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.install
+import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.verify
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.text.startsWith
 
 class StickyNoteRoutesTest {
     @Test
@@ -105,6 +134,157 @@ class StickyNoteRoutesTest {
             val expected = formatAsExpected("[]")
             assertEquals(OK, response.status)
             assertEquals(expected, response.body())
+        }
+
+    @Test
+    fun createStickyNote() =
+        testApplication {
+            // setup
+            val createStickyNoteUseCase = mockk<CreateStickyNoteUseCase>()
+            application {
+                configureSerialization()
+                configureRouting()
+                install(Koin) {
+                    modules(
+                        module {
+                            single { createStickyNoteUseCase }
+                        },
+                    )
+                }
+            }
+
+            every {
+                createStickyNoteUseCase.handle(CreateStickyNoteCommand("wanting to have happiness"))
+            } returns UUID.fromString("7147553a-0338-4ee4-b9e8-ddea8b6bc311")
+
+            // execute
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json()
+                    }
+                }
+            val actual =
+                client.post("/sticky-notes") {
+                    header(
+                        HttpHeaders.ContentType,
+                        ContentType.Application.Json,
+                    )
+                    setBody(CreateStickyNoteRequest("wanting to have happiness"))
+                }
+
+            // assert
+            val expected = "7147553a-0338-4ee4-b9e8-ddea8b6bc311"
+            assertEquals(Created, actual.status)
+            assertEquals(expected, actual.headers["Location"])
+        }
+
+    @Test
+    fun updateStickyNote() =
+        testApplication {
+            // setup
+            val updateStickyNoteUseCase = mockk<UpdateStickyNoteUseCase>()
+            application {
+                configureSerialization()
+                configureRouting()
+                install(Koin) {
+                    modules(
+                        module {
+                            single { updateStickyNoteUseCase }
+                        },
+                    )
+                }
+            }
+
+            // execute
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json()
+                    }
+                }
+            val actual =
+                client.put("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c") {
+                    header(
+                        HttpHeaders.ContentType,
+                        ContentType.Application.Json,
+                    )
+                    setBody(UpdateStickyNoteRequest("wanting to have happiness"))
+                }
+
+            // assert
+            verify(exactly = 1) {
+                updateStickyNoteUseCase.handle(
+                    UpdateStickyNoteCommand(
+                        id = UUID.fromString("ae95e722-253d-4fde-94f7-598da746cf0c"),
+                        concern = "wanting to have happiness",
+                    ),
+                )
+            }
+            assertEquals(NoContent, actual.status)
+        }
+
+    @Test
+    fun updateStickyNote_notFound() =
+        testApplication {
+            // setup
+            environment {
+                config = ApplicationConfig("application.yaml")
+            }
+            application {
+                module()
+            }
+
+            val appender = setUpAppender(UpdateStickyNoteUseCase::class.java)
+
+            // execute
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json()
+                    }
+                }
+            val actual =
+                client.put("/sticky-notes/cee8b174-fe19-47ac-b15b-d665c268c661") {
+                    header(
+                        HttpHeaders.ContentType,
+                        ContentType.Application.Json,
+                    )
+                    setBody(UpdateStickyNoteRequest("wanting to have happiness"))
+                }
+
+            // assert
+            val expected =
+                ErrorResponse(
+                    type = "blanck",
+                    title = "Not found sticky note.",
+                    detail = "No sticky note matching the id was found.",
+                    instance = "/sticky-notes/cee8b174-fe19-47ac-b15b-d665c268c661",
+                )
+            assertEquals(NotFound, actual.status)
+            assertEquals(expected, actual.body())
+            val events = appender.list
+            assert(events.size == 1)
+            assert(events[0].level == Level.WARN)
+            assert(events[0].formattedMessage == "sticky note not found : cee8b174-fe19-47ac-b15b-d665c268c661")
+        }
+
+    @Test
+    fun deleteStickyNote() =
+        testApplication {
+            // setup
+            environment {
+                config = ApplicationConfig("application.yaml")
+            }
+            application {
+                module()
+            }
+
+            // execute
+            val actual = client.delete("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c")
+
+            // assert
+            assertEquals(NoContent, actual.status)
         }
 
     private fun formatAsExpected(preExpected: String): String =
