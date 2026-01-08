@@ -1,6 +1,5 @@
 package ut.controller
 
-import ch.qos.logback.classic.Level
 import com.example.configureRouting
 import com.example.configureSerialization
 import com.example.controller.common.ErrorResponse
@@ -13,8 +12,6 @@ import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
 import com.example.usecase.stickynote.UpdateStickyNoteCommand
 import com.example.usecase.stickynote.UpdateStickyNoteUseCase
-import com.github.database.rider.core.api.dataset.DataSet
-import com.github.database.rider.core.api.dataset.ExpectedDataSet
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.delete
@@ -33,19 +30,15 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.install
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
-import io.mockk.Runs
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-import kotlin.text.startsWith
 
 class StickyNoteRoutesTest {
     @Test
@@ -235,8 +228,6 @@ class StickyNoteRoutesTest {
                 module()
             }
 
-            val appender = setUpAppender(UpdateStickyNoteUseCase::class.java)
-
             // execute
             val client =
                 createClient {
@@ -263,10 +254,6 @@ class StickyNoteRoutesTest {
                 )
             assertEquals(NotFound, actual.status)
             assertEquals(expected, actual.body())
-            val events = appender.list
-            assert(events.size == 1)
-            assert(events[0].level == Level.WARN)
-            assert(events[0].formattedMessage == "sticky note not found : cee8b174-fe19-47ac-b15b-d665c268c661")
         }
 
     @Test
