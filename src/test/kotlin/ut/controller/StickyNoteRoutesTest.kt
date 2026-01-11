@@ -8,6 +8,8 @@ import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
 import com.example.module
 import com.example.usecase.stickynote.CreateStickyNoteCommand
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
+import com.example.usecase.stickynote.DeleteStickyNoteCommand
+import com.example.usecase.stickynote.DeleteStickyNoteUseCase
 import com.example.usecase.stickynote.ListStickyNotesUseCase
 import com.example.usecase.stickynote.UpdateStickyNoteCommand
 import com.example.usecase.stickynote.UpdateStickyNoteUseCase
@@ -153,7 +155,7 @@ class StickyNoteRoutesTest {
                 }
 
             // assert
-            val expected = "7147553a-0338-4ee4-b9e8-ddea8b6bc311"
+            val expected = "/sticky-notes/7147553a-0338-4ee4-b9e8-ddea8b6bc311"
             assertEquals(Created, actual.status)
             assertEquals(expected, actual.headers["Location"])
         }
@@ -207,11 +209,17 @@ class StickyNoteRoutesTest {
     fun updateStickyNote_notFound() =
         testApplication {
             // setup
-            environment {
-                config = ApplicationConfig("application.yaml")
-            }
+            val updateStickyNoteUseCase = mockk<UpdateStickyNoteUseCase>()
             application {
-                module()
+                configureSerialization()
+                configureRouting()
+                install(Koin) {
+                    modules(
+                        module {
+                            single { updateStickyNoteUseCase }
+                        },
+                    )
+                }
             }
 
             // execute
@@ -246,17 +254,30 @@ class StickyNoteRoutesTest {
     fun deleteStickyNote() =
         testApplication {
             // setup
-            environment {
-                config = ApplicationConfig("application.yaml")
-            }
+            val deleteStickyNoteUseCase = mockk<DeleteStickyNoteUseCase>()
             application {
-                module()
+                configureSerialization()
+                configureRouting()
+                install(Koin) {
+                    modules(
+                        module {
+                            single { deleteStickyNoteUseCase }
+                        },
+                    )
+                }
             }
 
             // execute
             val actual = client.delete("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c")
 
             // assert
+            verify(exactly = 1) {
+                deleteStickyNoteUseCase.handle(
+                    DeleteStickyNoteCommand(
+                        id = UUID.fromString("ae95e722-253d-4fde-94f7-598da746cf0c"),
+                    ),
+                )
+            }
             assertEquals(NoContent, actual.status)
         }
 
