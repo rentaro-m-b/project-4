@@ -6,6 +6,7 @@ import com.example.controller.common.ErrorResponse
 import com.example.controller.stickynote.dto.CreateStickyNoteRequest
 import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
 import com.example.module
+import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import com.example.usecase.stickynote.CreateStickyNoteCommand
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.DeleteStickyNoteCommand
@@ -35,7 +36,9 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.install
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.koin.dsl.module
@@ -177,6 +180,15 @@ class StickyNoteRoutesTest {
                 }
             }
 
+            every {
+                updateStickyNoteUseCase.handle(
+                    UpdateStickyNoteCommand(
+                        id = UUID.fromString("ae95e722-253d-4fde-94f7-598da746cf0c"),
+                        concern = "wanting to have happiness",
+                    ),
+                )
+            } returns Result.success(Unit)
+
             // execute
             val client =
                 createClient {
@@ -194,14 +206,6 @@ class StickyNoteRoutesTest {
                 }
 
             // assert
-            verify(exactly = 1) {
-                updateStickyNoteUseCase.handle(
-                    UpdateStickyNoteCommand(
-                        id = UUID.fromString("ae95e722-253d-4fde-94f7-598da746cf0c"),
-                        concern = "wanting to have happiness",
-                    ),
-                )
-            }
             assertEquals(NoContent, actual.status)
         }
 
@@ -221,6 +225,15 @@ class StickyNoteRoutesTest {
                     )
                 }
             }
+
+            every {
+                updateStickyNoteUseCase.handle(
+                    UpdateStickyNoteCommand(
+                        id = UUID.fromString("cee8b174-fe19-47ac-b15b-d665c268c661"),
+                        concern = "wanting to have happiness",
+                    ),
+                )
+            } returns Result.failure(CurrentStickyNoteNotFoundException("sticky note not found : cee8b174-fe19-47ac-b15b-d665c268c661"))
 
             // execute
             val client =
@@ -266,6 +279,12 @@ class StickyNoteRoutesTest {
                     )
                 }
             }
+
+            every {
+                deleteStickyNoteUseCase.handle(
+                    DeleteStickyNoteCommand(UUID.fromString("ae95e722-253d-4fde-94f7-598da746cf0c")),
+                )
+            } just Runs
 
             // execute
             val actual = client.delete("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c")
