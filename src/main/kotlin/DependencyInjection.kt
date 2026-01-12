@@ -17,6 +17,7 @@ import com.example.usecase.scheduledaction.ListScheduledActionsUseCase
 import com.example.usecase.scheduledaction.UpdateScheduledActionUseCase
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
 import com.example.usecase.stickynote.DeleteStickyNoteUseCase
+import com.example.usecase.stickynote.IdGenerator
 import com.example.usecase.stickynote.ListStickyNotesUseCase
 import com.example.usecase.stickynote.UpdateStickyNoteUseCase
 import io.ktor.server.application.Application
@@ -48,6 +49,7 @@ fun Application.configureDependencyInjection() {
                 singleOf(::CreateScheduledActionUseCase)
                 singleOf(::UpdateScheduledActionUseCase)
                 singleOf(::DeleteScheduledActionUseCase)
+                singleOf(::IdGenerator)
             },
         )
     }

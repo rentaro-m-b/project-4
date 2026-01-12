@@ -7,11 +7,12 @@ import java.util.UUID
 
 class CreateStickyNoteUseCase(
     private val stickyNoteRepository: StickyNoteRepository,
+    private val idGenerator: IdGenerator,
 ) {
     fun handle(command: CreateStickyNoteCommand): UUID {
         val stickyNote =
             StickyNote.create(
-                id = UUID.randomUUID(),
+                id = idGenerator.generateId(),
                 concern = command.concern,
                 createdAt = LocalDateTime.now(),
             )
@@ -23,3 +24,7 @@ class CreateStickyNoteUseCase(
 data class CreateStickyNoteCommand(
     val concern: String,
 )
+
+class IdGenerator {
+    fun generateId(): UUID = UUID.randomUUID()
+}

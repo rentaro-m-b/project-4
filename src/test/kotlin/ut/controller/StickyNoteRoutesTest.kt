@@ -5,7 +5,6 @@ import com.example.configureSerialization
 import com.example.controller.common.ErrorResponse
 import com.example.controller.stickynote.dto.CreateStickyNoteRequest
 import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
-import com.example.module
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import com.example.usecase.stickynote.CreateStickyNoteCommand
 import com.example.usecase.stickynote.CreateStickyNoteUseCase
@@ -34,7 +33,6 @@ import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.install
-import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
 import io.mockk.Runs
 import io.mockk.every
