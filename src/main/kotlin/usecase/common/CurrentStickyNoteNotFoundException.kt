@@ -4,4 +4,4 @@ import java.lang.Exception
 
 class CurrentStickyNoteNotFoundException(
     message: String,
-) : Exception()
+) : Exception(message)

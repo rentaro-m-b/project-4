@@ -9,13 +9,11 @@ import domain.testdatum.StickyNoteTestDatum.STICKY_NOTE_3
 import domain.testdatum.StickyNoteTestDatum.STICKY_NOTE_4
 import io.mockk.every
 import io.mockk.mockk
-import java.time.LocalDateTime
-import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ListStickyNotesUseCaseTest {
-    val stickyNoteRepository = mockk<StickyNoteRepository>()
+    private val stickyNoteRepository = mockk<StickyNoteRepository>()
     private val target = ListStickyNotesUseCase(stickyNoteRepository)
 
     @Test

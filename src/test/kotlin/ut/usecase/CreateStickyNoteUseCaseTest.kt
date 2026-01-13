@@ -15,8 +15,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CreateStickyNoteUseCaseTest {
-    val idGenerator = mockk<IdGenerator>()
-    val stickyNoteRepository = mockk<StickyNoteRepository>()
+    private val idGenerator = mockk<IdGenerator>()
+    private val stickyNoteRepository = mockk<StickyNoteRepository>()
     private val target = CreateStickyNoteUseCase(stickyNoteRepository, idGenerator)
 
     @Test
