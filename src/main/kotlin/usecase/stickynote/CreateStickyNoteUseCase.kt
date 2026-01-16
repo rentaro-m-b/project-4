@@ -14,6 +14,7 @@ class CreateStickyNoteUseCase(
             StickyNote.create(
                 id = idGenerator.generateId(),
                 concern = command.concern,
+                imageKey = "",
                 createdAt = LocalDateTime.now(),
             )
         stickyNoteRepository.createStickyNote(stickyNote)

@@ -22,6 +22,7 @@ class UpdateStickyNoteUseCase(
             StickyNote.create(
                 id = command.id,
                 concern = command.concern,
+                imageKey = "",
                 createdAt = currentStickyNote.createdAt,
             )
         stickyNoteRepository.updateStickyNote(stickyNote)

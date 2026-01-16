@@ -30,6 +30,7 @@ class UpdateStickyNoteUseCaseTest {
                 StickyNote.create(
                     id = STICKY_NOTE_1.id,
                     concern = "wanting to have happiness",
+                    imageKey = "",
                     createdAt = STICKY_NOTE_1.createdAt,
                 ),
             )

@@ -28,6 +28,7 @@ class CreateStickyNoteUseCaseTest {
                 StickyNote.create(
                     id = UUID.fromString("7147553a-0338-4ee4-b9e8-ddea8b6bc311"),
                     concern = "wanting to have happiness",
+                    imageKey = "",
                     createdAt = LocalDateTime.parse("2025-02-01T00:00:00"),
                 ),
             )
