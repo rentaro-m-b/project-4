@@ -136,7 +136,12 @@ class StickyNoteRoutesTest {
             }
 
             every {
-                createStickyNoteUseCase.handle(CreateStickyNoteCommand("wanting to have happiness"))
+                createStickyNoteUseCase.handle(
+                    CreateStickyNoteCommand(
+                        concern = "wanting to have happiness",
+                        path = "sample.jpg",
+                    ),
+                )
             } returns UUID.fromString("7147553a-0338-4ee4-b9e8-ddea8b6bc311")
 
             // execute
@@ -152,7 +157,12 @@ class StickyNoteRoutesTest {
                         HttpHeaders.ContentType,
                         ContentType.Application.Json,
                     )
-                    setBody(CreateStickyNoteRequest("wanting to have happiness"))
+                    setBody(
+                        CreateStickyNoteRequest(
+                            concern = "wanting to have happiness",
+                            path = "sample.jpg",
+                        ),
+                    )
                 }
 
             // assert

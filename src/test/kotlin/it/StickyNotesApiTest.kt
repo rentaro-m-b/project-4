@@ -96,7 +96,12 @@ class StickyNotesApiTest {
                         HttpHeaders.ContentType,
                         ContentType.Application.Json,
                     )
-                    setBody(CreateStickyNoteRequest("wanting to have happiness"))
+                    setBody(
+                        CreateStickyNoteRequest(
+                            concern = "wanting to have happiness",
+                            path = "sample.jpg",
+                        ),
+                    )
                 }
 
             // assert

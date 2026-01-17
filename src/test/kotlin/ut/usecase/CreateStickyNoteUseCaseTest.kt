@@ -35,7 +35,13 @@ class CreateStickyNoteUseCaseTest {
         } just Runs
 
         // execute
-        val actual = target.handle(CreateStickyNoteCommand("wanting to have happiness"))
+        val actual =
+            target.handle(
+                CreateStickyNoteCommand(
+                    concern = "wanting to have happiness",
+                    path = "sample.jpg",
+                ),
+            )
 
         // assert
         val expected = UUID.fromString("7147553a-0338-4ee4-b9e8-ddea8b6bc311")

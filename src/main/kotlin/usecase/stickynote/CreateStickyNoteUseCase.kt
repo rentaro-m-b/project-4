@@ -24,6 +24,7 @@ class CreateStickyNoteUseCase(
 
 data class CreateStickyNoteCommand(
     val concern: String,
+    val path: String,
 )
 
 class IdGenerator {

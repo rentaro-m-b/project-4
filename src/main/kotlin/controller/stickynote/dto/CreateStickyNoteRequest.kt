@@ -6,6 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CreateStickyNoteRequest(
     val concern: String,
+    val path: String,
 ) {
-    fun toCommand(): CreateStickyNoteCommand = CreateStickyNoteCommand(concern)
+    fun toCommand(): CreateStickyNoteCommand =
+        CreateStickyNoteCommand(
+            concern,
+            path,
+        )
 }
