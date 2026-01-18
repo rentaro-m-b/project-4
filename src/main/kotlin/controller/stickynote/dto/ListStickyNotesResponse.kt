@@ -9,6 +9,7 @@ import java.time.LocalDateTime
 data class ListStickyNotesResponse(
     val id: String,
     val concern: String,
+    val s3Key: String,
     @Contextual
     val createdAt: LocalDateTime,
 ) {
@@ -17,6 +18,7 @@ data class ListStickyNotesResponse(
             ListStickyNotesResponse(
                 id = stickyNote.id.toString(),
                 concern = stickyNote.concern,
+                s3Key = stickyNote.s3Key,
                 createdAt = stickyNote.createdAt,
             )
     }

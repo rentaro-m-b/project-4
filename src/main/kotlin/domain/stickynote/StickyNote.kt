@@ -6,7 +6,7 @@ import java.util.UUID
 class StickyNote private constructor(
     val id: UUID,
     val concern: String,
-    val imageKey: String,
+    val s3Key: String,
     val createdAt: LocalDateTime,
 ) {
     companion object {
@@ -19,7 +19,7 @@ class StickyNote private constructor(
             StickyNote(
                 id = id,
                 concern = concern,
-                imageKey = imageKey,
+                s3Key = imageKey,
                 createdAt = createdAt,
             )
     }

@@ -56,10 +56,10 @@ class StickyNotesApiTest {
                 formatAsExpected(
                     """
                     [
-                        {"id":"ae95e722-253d-4fde-94f7-598da746cf0c","concern":"wanting to submit to illustration contests","createdAt":"2025-01-01T00:00:00"},
-                        {"id":"36baaf2f-e621-4db4-b26a-9dda2db5cb29","concern":"wanting to get better at drawing","createdAt":"2025-01-01T00:00:01"},
-                        {"id":"3a7c31c1-765b-4486-a05f-eefbee300be4","concern":"worrying about not losing weight","createdAt":"2025-01-01T00:00:02"},
-                        {"id":"8df1df03-5e9d-4a2a-aec3-96060d27727d","concern":"to read books","createdAt":"2025-01-01T00:00:03"}
+                        {"id":"ae95e722-253d-4fde-94f7-598da746cf0c","concern":"wanting to submit to illustration contests","s3Key":"illustration.jpg","createdAt":"2025-01-01T00:00:00"},
+                        {"id":"36baaf2f-e621-4db4-b26a-9dda2db5cb29","concern":"wanting to get better at drawing","s3Key":"drawing.jpg","createdAt":"2025-01-01T00:00:01"},
+                        {"id":"3a7c31c1-765b-4486-a05f-eefbee300be4","concern":"worrying about not losing weight","s3Key":"worrying.jpg","createdAt":"2025-01-01T00:00:02"},
+                        {"id":"8df1df03-5e9d-4a2a-aec3-96060d27727d","concern":"to read books","s3Key":"read.jpg","createdAt":"2025-01-01T00:00:03"}
                     ]
                 """,
                 )

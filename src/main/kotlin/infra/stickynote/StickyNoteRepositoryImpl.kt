@@ -49,6 +49,6 @@ fun StickyNotesRecord.toEntity(): StickyNote =
     StickyNote.create(
         id = id,
         concern = concern,
-        imageKey = "",
+        imageKey = s3Key,
         createdAt = createdAt,
     )
