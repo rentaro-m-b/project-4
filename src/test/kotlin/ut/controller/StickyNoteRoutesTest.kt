@@ -1,9 +1,11 @@
 package ut.controller
 
+import com.example.LocalDateTimeSerializer
 import com.example.configureRouting
 import com.example.configureSerialization
 import com.example.controller.common.ErrorResponse
 import com.example.controller.stickynote.dto.CreateStickyNoteRequest
+import com.example.controller.stickynote.dto.ListStickyNotesResponse
 import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
 import com.example.usecase.stickynote.CreateStickyNoteCommand
@@ -39,8 +41,11 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
+import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -62,6 +67,19 @@ class StickyNoteRoutesTest {
                     )
                 }
             }
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
+                    }
+                }
 
             every { listStickyNotesUseCase.handle() } returns
                 listOf(
@@ -72,22 +90,38 @@ class StickyNoteRoutesTest {
                 )
 
             // execute
-            val response = client.get("/sticky-notes")
+            val actual = client.get("/sticky-notes")
 
             // assert
             val expected =
-                formatAsExpected(
-                    """
-                    [
-                        {"id":"ae95e722-253d-4fde-94f7-598da746cf0c","concern":"wanting to submit to illustration contests","s3Key":"illustration.jpg","createdAt":"2025-01-01T00:00:00"},
-                        {"id":"36baaf2f-e621-4db4-b26a-9dda2db5cb29","concern":"wanting to get better at drawing","s3Key":"drawing.jpg","createdAt":"2025-01-01T00:00:01"},
-                        {"id":"3a7c31c1-765b-4486-a05f-eefbee300be4","concern":"worrying about not losing weight","s3Key":"worrying.jpg","createdAt":"2025-01-01T00:00:02"},
-                        {"id":"8df1df03-5e9d-4a2a-aec3-96060d27727d","concern":"to read books","s3Key":"read.jpg","createdAt":"2025-01-01T00:00:03"}
-                    ]
-                """,
+                listOf(
+                    ListStickyNotesResponse(
+                        id = "ae95e722-253d-4fde-94f7-598da746cf0c",
+                        concern = "wanting to submit to illustration contests",
+                        s3Key = "illustration.jpg",
+                        createdAt = LocalDateTime.parse("2025-01-01T00:00:00"),
+                    ),
+                    ListStickyNotesResponse(
+                        id = "36baaf2f-e621-4db4-b26a-9dda2db5cb29",
+                        concern = "wanting to get better at drawing",
+                        s3Key = "drawing.jpg",
+                        createdAt = LocalDateTime.parse("2025-01-01T00:00:01"),
+                    ),
+                    ListStickyNotesResponse(
+                        id = "3a7c31c1-765b-4486-a05f-eefbee300be4",
+                        concern = "worrying about not losing weight",
+                        s3Key = "worrying.jpg",
+                        createdAt = LocalDateTime.parse("2025-01-01T00:00:02"),
+                    ),
+                    ListStickyNotesResponse(
+                        id = "8df1df03-5e9d-4a2a-aec3-96060d27727d",
+                        concern = "to read books",
+                        s3Key = "read.jpg",
+                        createdAt = LocalDateTime.parse("2025-01-01T00:00:03"),
+                    ),
                 )
-            assertEquals(OK, response.status)
-            assertEquals(expected, response.body())
+            assertEquals(OK, actual.status)
+            assertEquals(expected, actual.body())
         }
 
     @Test
@@ -106,16 +140,29 @@ class StickyNoteRoutesTest {
                     )
                 }
             }
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
+                    }
+                }
 
             every { listStickyNotesUseCase.handle() } returns listOf()
 
             // execute
-            val response = client.get("/sticky-notes")
+            val actual = client.get("/sticky-notes")
 
             // assert
-            val expected = formatAsExpected("[]")
-            assertEquals(OK, response.status)
-            assertEquals(expected, response.body())
+            val expected = listOf<ListStickyNotesResponse>()
+            assertEquals(OK, actual.status)
+            assertEquals(expected, actual.body())
         }
 
     @Test
@@ -134,6 +181,12 @@ class StickyNoteRoutesTest {
                     )
                 }
             }
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json()
+                    }
+                }
 
             every {
                 createStickyNoteUseCase.handle(
@@ -145,12 +198,6 @@ class StickyNoteRoutesTest {
             } returns UUID.fromString("7147553a-0338-4ee4-b9e8-ddea8b6bc311")
 
             // execute
-            val client =
-                createClient {
-                    install(ContentNegotiation) {
-                        json()
-                    }
-                }
             val actual =
                 client.post("/sticky-notes") {
                     header(
@@ -187,6 +234,12 @@ class StickyNoteRoutesTest {
                     )
                 }
             }
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json()
+                    }
+                }
 
             every {
                 updateStickyNoteUseCase.handle(
@@ -198,12 +251,6 @@ class StickyNoteRoutesTest {
             } returns Result.success(Unit)
 
             // execute
-            val client =
-                createClient {
-                    install(ContentNegotiation) {
-                        json()
-                    }
-                }
             val actual =
                 client.put("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c") {
                     header(
@@ -233,6 +280,12 @@ class StickyNoteRoutesTest {
                     )
                 }
             }
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json()
+                    }
+                }
 
             every {
                 updateStickyNoteUseCase.handle(
@@ -244,12 +297,6 @@ class StickyNoteRoutesTest {
             } returns Result.failure(CurrentStickyNoteNotFoundException("sticky note not found : cee8b174-fe19-47ac-b15b-d665c268c661"))
 
             // execute
-            val client =
-                createClient {
-                    install(ContentNegotiation) {
-                        json()
-                    }
-                }
             val actual =
                 client.put("/sticky-notes/cee8b174-fe19-47ac-b15b-d665c268c661") {
                     header(
@@ -307,10 +354,4 @@ class StickyNoteRoutesTest {
             }
             assertEquals(NoContent, actual.status)
         }
-
-    private fun formatAsExpected(preExpected: String): String =
-        preExpected
-            .lineSequence()
-            .map { it.trim() }
-            .joinToString("")
 }

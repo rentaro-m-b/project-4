@@ -1,5 +1,9 @@
 package ut.usecase
 
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.read.ListAppender
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
@@ -10,6 +14,7 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import org.slf4j.LoggerFactory
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -57,6 +62,8 @@ class UpdateStickyNoteUseCaseTest {
             stickyNoteRepository.fetchStickyNote(UUID.fromString("cee8b174-fe19-47ac-b15b-d665c268c661"))
         } returns null
 
+        val appender = setUpAppender(UpdateStickyNoteUseCase::class.java)
+
         // execute
         val actual =
             target.handle(
@@ -71,5 +78,17 @@ class UpdateStickyNoteUseCaseTest {
         assertTrue(actual.isFailure)
         assertTrue(actual.exceptionOrNull() is CurrentStickyNoteNotFoundException)
         assertEquals(expected, actual.exceptionOrNull()!!.message)
+        val events = appender.list
+        assert(events.size == 1)
+        assert(events[0].level == Level.WARN)
+        assert(events[0].formattedMessage == "sticky note not found : cee8b174-fe19-47ac-b15b-d665c268c661")
+    }
+
+    private fun <T> setUpAppender(logId: Class<T>): ListAppender<ILoggingEvent> {
+        val log = LoggerFactory.getLogger(logId) as Logger
+        val appender = ListAppender<ILoggingEvent>()
+        appender.start()
+        log.addAppender(appender)
+        return appender
     }
 }

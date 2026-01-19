@@ -4,8 +4,10 @@ import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.read.ListAppender
+import com.example.LocalDateTimeSerializer
 import com.example.controller.common.ErrorResponse
 import com.example.controller.stickynote.dto.CreateStickyNoteRequest
+import com.example.controller.stickynote.dto.ListStickyNotesResponse
 import com.example.controller.stickynote.dto.UpdateStickyNoteRequest
 import com.example.module
 import com.example.usecase.stickynote.UpdateStickyNoteUseCase
@@ -29,7 +31,10 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import org.slf4j.LoggerFactory
+import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -47,24 +52,53 @@ class StickyNotesApiTest {
             application {
                 module()
             }
+            val client =
+                createClient {
+                    install(ContentNegotiation) {
+                        json(
+                            Json {
+                                serializersModule =
+                                    SerializersModule {
+                                        contextual(LocalDateTime::class, LocalDateTimeSerializer)
+                                    }
+                            },
+                        )
+                    }
+                }
 
             // execute
-            val response = client.get("/sticky-notes")
+            val actual = client.get("/sticky-notes")
 
             // assert
             val expected =
-                formatAsExpected(
-                    """
-                    [
-                        {"id":"ae95e722-253d-4fde-94f7-598da746cf0c","concern":"wanting to submit to illustration contests","s3Key":"illustration.jpg","createdAt":"2025-01-01T00:00:00"},
-                        {"id":"36baaf2f-e621-4db4-b26a-9dda2db5cb29","concern":"wanting to get better at drawing","s3Key":"drawing.jpg","createdAt":"2025-01-01T00:00:01"},
-                        {"id":"3a7c31c1-765b-4486-a05f-eefbee300be4","concern":"worrying about not losing weight","s3Key":"worrying.jpg","createdAt":"2025-01-01T00:00:02"},
-                        {"id":"8df1df03-5e9d-4a2a-aec3-96060d27727d","concern":"to read books","s3Key":"read.jpg","createdAt":"2025-01-01T00:00:03"}
-                    ]
-                """,
+                listOf(
+                    ListStickyNotesResponse(
+                        id = "ae95e722-253d-4fde-94f7-598da746cf0c",
+                        concern = "wanting to submit to illustration contests",
+                        s3Key = "illustration.jpg",
+                        createdAt = LocalDateTime.parse("2025-01-01T00:00:00"),
+                    ),
+                    ListStickyNotesResponse(
+                        id = "36baaf2f-e621-4db4-b26a-9dda2db5cb29",
+                        concern = "wanting to get better at drawing",
+                        s3Key = "drawing.jpg",
+                        createdAt = LocalDateTime.parse("2025-01-01T00:00:01"),
+                    ),
+                    ListStickyNotesResponse(
+                        id = "3a7c31c1-765b-4486-a05f-eefbee300be4",
+                        concern = "worrying about not losing weight",
+                        s3Key = "worrying.jpg",
+                        createdAt = LocalDateTime.parse("2025-01-01T00:00:02"),
+                    ),
+                    ListStickyNotesResponse(
+                        id = "8df1df03-5e9d-4a2a-aec3-96060d27727d",
+                        concern = "to read books",
+                        s3Key = "read.jpg",
+                        createdAt = LocalDateTime.parse("2025-01-01T00:00:03"),
+                    ),
                 )
-            assertEquals(OK, response.status)
-            assertEquals(expected, response.body())
+            assertEquals(OK, actual.status)
+            assertEquals(expected, actual.body())
         }
 
     @Test
@@ -82,14 +116,14 @@ class StickyNotesApiTest {
             application {
                 module()
             }
-
-            // execute
             val client =
                 createClient {
                     install(ContentNegotiation) {
                         json()
                     }
                 }
+
+            // execute
             val actual =
                 client.post("/sticky-notes") {
                     header(
@@ -124,14 +158,14 @@ class StickyNotesApiTest {
             application {
                 module()
             }
-
-            // execute
             val client =
                 createClient {
                     install(ContentNegotiation) {
                         json()
                     }
                 }
+
+            // execute
             val actual =
                 client.put("/sticky-notes/ae95e722-253d-4fde-94f7-598da746cf0c") {
                     header(
@@ -160,16 +194,16 @@ class StickyNotesApiTest {
             application {
                 module()
             }
-
-            val appender = setUpAppender(UpdateStickyNoteUseCase::class.java)
-
-            // execute
             val client =
                 createClient {
                     install(ContentNegotiation) {
                         json()
                     }
                 }
+
+            val appender = setUpAppender(UpdateStickyNoteUseCase::class.java)
+
+            // execute
             val actual =
                 client.put("/sticky-notes/cee8b174-fe19-47ac-b15b-d665c268c661") {
                     header(
@@ -217,12 +251,6 @@ class StickyNotesApiTest {
             // assert
             assertEquals(NoContent, actual.status)
         }
-
-    private fun formatAsExpected(preExpected: String): String =
-        preExpected
-            .lineSequence()
-            .map { it.trim() }
-            .joinToString("")
 
     private fun <T> setUpAppender(logId: Class<T>): ListAppender<ILoggingEvent> {
         val log = LoggerFactory.getLogger(logId) as Logger
