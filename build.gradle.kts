@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ktor)
     alias(libs.plugins.flyway)
     alias(libs.plugins.jooq.codegen)
+    alias(libs.plugins.ksp)
 }
 
 group = "com.example"
@@ -23,6 +24,8 @@ dependencies {
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.ktor)
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
     implementation(libs.logback.classic)
     implementation(libs.postgresql)
     implementation(libs.hikari)
