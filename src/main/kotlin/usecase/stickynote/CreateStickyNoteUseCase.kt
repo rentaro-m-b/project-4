@@ -2,10 +2,11 @@ package com.example.usecase.stickynote
 
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
-import org.koin.core.annotation.Single
+import jakarta.inject.Singleton
 import java.time.LocalDateTime
 import java.util.UUID
 
+@Singleton
 class CreateStickyNoteUseCase(
     private val stickyNoteRepository: StickyNoteRepository,
     private val idGenerator: IdGenerator,
@@ -28,7 +29,7 @@ data class CreateStickyNoteCommand(
     val path: String,
 )
 
-@Single
+@Singleton
 class IdGenerator {
     fun generateId(): UUID = UUID.randomUUID()
 }

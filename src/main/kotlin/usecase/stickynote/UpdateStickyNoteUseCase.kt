@@ -3,9 +3,11 @@ package com.example.usecase.stickynote
 import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
 import com.example.usecase.common.CurrentStickyNoteNotFoundException
+import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
+@Singleton
 class UpdateStickyNoteUseCase(
     private val stickyNoteRepository: StickyNoteRepository,
 ) {

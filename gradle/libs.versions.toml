@@ -16,7 +16,7 @@ jackson = "2.20.1"
 junit-jupiter-api = "6.0.1"
 mokk = "1.14.7"
 ksp = "2.3.3"
-dagger-compiler = "2.51.1"
+jakarta = "2.0.1"
 
 [libraries]
 # main
@@ -38,6 +38,7 @@ flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql
 jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
 jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
 mokk = { module = "io.mockk:mockk", version.ref = "mokk" }
+jakarta-inject-api = { module = "jakarta.inject:jakarta.inject-api", version.ref = "jakarta" }
 
 # test
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin" }

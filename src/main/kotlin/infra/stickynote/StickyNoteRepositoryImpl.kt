@@ -4,9 +4,11 @@ import com.example.domain.stickynote.StickyNote
 import com.example.domain.stickynote.StickyNoteRepository
 import com.example.tables.StickyNotes.STICKY_NOTES
 import com.example.tables.records.StickyNotesRecord
+import jakarta.inject.Singleton
 import org.jooq.DSLContext
 import java.util.UUID
 
+@Singleton
 class StickyNoteRepositoryImpl(
     val dslContext: DSLContext,
 ) : StickyNoteRepository {

@@ -14,8 +14,16 @@ import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.includes
 import org.koin.dsl.module
+import org.koin.ksp.generated.koinConfiguration
 import org.koin.ktor.plugin.Koin
+
+// fun Application.configureDependencyInjection() {
+//    install(Koin) {
+//        includes(KoinApplication.koinConfiguration())
+//    }
+// }
 
 fun Application.configureDependencyInjection() {
     install(Koin) {
