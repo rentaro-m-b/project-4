@@ -34,11 +34,13 @@ import io.ktor.server.testing.testApplication
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import org.slf4j.LoggerFactory
+import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@Testcontainers
 @DBRider
 class StickyNotesApiTest {
     @Test

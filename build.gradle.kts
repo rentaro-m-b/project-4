@@ -43,6 +43,11 @@ dependencies {
     testImplementation(libs.jackson.core)
     testImplementation(libs.rider.junit5)
     testImplementation(libs.mokk)
+    testImplementation(platform(libs.testcontainers.bom))
+    testImplementation(libs.testcontainers)
+    testImplementation(libs.testcontainers.jdbc)
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.testcontainers.junit.jupiter)
 }
 
 buildscript {

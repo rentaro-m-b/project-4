@@ -17,6 +17,7 @@ junit-jupiter-api = "6.0.1"
 mokk = "1.14.7"
 ksp = "2.3.3"
 jakarta = "2.0.1"
+testcontainers-bom = "1.21.4"
 
 [libraries]
 # main
@@ -52,6 +53,11 @@ groovy = { module = "org.codehaus.groovy:groovy-all", version.ref = "groovy" }
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyaml" }
 # caused by a vulnerable transitive library from rider-core
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers-bom" }
+testcontainers = { module = "org.testcontainers:testcontainers" }
+testcontainers-jdbc = { module = "org.testcontainers:jdbc" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
