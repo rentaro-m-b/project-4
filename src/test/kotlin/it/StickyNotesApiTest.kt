@@ -34,6 +34,8 @@ import io.ktor.server.testing.testApplication
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import org.slf4j.LoggerFactory
+import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.LocalDateTime
 import kotlin.test.Test
@@ -43,6 +45,17 @@ import kotlin.test.assertTrue
 @Testcontainers
 @DBRider
 class StickyNotesApiTest {
+    companion object {
+        @Container
+        @JvmStatic
+        val postgres =
+            PostgreSQLContainer("postgres:17-alpine").apply {
+                withDatabaseName("main")
+                withUsername("montre")
+                withPassword("P@ssw0rd")
+            }
+    }
+
     @Test
     @DataSet(value = ["datasets/setup/stickyNotes.yaml"], cleanBefore = true)
     fun listStickyNotes() =

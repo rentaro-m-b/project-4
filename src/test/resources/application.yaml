@@ -1,7 +1,15 @@
+#db:
+#  url: "jdbc:tc:postgresql:17-alpine:///main"
+#  user: "montre"
+#  password: "P@ssw0rd"
+#  driver: "org.testcontainers.jdbc.ContainerDatabaseDriver"
+#  pool:
+#    maxSize: 10
+
 db:
-  url: "jdbc:tc:postgresql:17-alpine:///main"
+  url: "jdbc:postgresql://localhost:54332/main"
   user: "montre"
   password: "P@ssw0rd"
-  driver: "org.testcontainers.jdbc.ContainerDatabaseDriver"
+  driver: "org.postgresql.Driver"
   pool:
     maxSize: 10
