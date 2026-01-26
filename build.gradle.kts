@@ -48,6 +48,8 @@ dependencies {
     testImplementation(libs.testcontainers.jdbc)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.testcontainers.junit.jupiter)
+    testImplementation(libs.flyway.core)
+    testImplementation(libs.flyway.database.postgresql)
 }
 
 buildscript {

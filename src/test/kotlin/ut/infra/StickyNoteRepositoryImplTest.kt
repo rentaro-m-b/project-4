@@ -11,23 +11,51 @@ import domain.testdatum.StickyNoteTestDatum.STICKY_NOTE_1
 import domain.testdatum.StickyNoteTestDatum.STICKY_NOTE_2
 import domain.testdatum.StickyNoteTestDatum.STICKY_NOTE_3
 import domain.testdatum.StickyNoteTestDatum.STICKY_NOTE_4
+import org.flywaydb.core.Flyway
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
+import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Testcontainers
 @DBRider
 class StickyNoteRepositoryImplTest {
+    companion object {
+        @Container
+        @JvmStatic
+        val postgres =
+            PostgreSQLContainer("postgres:17-alpine").apply {
+                withDatabaseName("main")
+                withUsername("montre")
+                withPassword("P@ssw0rd")
+            }
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            System.setProperty("DB_URL", postgres.jdbcUrl)
+            Flyway
+                .configure()
+                .dataSource(postgres.jdbcUrl, postgres.username, postgres.password)
+                .load()
+                .migrate()
+        }
+    }
+
     private val config = HikariConfig()
     private val dataSource: HikariDataSource
 
     init {
-        config.jdbcUrl = "jdbc:postgresql://localhost:54332/main"
-        config.username = "montre"
-        config.password = "P@ssw0rd"
+        config.jdbcUrl = postgres.jdbcUrl
+        config.username = postgres.username
+        config.password = postgres.password
         dataSource = HikariDataSource(config)
     }
 

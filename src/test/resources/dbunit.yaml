@@ -2,6 +2,6 @@ caseInsensitiveStrategy: LOWERCASE
 
 connectionConfig:
   driver: "org.postgresql.Driver"
-  url: "jdbc:postgresql://localhost:54332/main"
+  url: ${DB_URL}
   user: "montre"
   password: "P@ssw0rd"

@@ -33,6 +33,8 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.testApplication
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
+import org.flywaydb.core.Flyway
+import org.junit.jupiter.api.BeforeAll
 import org.slf4j.LoggerFactory
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
@@ -54,6 +56,17 @@ class StickyNotesApiTest {
                 withUsername("montre")
                 withPassword("P@ssw0rd")
             }
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            System.setProperty("DB_URL", postgres.jdbcUrl)
+            Flyway
+                .configure()
+                .dataSource(postgres.jdbcUrl, postgres.username, postgres.password)
+                .load()
+                .migrate()
+        }
     }
 
     @Test

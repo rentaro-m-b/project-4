@@ -7,7 +7,7 @@
 #    maxSize: 10
 
 db:
-  url: "jdbc:postgresql://localhost:54332/main"
+  url: ${DB_URL:-"jdbc:postgresql://localhost:5432/main"}
   user: "montre"
   password: "P@ssw0rd"
   driver: "org.postgresql.Driver"
