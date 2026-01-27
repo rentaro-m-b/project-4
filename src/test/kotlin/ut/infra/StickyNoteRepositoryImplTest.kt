@@ -49,17 +49,15 @@ class StickyNoteRepositoryImplTest {
         }
     }
 
-    private val config = HikariConfig()
-    private val dataSource: HikariDataSource
+    private val config =
+        HikariConfig().apply {
+            jdbcUrl = postgres.jdbcUrl
+            username = postgres.username
+            password = postgres.password
+        }
+    private val dataSource = HikariDataSource(config)
 
-    init {
-        config.jdbcUrl = postgres.jdbcUrl
-        config.username = postgres.username
-        config.password = postgres.password
-        dataSource = HikariDataSource(config)
-    }
-
-    private val target = StickyNoteRepositoryImpl(DSL.using(dataSource.connection, SQLDialect.POSTGRES))
+    private val target = StickyNoteRepositoryImpl(DSL.using(dataSource, SQLDialect.POSTGRES))
 
     @Nested
     inner class ListStickyNotes {
