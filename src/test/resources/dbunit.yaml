@@ -1,3 +1,4 @@
+cacheConnection: false
 caseInsensitiveStrategy: LOWERCASE
 
 connectionConfig:
