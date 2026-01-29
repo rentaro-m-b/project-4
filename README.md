@@ -21,7 +21,7 @@ Here's a list of features included in this project:
 To build or run the project, use one of the following tasks:
 
 | Task                          | Description                                                          |
-| -------------------------------|---------------------------------------------------------------------- |
+|-------------------------------|----------------------------------------------------------------------|
 | `./gradlew test`              | Run the tests                                                        |
 | `./gradlew build`             | Build everything                                                     |
 | `buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
@@ -29,6 +29,8 @@ To build or run the project, use one of the following tasks:
 | `publishImageToLocalRegistry` | Publish the docker image locally                                     |
 | `run`                         | Run the server                                                       |
 | `runDocker`                   | Run using the local docker image                                     |
+| `./gradlew flywayMigrate`     | Run migrate                                                          |
+| `./gradlew flywayClean`       | Run migrate reset                                                    |
 
 If the server starts successfully, you'll see the following output:
 
